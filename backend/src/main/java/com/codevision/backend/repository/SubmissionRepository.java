@@ -15,4 +15,10 @@ public interface SubmissionRepository
     List<Submission> findByProblemId(
             Long problemId
     );
+
+    List<Submission>
+    findByProblemIdAndStatusOrderByRuntimeAsc(
+            Long problemId,
+            String status
+    );
 }

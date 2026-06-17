@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Editor from "@monaco-editor/react";
+
 import {
     getProblemById,
     submitSolution
@@ -15,7 +17,9 @@ function ProblemDetails() {
 
     const [code, setCode] =
         useState(
-`public class Main {
+`import java.util.*;
+
+public class Main {
 
     public static void main(
             String[] args
@@ -136,21 +140,21 @@ function ProblemDetails() {
             </pre>
 
             <h3>
-                Code
+                Code Editor
             </h3>
 
-            <textarea
-                rows="20"
-                cols="80"
+            <Editor
+                height="500px"
+                defaultLanguage="java"
                 value={code}
-                onChange={(e) =>
+                onChange={(value) =>
                     setCode(
-                        e.target.value
+                        value || ""
                     )
                 }
+                theme="vs-dark"
             />
 
-            <br />
             <br />
 
             <button

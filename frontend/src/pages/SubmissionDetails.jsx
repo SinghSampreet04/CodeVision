@@ -84,6 +84,14 @@ function SubmissionDetails() {
             </p>
 
             <h3>
+                Feedback
+            </h3>
+
+            <pre>
+                {submission.feedback}
+            </pre>
+
+            <h3>
                 Code
             </h3>
 

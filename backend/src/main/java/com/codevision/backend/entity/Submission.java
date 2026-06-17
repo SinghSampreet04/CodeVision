@@ -37,6 +37,9 @@ public class Submission {
 
     private Long memory;
 
+    @Column(columnDefinition = "TEXT")
+    private String feedback;
+
     private LocalDateTime createdAt =
             LocalDateTime.now();
 
@@ -141,6 +144,16 @@ public class Submission {
             Long memory
     ) {
         this.memory = memory;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(
+            String feedback
+    ) {
+        this.feedback = feedback;
     }
 
     public LocalDateTime getCreatedAt() {

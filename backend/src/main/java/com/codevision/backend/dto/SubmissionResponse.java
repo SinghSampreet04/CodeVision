@@ -16,6 +16,8 @@ public class SubmissionResponse {
 
     private String code;
 
+    private String feedback;
+
     private LocalDateTime createdAt;
 
     public SubmissionResponse() {
@@ -83,6 +85,17 @@ public class SubmissionResponse {
     ) {
         this.code =
                 code;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(
+            String feedback
+    ) {
+        this.feedback =
+                feedback;
     }
 
     public LocalDateTime getCreatedAt() {

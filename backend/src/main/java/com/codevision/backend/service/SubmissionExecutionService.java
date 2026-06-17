@@ -7,18 +7,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class SubmissionExecutionService {
 
-    private final SubmissionRepository submissionRepository;
-    private final DecisionService decisionService;
+    private final SubmissionRepository
+            submissionRepository;
+
+    private final DecisionService
+            decisionService;
+
+    private final AIReviewService
+            aiReviewService;
 
     public SubmissionExecutionService(
             SubmissionRepository submissionRepository,
-            DecisionService decisionService
+            DecisionService decisionService,
+            AIReviewService aiReviewService
     ) {
+
         this.submissionRepository =
                 submissionRepository;
 
         this.decisionService =
                 decisionService;
+
+        this.aiReviewService =
+                aiReviewService;
     }
 
     public Submission executeSubmission(
@@ -26,10 +37,13 @@ public class SubmissionExecutionService {
     ) {
 
         DecisionResult decisionResult =
-                decisionService.evaluateSubmission(
-                        submission.getCode(),
-                        submission.getProblem().getId()
-                );
+                decisionService
+                        .evaluateSubmission(
+                                submission.getCode(),
+                                submission
+                                        .getProblem()
+                                        .getId()
+                        );
 
         submission.setStatus(
                 decisionResult.getStatus()
@@ -41,6 +55,17 @@ public class SubmissionExecutionService {
 
         submission.setTotalTestCases(
                 decisionResult.getTotal()
+        );
+
+        String feedback =
+                aiReviewService
+                        .generateFeedback(
+                                submission.getCode(),
+                                decisionResult.getStatus()
+                        );
+
+        submission.setFeedback(
+                feedback
         );
 
         return submissionRepository.save(

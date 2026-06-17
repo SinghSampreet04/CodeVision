@@ -184,6 +184,10 @@ public class SubmissionService {
                 submission.getCode()
         );
 
+        response.setFeedback(
+                submission.getFeedback()
+        );
+
         response.setCreatedAt(
                 submission.getCreatedAt()
         );

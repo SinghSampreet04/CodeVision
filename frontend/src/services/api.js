@@ -34,6 +34,18 @@ export async function getUserSubmissions(
     return response.json();
 }
 
+export async function getSubmissionById(
+    id
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions/${id}`
+        );
+
+    return response.json();
+}
+
 export async function submitSolution(
     submission
 ) {

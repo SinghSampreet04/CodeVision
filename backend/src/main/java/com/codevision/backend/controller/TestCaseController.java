@@ -10,12 +10,15 @@ import java.util.List;
 @RequestMapping("/testcases")
 public class TestCaseController {
 
-    private final TestCaseService testCaseService;
+    private final TestCaseService
+            testCaseService;
 
     public TestCaseController(
             TestCaseService testCaseService
     ) {
-        this.testCaseService = testCaseService;
+
+        this.testCaseService =
+                testCaseService;
     }
 
     @PostMapping
@@ -23,9 +26,10 @@ public class TestCaseController {
             @RequestBody TestCase testCase
     ) {
 
-        return testCaseService.createTestCase(
-                testCase
-        );
+        return testCaseService
+                .createTestCase(
+                        testCase
+                );
     }
 
     @GetMapping("/problem/{problemId}")
@@ -33,8 +37,9 @@ public class TestCaseController {
             @PathVariable Long problemId
     ) {
 
-        return testCaseService.getByProblemId(
-                problemId
-        );
+        return testCaseService
+                .getByProblemId(
+                        problemId
+                );
     }
 }

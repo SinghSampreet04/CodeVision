@@ -10,6 +10,7 @@ import ProblemDetails from "./pages/ProblemDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Submissions from "./pages/Submissions";
+import SubmissionDetails from "./pages/SubmissionDetails";
 
 function App() {
 
@@ -60,6 +61,13 @@ function App() {
                     path="/submissions"
                     element={
                         <Submissions />
+                    }
+                />
+
+                <Route
+                    path="/submissions/:id"
+                    element={
+                        <SubmissionDetails />
                     }
                 />
 

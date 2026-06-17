@@ -1,5 +1,15 @@
-import { useEffect, useState } from "react";
-import { getUserSubmissions } from "../services/api";
+import {
+    useEffect,
+    useState
+} from "react";
+
+import {
+    Link
+} from "react-router-dom";
+
+import {
+    getUserSubmissions
+} from "../services/api";
 
 function Submissions() {
 
@@ -24,10 +34,16 @@ function Submissions() {
             user.userId
         )
             .then(data => {
-                setSubmissions(data);
+
+                setSubmissions(
+                    data
+                );
             })
             .catch(error => {
-                console.error(error);
+
+                console.error(
+                    error
+                );
             });
 
     }, []);
@@ -49,8 +65,16 @@ function Submissions() {
                     >
 
                         <h3>
-                            Submission #
-                            {submission.id}
+
+                            <Link
+                                to={
+                                    `/submissions/${submission.id}`
+                                }
+                            >
+                                Submission #
+                                {submission.id}
+                            </Link>
+
                         </h3>
 
                         <p>

@@ -17,9 +17,13 @@ import java.util.stream.Collectors;
 public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
+
     private final UserRepository userRepository;
+
     private final ProblemRepository problemRepository;
-    private final SubmissionExecutionService submissionExecutionService;
+
+    private final SubmissionExecutionService
+            submissionExecutionService;
 
     public SubmissionService(
             SubmissionRepository submissionRepository,
@@ -27,10 +31,18 @@ public class SubmissionService {
             ProblemRepository problemRepository,
             SubmissionExecutionService submissionExecutionService
     ) {
-        this.submissionRepository = submissionRepository;
-        this.userRepository = userRepository;
-        this.problemRepository = problemRepository;
-        this.submissionExecutionService = submissionExecutionService;
+
+        this.submissionRepository =
+                submissionRepository;
+
+        this.userRepository =
+                userRepository;
+
+        this.problemRepository =
+                problemRepository;
+
+        this.submissionExecutionService =
+                submissionExecutionService;
     }
 
     public SubmissionResponse createSubmission(
@@ -50,9 +62,13 @@ public class SubmissionService {
         Submission submission =
                 new Submission();
 
-        submission.setUser(user);
+        submission.setUser(
+                user
+        );
 
-        submission.setProblem(problem);
+        submission.setProblem(
+                problem
+        );
 
         submission.setLanguage(
                 request.getLanguage()
@@ -82,16 +98,22 @@ public class SubmissionService {
         );
     }
 
-    public List<SubmissionResponse> getAllSubmissions() {
+    public List<SubmissionResponse>
+    getAllSubmissions() {
 
         return submissionRepository
                 .findAll()
                 .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+                .map(
+                        this::convertToResponse
+                )
+                .collect(
+                        Collectors.toList()
+                );
     }
 
-    public SubmissionResponse getSubmissionById(
+    public SubmissionResponse
+    getSubmissionById(
             Long id
     ) {
 
@@ -100,7 +122,10 @@ public class SubmissionService {
                         .findById(id)
                         .orElse(null);
 
-        if (submission == null) {
+        if (
+                submission == null
+        ) {
+
             return null;
         }
 
@@ -109,18 +134,26 @@ public class SubmissionService {
         );
     }
 
-    public List<SubmissionResponse> getUserSubmissions(
+    public List<SubmissionResponse>
+    getUserSubmissions(
             Long userId
     ) {
 
         return submissionRepository
-                .findByUserId(userId)
+                .findByUserId(
+                        userId
+                )
                 .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+                .map(
+                        this::convertToResponse
+                )
+                .collect(
+                        Collectors.toList()
+                );
     }
 
-    private SubmissionResponse convertToResponse(
+    private SubmissionResponse
+    convertToResponse(
             Submission submission
     ) {
 
@@ -141,6 +174,14 @@ public class SubmissionService {
 
         response.setTotalTestCases(
                 submission.getTotalTestCases()
+        );
+
+        response.setLanguage(
+                submission.getLanguage()
+        );
+
+        response.setCode(
+                submission.getCode()
         );
 
         response.setCreatedAt(

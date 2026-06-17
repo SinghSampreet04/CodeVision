@@ -12,6 +12,10 @@ public class SubmissionResponse {
 
     private Integer totalTestCases;
 
+    private String language;
+
+    private String code;
+
     private LocalDateTime createdAt;
 
     public SubmissionResponse() {
@@ -44,7 +48,8 @@ public class SubmissionResponse {
     public void setPassedTestCases(
             Integer passedTestCases
     ) {
-        this.passedTestCases = passedTestCases;
+        this.passedTestCases =
+                passedTestCases;
     }
 
     public Integer getTotalTestCases() {
@@ -54,7 +59,30 @@ public class SubmissionResponse {
     public void setTotalTestCases(
             Integer totalTestCases
     ) {
-        this.totalTestCases = totalTestCases;
+        this.totalTestCases =
+                totalTestCases;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(
+            String language
+    ) {
+        this.language =
+                language;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(
+            String code
+    ) {
+        this.code =
+                code;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -64,6 +92,7 @@ public class SubmissionResponse {
     public void setCreatedAt(
             LocalDateTime createdAt
     ) {
-        this.createdAt = createdAt;
+        this.createdAt =
+                createdAt;
     }
 }

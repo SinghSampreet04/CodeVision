@@ -9,17 +9,21 @@ import java.util.List;
 @Service
 public class TestCaseService {
 
-    private final TestCaseRepository testCaseRepository;
+    private final TestCaseRepository
+            testCaseRepository;
 
     public TestCaseService(
             TestCaseRepository testCaseRepository
     ) {
-        this.testCaseRepository = testCaseRepository;
+
+        this.testCaseRepository =
+                testCaseRepository;
     }
 
     public TestCase createTestCase(
             TestCase testCase
     ) {
+
         return testCaseRepository.save(
                 testCase
         );
@@ -28,8 +32,10 @@ public class TestCaseService {
     public List<TestCase> getByProblemId(
             Long problemId
     ) {
-        return testCaseRepository.findByProblemId(
-                problemId
-        );
+
+        return testCaseRepository
+                .findByProblemIdAndHiddenFalse(
+                        problemId
+                );
     }
 }

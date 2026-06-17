@@ -22,6 +22,18 @@ export async function getProblemById(
     return response.json();
 }
 
+export async function getUserSubmissions(
+    userId
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions/user/${userId}`
+        );
+
+    return response.json();
+}
+
 export async function submitSolution(
     submission
 ) {

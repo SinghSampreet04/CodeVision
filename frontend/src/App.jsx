@@ -9,6 +9,7 @@ import Problems from "./pages/Problems";
 import ProblemDetails from "./pages/ProblemDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Submissions from "./pages/Submissions";
 
 function App() {
 
@@ -19,6 +20,12 @@ function App() {
 
                 <Link to="/">
                     Problems
+                </Link>
+
+                {" | "}
+
+                <Link to="/submissions">
+                    My Submissions
                 </Link>
 
                 {" | "}
@@ -46,6 +53,13 @@ function App() {
                     path="/problems/:id"
                     element={
                         <ProblemDetails />
+                    }
+                />
+
+                <Route
+                    path="/submissions"
+                    element={
+                        <Submissions />
                     }
                 />
 

@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import Problems from "./pages/Problems";
+import ProblemDetails from "./pages/ProblemDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -39,6 +40,13 @@ function App() {
                 <Route
                     path="/"
                     element={<Problems />}
+                />
+
+                <Route
+                    path="/problems/:id"
+                    element={
+                        <ProblemDetails />
+                    }
                 />
 
                 <Route

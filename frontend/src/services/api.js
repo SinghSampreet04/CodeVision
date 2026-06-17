@@ -10,6 +10,18 @@ export async function getProblems() {
     return response.json();
 }
 
+export async function getProblemById(
+    id
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/problems/${id}`
+        );
+
+    return response.json();
+}
+
 export async function registerUser(
     userData
 ) {

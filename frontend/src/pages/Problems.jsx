@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getProblems } from "../services/api";
 
 function Problems() {
@@ -20,21 +21,34 @@ function Problems() {
 
     return (
         <div>
+
             <h1>CodeVision</h1>
 
             <h2>Problems</h2>
 
             {problems.map(problem => (
+
                 <div key={problem.id}>
-                    <h3>{problem.title}</h3>
+
+                    <Link
+                        to={`/problems/${problem.id}`}
+                    >
+                        <h3>
+                            {problem.title}
+                        </h3>
+                    </Link>
 
                     <p>
-                        Difficulty: {problem.difficulty}
+                        Difficulty:
+                        {" "}
+                        {problem.difficulty}
                     </p>
 
                     <hr />
+
                 </div>
             ))}
+
         </div>
     );
 }

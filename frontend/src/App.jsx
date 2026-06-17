@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Submissions from "./pages/Submissions";
 import SubmissionDetails from "./pages/SubmissionDetails";
+import Leaderboard from "./pages/Leaderboard";
 
 function App() {
 
@@ -54,6 +55,13 @@ function App() {
                     path="/problems/:id"
                     element={
                         <ProblemDetails />
+                    }
+                />
+
+                <Route
+                    path="/leaderboard/:problemId"
+                    element={
+                        <Leaderboard />
                     }
                 />
 

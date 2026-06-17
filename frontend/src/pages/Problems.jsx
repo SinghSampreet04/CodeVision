@@ -22,32 +22,54 @@ function Problems() {
     return (
         <div>
 
-            <h1>CodeVision</h1>
+            <h1>
+                CodeVision
+            </h1>
 
-            <h2>Problems</h2>
+            <h2>
+                Problems
+            </h2>
 
-            {problems.map(problem => (
+            {
+                problems.map(
+                    problem => (
 
-                <div key={problem.id}>
+                        <div
+                            key={
+                                problem.id
+                            }
+                        >
 
-                    <Link
-                        to={`/problems/${problem.id}`}
-                    >
-                        <h3>
-                            {problem.title}
-                        </h3>
-                    </Link>
+                            <Link
+                                to={`/problems/${problem.id}`}
+                            >
+                                <h3>
+                                    {
+                                        problem.title
+                                    }
+                                </h3>
+                            </Link>
 
-                    <p>
-                        Difficulty:
-                        {" "}
-                        {problem.difficulty}
-                    </p>
+                            <p>
+                                Difficulty:
+                                {" "}
+                                {
+                                    problem.difficulty
+                                }
+                            </p>
 
-                    <hr />
+                            <Link
+                                to={`/leaderboard/${problem.id}`}
+                            >
+                                View Leaderboard
+                            </Link>
 
-                </div>
-            ))}
+                            <hr />
+
+                        </div>
+                    )
+                )
+            }
 
         </div>
     );

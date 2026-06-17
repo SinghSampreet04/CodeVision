@@ -46,6 +46,18 @@ export async function getSubmissionById(
     return response.json();
 }
 
+export async function getLeaderboard(
+    problemId
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions/leaderboard/problem/${problemId}`
+        );
+
+    return response.json();
+}
+
 export async function submitSolution(
     submission
 ) {

@@ -5,7 +5,7 @@ import com.codevision.backend.entity.Submission;
 import com.codevision.backend.repository.SubmissionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +34,65 @@ public class LeaderboardService {
                                 "ACCEPTED"
                         );
 
-        return submissions
+        Map<String, Submission>
+                bestSubmissionPerUser =
+                new HashMap<>();
+
+        for (
+                Submission submission
+                        : submissions
+        ) {
+
+            if (
+                    submission.getRuntime()
+                            == null
+            ) {
+
+                continue;
+            }
+
+            String username =
+                    submission
+                            .getUser()
+                            .getUsername();
+
+            Submission existing =
+                    bestSubmissionPerUser
+                            .get(username);
+
+            if (
+                    existing == null
+            ) {
+
+                bestSubmissionPerUser.put(
+                        username,
+                        submission
+                );
+
+                continue;
+            }
+
+            if (
+                    submission.getRuntime()
+                            <
+                    existing.getRuntime()
+            ) {
+
+                bestSubmissionPerUser.put(
+                        username,
+                        submission
+                );
+            }
+        }
+
+        return bestSubmissionPerUser
+                .values()
                 .stream()
+                .sorted(
+                        Comparator.comparing(
+                                Submission::getRuntime
+                        )
+                )
                 .map(
                         submission -> {
 

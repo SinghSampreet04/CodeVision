@@ -62,13 +62,9 @@ public class SubmissionService {
         Submission submission =
                 new Submission();
 
-        submission.setUser(
-                user
-        );
+        submission.setUser(user);
 
-        submission.setProblem(
-                problem
-        );
+        submission.setProblem(problem);
 
         submission.setLanguage(
                 request.getLanguage()
@@ -104,12 +100,8 @@ public class SubmissionService {
         return submissionRepository
                 .findAll()
                 .stream()
-                .map(
-                        this::convertToResponse
-                )
-                .collect(
-                        Collectors.toList()
-                );
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     public SubmissionResponse
@@ -140,16 +132,10 @@ public class SubmissionService {
     ) {
 
         return submissionRepository
-                .findByUserId(
-                        userId
-                )
+                .findByUserId(userId)
                 .stream()
-                .map(
-                        this::convertToResponse
-                )
-                .collect(
-                        Collectors.toList()
-                );
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     private SubmissionResponse
@@ -186,6 +172,10 @@ public class SubmissionService {
 
         response.setFeedback(
                 submission.getFeedback()
+        );
+
+        response.setRuntime(
+                submission.getRuntime()
         );
 
         response.setCreatedAt(

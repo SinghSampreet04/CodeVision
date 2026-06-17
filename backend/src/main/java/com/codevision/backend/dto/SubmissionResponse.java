@@ -18,6 +18,8 @@ public class SubmissionResponse {
 
     private String feedback;
 
+    private Long runtime;
+
     private LocalDateTime createdAt;
 
     public SubmissionResponse() {
@@ -96,6 +98,16 @@ public class SubmissionResponse {
     ) {
         this.feedback =
                 feedback;
+    }
+
+    public Long getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(
+            Long runtime
+    ) {
+        this.runtime = runtime;
     }
 
     public LocalDateTime getCreatedAt() {

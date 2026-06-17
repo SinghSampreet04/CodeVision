@@ -12,12 +12,18 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DockerExecutionService {
 
-    public String executeJavaCode(
+    public ExecutionResult executeJavaCode(
             String code,
             String input
     ) {
 
+        ExecutionResult result =
+                new ExecutionResult();
+
         try {
+
+            long startTime =
+                    System.currentTimeMillis();
 
             Path tempDir =
                     Files.createTempDirectory(
@@ -100,11 +106,22 @@ public class DockerExecutionService {
                             TimeUnit.SECONDS
                     );
 
+            long endTime =
+                    System.currentTimeMillis();
+
+            result.setRuntime(
+                    endTime - startTime
+            );
+
             if (!finished) {
 
                 process.destroyForcibly();
 
-                return "TIME_LIMIT_EXCEEDED";
+                result.setOutput(
+                        "TIME_LIMIT_EXCEEDED"
+                );
+
+                return result;
             }
 
             String output =
@@ -124,32 +141,6 @@ public class DockerExecutionService {
             int exitCode =
                     process.exitValue();
 
-            System.out.println(
-                    "=================================="
-            );
-
-            System.out.println(
-                    "DOCKER STDERR:"
-            );
-
-            System.out.println(
-                    errors
-            );
-
-            System.out.println(
-                    "EXIT CODE: "
-                            + exitCode
-            );
-
-            System.out.println(
-                    "OUTPUT: "
-                            + output
-            );
-
-            System.out.println(
-                    "=================================="
-            );
-
             if (exitCode != 0) {
 
                 if (
@@ -158,19 +149,37 @@ public class DockerExecutionService {
                         )
                 ) {
 
-                    return "RUNTIME_ERROR";
+                    result.setOutput(
+                            "RUNTIME_ERROR"
+                    );
+
+                    return result;
                 }
 
-                return "COMPILATION_ERROR";
+                result.setOutput(
+                        "COMPILATION_ERROR"
+                );
+
+                return result;
             }
 
-            return output.trim();
+            result.setOutput(
+                    output.trim()
+            );
+
+            return result;
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            result.setOutput(
+                    "RUNTIME_ERROR"
+            );
 
-            return "RUNTIME_ERROR";
+            result.setRuntime(
+                    0L
+            );
+
+            return result;
         }
     }
 }

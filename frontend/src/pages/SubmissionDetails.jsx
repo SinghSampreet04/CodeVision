@@ -78,18 +78,33 @@ function SubmissionDetails() {
             </p>
 
             <p>
+                Runtime:
+                {" "}
+                {submission.runtime}
+                {" ms"}
+            </p>
+
+            <p>
                 Submitted:
                 {" "}
                 {submission.createdAt}
             </p>
 
-            <h3>
-                Feedback
-            </h3>
+            {
+                submission.feedback && (
+                    <>
+                        <h3>
+                            Feedback
+                        </h3>
 
-            <pre>
-                {submission.feedback}
-            </pre>
+                        <pre>
+                            {
+                                submission.feedback
+                            }
+                        </pre>
+                    </>
+                )
+            }
 
             <h3>
                 Code

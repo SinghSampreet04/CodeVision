@@ -39,14 +39,22 @@ public class DecisionService {
 
         int passed = 0;
 
+        long totalRuntime = 0;
+
         for (TestCase testCase : testCases) {
 
-            String actualOutput =
+            ExecutionResult executionResult =
                     dockerExecutionService
                             .executeJavaCode(
                                     code,
                                     testCase.getInput()
                             );
+
+            String actualOutput =
+                    executionResult.getOutput();
+
+            totalRuntime +=
+                    executionResult.getRuntime();
 
             if (
                     actualOutput.equals(
@@ -62,6 +70,10 @@ public class DecisionService {
 
                 result.setTotal(
                         testCases.size()
+                );
+
+                result.setRuntime(
+                        totalRuntime
                 );
 
                 return result;
@@ -85,6 +97,10 @@ public class DecisionService {
                         testCases.size()
                 );
 
+                result.setRuntime(
+                        totalRuntime
+                );
+
                 return result;
             }
 
@@ -104,6 +120,10 @@ public class DecisionService {
 
                 result.setTotal(
                         testCases.size()
+                );
+
+                result.setRuntime(
+                        totalRuntime
                 );
 
                 return result;
@@ -130,6 +150,10 @@ public class DecisionService {
 
         result.setTotal(
                 testCases.size()
+        );
+
+        result.setRuntime(
+                totalRuntime
         );
 
         if (

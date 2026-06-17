@@ -57,6 +57,10 @@ public class SubmissionExecutionService {
                 decisionResult.getTotal()
         );
 
+        submission.setRuntime(
+                decisionResult.getRuntime()
+        );
+
         String feedback =
                 aiReviewService
                         .generateFeedback(

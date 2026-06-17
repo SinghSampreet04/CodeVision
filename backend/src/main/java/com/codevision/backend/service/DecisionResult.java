@@ -8,6 +8,8 @@ public class DecisionResult {
 
     private int total;
 
+    private Long runtime;
+
     public DecisionResult() {
     }
 
@@ -39,5 +41,15 @@ public class DecisionResult {
             int total
     ) {
         this.total = total;
+    }
+
+    public Long getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(
+            Long runtime
+    ) {
+        this.runtime = runtime;
     }
 }

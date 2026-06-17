@@ -3,6 +3,7 @@ package com.codevision.backend.controller;
 import com.codevision.backend.dto.ExecuteCodeRequest;
 import com.codevision.backend.service.CodeExecutionService;
 import com.codevision.backend.service.DockerExecutionService;
+import com.codevision.backend.service.ExecutionResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,10 +42,13 @@ public class ExecutionController {
             @RequestBody ExecuteCodeRequest request
     ) {
 
-        return dockerExecutionService
-                .executeJavaCode(
-                        request.getCode(),
-                        request.getInput()
-                );
+        ExecutionResult result =
+                dockerExecutionService
+                        .executeJavaCode(
+                                request.getCode(),
+                                request.getInput()
+                        );
+
+        return result.getOutput();
     }
 }

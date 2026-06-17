@@ -22,6 +22,35 @@ export async function getProblemById(
     return response.json();
 }
 
+export async function submitSolution(
+    submission
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify(
+                    submission
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Submission failed"
+        );
+    }
+
+    return response.json();
+}
+
 export async function registerUser(
     userData
 ) {

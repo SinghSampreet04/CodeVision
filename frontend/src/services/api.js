@@ -7,12 +7,34 @@ export async function getProblems() {
             `${API_URL}/problems`
         );
 
-    console.log("Status:", response.status);
+    return response.json();
+}
 
-    const data =
-        await response.json();
+export async function registerUser(
+    userData
+) {
 
-    console.log("Data:", data);
+    const response =
+        await fetch(
+            `${API_URL}/auth/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify(
+                    userData
+                )
+            }
+        );
 
-    return data;
+    if (!response.ok) {
+
+        throw new Error(
+            "Registration failed"
+        );
+    }
+
+    return response.json();
 }

@@ -1,39 +1,59 @@
-import { useEffect, useState } from "react";
-import { getProblems } from "./services/api";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Link
+} from "react-router-dom";
+
+import Problems from "./pages/Problems";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
 
-    const [problems, setProblems] =
-        useState([]);
-
-    useEffect(() => {
-
-        getProblems()
-            .then(data => {
-                console.log("Received:", data);
-                setProblems(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-    }, []);
-
     return (
-        <div>
-            <h1>CodeVision</h1>
+        <BrowserRouter>
 
-            <h2>Problems</h2>
+            <nav>
 
-            <p>Problems loaded: {problems.length}</p>
+                <Link to="/">
+                    Problems
+                </Link>
 
-            {problems.map(problem => (
-                <div key={problem.id}>
-                    <h3>{problem.title}</h3>
-                    <p>{problem.difficulty}</p>
-                </div>
-            ))}
-        </div>
+                {" | "}
+
+                <Link to="/login">
+                    Login
+                </Link>
+
+                {" | "}
+
+                <Link to="/register">
+                    Register
+                </Link>
+
+            </nav>
+
+            <Routes>
+
+                <Route
+                    path="/"
+                    element={<Problems />}
+                />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+
+            </Routes>
+
+        </BrowserRouter>
     );
 }
 

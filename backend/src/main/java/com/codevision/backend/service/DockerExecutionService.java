@@ -32,13 +32,19 @@ public class DockerExecutionService {
 
             try (
                     FileWriter writer =
-                            new FileWriter(javaFile)
+                            new FileWriter(
+                                    javaFile
+                            )
             ) {
-                writer.write(code);
+
+                writer.write(
+                        code
+                );
             }
 
             String directory =
-                    tempDir.toAbsolutePath()
+                    tempDir
+                            .toAbsolutePath()
                             .toString();
 
             Process process =
@@ -61,7 +67,8 @@ public class DockerExecutionService {
                             "100",
 
                             "-v",
-                            directory + ":/workspace",
+                            directory +
+                                    ":/workspace",
 
                             "-w",
                             "/workspace",
@@ -84,6 +91,7 @@ public class DockerExecutionService {
             }
 
             stdin.flush();
+
             stdin.close();
 
             boolean finished =
@@ -116,6 +124,32 @@ public class DockerExecutionService {
             int exitCode =
                     process.exitValue();
 
+            System.out.println(
+                    "=================================="
+            );
+
+            System.out.println(
+                    "DOCKER STDERR:"
+            );
+
+            System.out.println(
+                    errors
+            );
+
+            System.out.println(
+                    "EXIT CODE: "
+                            + exitCode
+            );
+
+            System.out.println(
+                    "OUTPUT: "
+                            + output
+            );
+
+            System.out.println(
+                    "=================================="
+            );
+
             if (exitCode != 0) {
 
                 if (
@@ -123,6 +157,7 @@ public class DockerExecutionService {
                                 "Exception"
                         )
                 ) {
+
                     return "RUNTIME_ERROR";
                 }
 
@@ -132,6 +167,8 @@ public class DockerExecutionService {
             return output.trim();
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             return "RUNTIME_ERROR";
         }

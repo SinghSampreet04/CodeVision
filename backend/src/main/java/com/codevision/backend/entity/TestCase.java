@@ -22,6 +22,8 @@ public class TestCase {
     @Column(columnDefinition = "TEXT")
     private String expectedOutput;
 
+    private Boolean hidden = false;
+
     public TestCase() {
     }
 
@@ -63,5 +65,15 @@ public class TestCase {
             String expectedOutput
     ) {
         this.expectedOutput = expectedOutput;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(
+            Boolean hidden
+    ) {
+        this.hidden = hidden;
     }
 }

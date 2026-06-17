@@ -15,30 +15,46 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtService jwtService;
 
     public AuthService(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService
     ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+
+        this.userRepository =
+                userRepository;
+
+        this.passwordEncoder =
+                passwordEncoder;
+
+        this.jwtService =
+                jwtService;
     }
 
     public UserResponse register(
             RegisterRequest request
     ) {
 
-        if (userRepository
-                .findByEmail(request.getEmail())
-                .isPresent()) {
+        if (
+                userRepository
+                        .findByEmail(
+                                request.getEmail()
+                        )
+                        .isPresent()
+        ) {
 
             throw new EmailAlreadyExistsException(
                     "Email already exists"
             );
         }
 
-        User user = new User();
+        User user =
+                new User();
 
         user.setUsername(
                 request.getUsername()
@@ -54,10 +70,14 @@ public class AuthService {
                 )
         );
 
-        user.setRole("USER");
+        user.setRole(
+                "USER"
+        );
 
         User savedUser =
-                userRepository.save(user);
+                userRepository.save(
+                        user
+                );
 
         UserResponse response =
                 new UserResponse();
@@ -91,9 +111,10 @@ public class AuthService {
                                 request.getEmail()
                         )
                         .orElseThrow(
-                                () -> new InvalidCredentialsException(
-                                        "Invalid email or password"
-                                )
+                                () ->
+                                        new InvalidCredentialsException(
+                                                "Invalid email or password"
+                                        )
                         );
 
         boolean matches =
@@ -109,11 +130,20 @@ public class AuthService {
             );
         }
 
+        String token =
+                jwtService.generateToken(
+                        user.getEmail()
+                );
+
         LoginResponse response =
                 new LoginResponse();
 
         response.setMessage(
                 "Login successful"
+        );
+
+        response.setToken(
+                token
         );
 
         response.setUserId(

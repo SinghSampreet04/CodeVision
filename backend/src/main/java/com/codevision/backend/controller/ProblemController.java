@@ -15,7 +15,8 @@ public class ProblemController {
     public ProblemController(
             ProblemService problemService
     ) {
-        this.problemService = problemService;
+        this.problemService =
+                problemService;
     }
 
     @PostMapping
@@ -40,6 +41,28 @@ public class ProblemController {
     ) {
 
         return problemService.getProblemById(
+                id
+        );
+    }
+
+    @PutMapping("/{id}")
+    public Problem updateProblem(
+            @PathVariable Long id,
+            @RequestBody Problem problem
+    ) {
+
+        return problemService.updateProblem(
+                id,
+                problem
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProblem(
+            @PathVariable Long id
+    ) {
+
+        problemService.deleteProblem(
                 id
         );
     }

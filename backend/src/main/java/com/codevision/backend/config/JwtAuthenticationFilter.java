@@ -1,5 +1,7 @@
 package com.codevision.backend.config;
 
+import com.codevision.backend.entity.User;
+import com.codevision.backend.repository.UserRepository;
 import com.codevision.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,12 +21,18 @@ public class JwtAuthenticationFilter
 
     private final JwtService jwtService;
 
+    private final UserRepository userRepository;
+
     public JwtAuthenticationFilter(
-            JwtService jwtService
+            JwtService jwtService,
+            UserRepository userRepository
     ) {
 
         this.jwtService =
                 jwtService;
+
+        this.userRepository =
+                userRepository;
     }
 
     @Override
@@ -62,19 +70,33 @@ public class JwtAuthenticationFilter
                                 token
                         );
 
-                UsernamePasswordAuthenticationToken
-                        authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                AuthorityUtils.NO_AUTHORITIES
-                        );
+                User user =
+                        userRepository
+                                .findByEmail(
+                                        email
+                                )
+                                .orElse(null);
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(
-                                authentication
-                        );
+                if (
+                        user != null
+                ) {
+
+                    UsernamePasswordAuthenticationToken
+                            authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    AuthorityUtils.createAuthorityList(
+                                            "ROLE_" + user.getRole()
+                                    )
+                            );
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(
+                                    authentication
+                            );
+                }
             }
         }
 

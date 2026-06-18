@@ -20,6 +20,7 @@ public class ProblemService {
     public Problem createProblem(
             Problem problem
     ) {
+
         return problemRepository.save(
                 problem
         );
@@ -37,5 +38,49 @@ public class ProblemService {
         return problemRepository
                 .findById(id)
                 .orElse(null);
+    }
+
+    public Problem updateProblem(
+            Long id,
+            Problem updatedProblem
+    ) {
+
+        Problem existingProblem =
+                problemRepository
+                        .findById(id)
+                        .orElseThrow();
+
+        existingProblem.setTitle(
+                updatedProblem.getTitle()
+        );
+
+        existingProblem.setDescription(
+                updatedProblem.getDescription()
+        );
+
+        existingProblem.setDifficulty(
+                updatedProblem.getDifficulty()
+        );
+
+        existingProblem.setSampleInput(
+                updatedProblem.getSampleInput()
+        );
+
+        existingProblem.setSampleOutput(
+                updatedProblem.getSampleOutput()
+        );
+
+        return problemRepository.save(
+                existingProblem
+        );
+    }
+
+    public void deleteProblem(
+            Long id
+    ) {
+
+        problemRepository.deleteById(
+                id
+        );
     }
 }

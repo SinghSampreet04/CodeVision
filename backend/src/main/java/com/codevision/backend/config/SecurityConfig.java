@@ -59,9 +59,34 @@ public class SecurityConfig {
                                 .permitAll()
 
                                 .requestMatchers(
+                                        HttpMethod.GET,
                                         "/problems/**"
                                 )
                                 .permitAll()
+
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/problems"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
+
+                                .requestMatchers(
+                                        HttpMethod.PUT,
+                                        "/problems/**"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
+
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/problems/**"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
 
                                 .requestMatchers(
                                         "/execute/**"

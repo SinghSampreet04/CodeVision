@@ -69,6 +69,11 @@ public class SecurityConfig {
                                 .permitAll()
 
                                 .requestMatchers(
+                                        "/submissions/leaderboard/**"
+                                )
+                                .permitAll()
+
+                                .requestMatchers(
                                         "/submissions/**"
                                 )
                                 .authenticated()

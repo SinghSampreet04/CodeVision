@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import {
+    useEffect,
+    useState
+} from "react";
 
 import {
     useParams
@@ -16,6 +19,9 @@ function Leaderboard() {
     const [entries, setEntries] =
         useState([]);
 
+    const [loading, setLoading] =
+        useState(true);
+
     useEffect(() => {
 
         getLeaderboard(
@@ -26,15 +32,40 @@ function Leaderboard() {
                 setEntries(
                     data
                 );
+
+                setLoading(
+                    false
+                );
             })
             .catch(error => {
 
                 console.error(
                     error
                 );
+
+                setLoading(
+                    false
+                );
             });
 
     }, [problemId]);
+
+    if (loading) {
+
+        return (
+            <div>
+
+                <h1>
+                    Leaderboard
+                </h1>
+
+                <p>
+                    Loading...
+                </p>
+
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -43,73 +74,105 @@ function Leaderboard() {
                 Leaderboard
             </h1>
 
-            <table>
+            {entries.length === 0 && (
 
-                <thead>
+                <p>
+                    No accepted submissions yet.
+                </p>
 
-                    <tr>
+            )}
 
-                        <th>
-                            Rank
-                        </th>
+            {entries.length > 0 && (
 
-                        <th>
-                            User
-                        </th>
+                <table
+                    border="1"
+                    cellPadding="10"
+                    style={{
+                        borderCollapse:
+                            "collapse",
+                        width: "100%"
+                    }}
+                >
 
-                        <th>
-                            Runtime
-                        </th>
+                    <thead>
 
-                    </tr>
+                        <tr>
 
-                </thead>
+                            <th>
+                                Rank
+                            </th>
 
-                <tbody>
+                            <th>
+                                Username
+                            </th>
 
-                    {
-                        entries.map(
-                            (
-                                entry,
-                                index
-                            ) => (
+                            <th>
+                                Runtime
+                            </th>
 
-                                <tr
-                                    key={
-                                        entry
-                                            .submissionId
-                                    }
-                                >
+                        </tr>
 
-                                    <td>
-                                        {
-                                            index + 1
-                                        }
-                                    </td>
+                    </thead>
 
-                                    <td>
-                                        {
+                    <tbody>
+
+                        {
+                            entries.map(
+                                (
+                                    entry,
+                                    index
+                                ) => (
+
+                                    <tr
+                                        key={
                                             entry
-                                                .username
+                                                .submissionId
                                         }
-                                    </td>
+                                    >
 
-                                    <td>
-                                        {
-                                            entry
-                                                .runtime
-                                        }
-                                        {" ms"}
-                                    </td>
+                                        <td>
 
-                                </tr>
+                                            {
+                                                index === 0
+                                                    ? "🥇"
+                                                    : index === 1
+                                                    ? "🥈"
+                                                    : index === 2
+                                                    ? "🥉"
+                                                    : index + 1
+                                            }
+
+                                        </td>
+
+                                        <td>
+
+                                            {
+                                                entry
+                                                    .username
+                                            }
+
+                                        </td>
+
+                                        <td>
+
+                                            {
+                                                entry
+                                                    .runtime
+                                            }
+                                            {" ms"}
+
+                                        </td>
+
+                                    </tr>
+                                )
                             )
-                        )
-                    }
+                        }
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
+
+            )}
 
         </div>
     );

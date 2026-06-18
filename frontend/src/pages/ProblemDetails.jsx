@@ -27,13 +27,9 @@ function ProblemDetails() {
     const [problem, setProblem] =
         useState(null);
 
-        const [language, setLanguage] =
-    useState(
-        "java"
-    );
+const templates = {
 
-    const [code, setCode] =
-        useState(
+    java:
 `import java.util.*;
 
 public class Main {
@@ -43,8 +39,44 @@ public class Main {
     ) {
 
     }
+}`,
+
+    python:
+`# Write your solution here
+`,
+
+    javascript:
+`const fs =
+    require("fs");
+
+const input =
+    fs.readFileSync(
+        0,
+        "utf8"
+    );
+
+`,
+
+    cpp:
+`#include <iostream>
+
+using namespace std;
+
+int main() {
+
+    return 0;
 }`
-        );
+};
+
+const [language, setLanguage] =
+    useState(
+        "java"
+    );
+
+const [code, setCode] =
+    useState(
+        templates.java
+    );
 
     const [result, setResult] =
         useState(null);
@@ -86,6 +118,8 @@ const [discussionText,
                 "user"
             )
         );
+
+
 useEffect(() => {
 
     async function loadStats() {
@@ -705,13 +739,22 @@ async function handleDiscussionSubmit() {
 
 <select
     value={language}
-    onChange={(e) =>
-        setLanguage(
-            e.target.value
-        )
-    }
->
+    onChange={(e) => {
 
+        const newLanguage =
+            e.target.value;
+
+        setLanguage(
+            newLanguage
+        );
+
+        setCode(
+            templates[
+                newLanguage
+            ]
+        );
+    }}
+>
     <option value="java">
         Java
     </option>

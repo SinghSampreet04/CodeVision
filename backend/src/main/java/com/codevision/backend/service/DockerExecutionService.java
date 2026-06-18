@@ -18,6 +18,42 @@ public class DockerExecutionService {
             String language
     ) {
 
+        if (
+                "python".equalsIgnoreCase(
+                        language
+                )
+        ) {
+
+            return executePythonCode(
+                    code,
+                    input
+            );
+        }
+
+        if (
+                "javascript".equalsIgnoreCase(
+                        language
+                )
+        ) {
+
+            return executeJavaScriptCode(
+                    code,
+                    input
+            );
+        }
+
+        if (
+                "cpp".equalsIgnoreCase(
+                        language
+                )
+        ) {
+
+            return executeCppCode(
+                    code,
+                    input
+            );
+        }
+
         return executeJavaCode(
                 code,
                 input
@@ -27,6 +63,65 @@ public class DockerExecutionService {
     public ExecutionResult executeJavaCode(
             String code,
             String input
+    ) {
+
+        return executeContainer(
+                code,
+                input,
+                "Main.java",
+                "eclipse-temurin:21",
+                "javac Main.java && java Main"
+        );
+    }
+
+    public ExecutionResult executePythonCode(
+            String code,
+            String input
+    ) {
+
+        return executeContainer(
+                code,
+                input,
+                "main.py",
+                "python:3.12",
+                "python main.py"
+        );
+    }
+
+    public ExecutionResult executeJavaScriptCode(
+            String code,
+            String input
+    ) {
+
+        return executeContainer(
+                code,
+                input,
+                "main.js",
+                "node:22",
+                "node main.js"
+        );
+    }
+
+    public ExecutionResult executeCppCode(
+            String code,
+            String input
+    ) {
+
+        return executeContainer(
+                code,
+                input,
+                "main.cpp",
+                "gcc:14",
+                "g++ main.cpp -o main && ./main"
+        );
+    }
+
+    private ExecutionResult executeContainer(
+            String code,
+            String input,
+            String fileName,
+            String image,
+            String command
     ) {
 
         ExecutionResult result =
@@ -42,16 +137,16 @@ public class DockerExecutionService {
                             "codevision-docker"
                     );
 
-            File javaFile =
+            File sourceFile =
                     new File(
                             tempDir.toFile(),
-                            "Main.java"
+                            fileName
                     );
 
             try (
                     FileWriter writer =
                             new FileWriter(
-                                    javaFile
+                                    sourceFile
                             )
             ) {
 
@@ -84,16 +179,18 @@ public class DockerExecutionService {
                                     ":/workspace",
                             "-w",
                             "/workspace",
-                            "eclipse-temurin:21",
+                            image,
                             "sh",
                             "-c",
-                            "javac Main.java && java Main"
+                            command
                     ).start();
 
             OutputStream stdin =
                     process.getOutputStream();
 
-            if (input != null) {
+            if (
+                    input != null
+            ) {
 
                 stdin.write(
                         input.getBytes()
@@ -117,7 +214,9 @@ public class DockerExecutionService {
                     endTime - startTime
             );
 
-            if (!finished) {
+            if (
+                    !finished
+            ) {
 
                 process.destroyForcibly();
 
@@ -145,11 +244,17 @@ public class DockerExecutionService {
             int exitCode =
                     process.exitValue();
 
-            if (exitCode != 0) {
+            if (
+                    exitCode != 0
+            ) {
 
                 if (
                         errors.contains(
                                 "Exception"
+                        )
+                        ||
+                        errors.contains(
+                                "Traceback"
                         )
                 ) {
 

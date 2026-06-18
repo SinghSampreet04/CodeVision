@@ -119,6 +119,18 @@ public class SecurityConfig {
                                 )
 
                                 .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/discussions/**"
+                                )
+                                .permitAll()
+
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/discussions"
+                                )
+                                .authenticated()
+
+                                .requestMatchers(
                                         "/execute/**"
                                 )
                                 .permitAll()

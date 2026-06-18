@@ -525,6 +525,53 @@ export async function createContest(
     return response.json();
 }
 
+export async function getDiscussions(
+    problemId
+) {
+    const response =
+        await fetch(
+            `${API_URL}/discussions/problem/${problemId}`
+        );
+
+    return response.json();
+}
+
+export async function createDiscussion(
+    discussion
+) {
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/discussions`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json",
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+                body: JSON.stringify(
+                    discussion
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to create discussion"
+        );
+    }
+
+    return response.json();
+}
 export async function updateContest(
     id,
     contest

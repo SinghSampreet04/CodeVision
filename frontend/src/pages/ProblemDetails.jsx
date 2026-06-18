@@ -13,7 +13,9 @@ import {
     deleteTestCase,
     updateTestCase,
     getMySubmissionsForProblem,
-    getProblemStats
+    getProblemStats,
+    getDiscussions,
+    createDiscussion
 } from "../services/api";
 
 
@@ -45,6 +47,14 @@ public class Main {
     const [submissions, setSubmissions] =
         useState([]);
 
+   const [discussions, setDiscussions] =
+    useState([]);
+
+const [discussionText,
+    setDiscussionText] =
+    useState("");
+
+
         const [stats, setStats] =
     useState(null);
 
@@ -71,8 +81,7 @@ public class Main {
                 "user"
             )
         );
-
-    useEffect(() => {
+useEffect(() => {
 
     async function loadStats() {
 
@@ -100,6 +109,8 @@ public class Main {
     loadTestCases();
 
     loadStats();
+
+    loadDiscussions();
 
     if (user) {
 
@@ -170,6 +181,26 @@ public class Main {
             );
         }
     }
+    async function loadDiscussions() {
+
+    try {
+
+        const data =
+            await getDiscussions(
+                id
+            );
+
+        setDiscussions(
+            data
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+    }
+}
 
    async function handleSubmit() {
 
@@ -232,6 +263,50 @@ public class Main {
 
         alert(
             "Submission failed"
+        );
+    }
+}
+
+async function handleDiscussionSubmit() {
+
+    if (!user) {
+
+        alert(
+            "Please login first"
+        );
+
+        return;
+    }
+
+    if (
+            !discussionText.trim()
+    ) {
+
+        return;
+    }
+
+    try {
+
+        await createDiscussion(
+            {
+                problemId:
+                    Number(id),
+
+                content:
+                    discussionText
+            }
+        );
+
+        setDiscussionText(
+            ""
+        );
+
+        await loadDiscussions();
+
+    } catch {
+
+        alert(
+            "Failed to post discussion"
         );
     }
 }
@@ -768,6 +843,91 @@ public class Main {
                 )
             }
 
+<hr />
+
+<h2>
+    Discussions
+</h2>
+
+{
+    user && (
+
+        <>
+
+            <textarea
+                rows={4}
+                cols={80}
+                value={discussionText}
+                onChange={(e) =>
+                    setDiscussionText(
+                        e.target.value
+                    )
+                }
+                placeholder="Write a comment..."
+            />
+
+            <br />
+            <br />
+
+            <button
+                onClick={
+                    handleDiscussionSubmit
+                }
+            >
+                Post Comment
+            </button>
+
+            <br />
+            <br />
+
+        </>
+
+    )
+}
+
+{
+    discussions.length === 0 ? (
+
+        <p>
+            No discussions yet.
+        </p>
+
+    ) : (
+
+        discussions.map(
+            discussion => (
+
+                <div
+                    key={
+                        discussion.id
+                    }
+                >
+
+                    <strong>
+                        {
+                            discussion.username
+                        }
+                    </strong>
+
+                    <p>
+                        {
+                            discussion.content
+                        }
+                    </p>
+
+                    <small>
+                        {
+                            discussion.createdAt
+                        }
+                    </small>
+
+                    <hr />
+
+                </div>
+            )
+        )
+    )
+}
         </div>
     );
 }

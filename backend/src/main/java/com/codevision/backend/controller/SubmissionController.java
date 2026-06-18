@@ -59,6 +59,20 @@ public class SubmissionController {
         );
     }
 
+    @GetMapping("/me/problem/{problemId}")
+    public List<SubmissionResponse>
+    getMySubmissionsForProblem(
+            @PathVariable Long problemId,
+            Authentication authentication
+    ) {
+
+        return submissionService
+                .getMySubmissionsForProblem(
+                        problemId,
+                        authentication.getName()
+                );
+    }
+
     @GetMapping("/{id}")
     public SubmissionResponse getSubmissionById(
             @PathVariable Long id,

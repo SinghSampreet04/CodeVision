@@ -11,7 +11,8 @@ import {
     createTestCase,
     getTestCases,
     deleteTestCase,
-    updateTestCase
+    updateTestCase,
+    getMySubmissionsForProblem
 } from "../services/api";
 
 function ProblemDetails() {
@@ -38,6 +39,9 @@ public class Main {
 
     const [result, setResult] =
         useState(null);
+
+    const [submissions, setSubmissions] =
+        useState([]);
 
     const [testCases, setTestCases] =
         useState([]);
@@ -68,6 +72,11 @@ public class Main {
         loadProblem();
 
         loadTestCases();
+
+        if (user) {
+
+            loadMySubmissions();
+        }
 
     }, [id]);
 
@@ -113,6 +122,27 @@ public class Main {
         }
     }
 
+    async function loadMySubmissions() {
+
+        try {
+
+            const data =
+                await getMySubmissionsForProblem(
+                    id
+                );
+
+            setSubmissions(
+                data
+            );
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+        }
+    }
+
     async function handleSubmit() {
 
         try {
@@ -143,6 +173,8 @@ public class Main {
             setResult(
                 response
             );
+
+            await loadMySubmissions();
 
         } catch {
 
@@ -462,17 +494,13 @@ public class Main {
                                         <pre>
                                             Input:
                                             {"\n"}
-                                            {
-                                                testCase.input
-                                            }
+                                            {testCase.input}
                                         </pre>
 
                                         <pre>
                                             Expected:
                                             {"\n"}
-                                            {
-                                                testCase.expectedOutput
-                                            }
+                                            {testCase.expectedOutput}
                                         </pre>
 
                                         <button
@@ -552,13 +580,9 @@ public class Main {
                         <p>
                             Passed:
                             {" "}
-                            {
-                                result.passedTestCases
-                            }
+                            {result.passedTestCases}
                             {" / "}
-                            {
-                                result.totalTestCases
-                            }
+                            {result.totalTestCases}
                         </p>
 
                         {
@@ -571,12 +595,83 @@ public class Main {
                                     </h4>
 
                                     <pre>
-                                        {
-                                            result.feedback
-                                        }
+                                        {result.feedback}
                                     </pre>
 
                                 </div>
+                            )
+                        }
+
+                    </div>
+                )
+            }
+
+            {
+                user && (
+
+                    <div>
+
+                        <hr />
+
+                        <h2>
+                            My Attempts
+                        </h2>
+
+                        {
+                            submissions.length === 0 ? (
+
+                                <p>
+                                    No submissions yet.
+                                </p>
+
+                            ) : (
+
+                                submissions
+                                    .slice()
+                                    .reverse()
+                                    .map(
+                                        submission => (
+
+                                            <div
+                                                key={
+                                                    submission.id
+                                                }
+                                            >
+
+                                                <Link
+                                                    to={`/submissions/${submission.id}`}
+                                                >
+                                                    Submission #
+                                                    {
+                                                        submission.id
+                                                    }
+                                                </Link>
+
+                                                <p>
+                                                    Status:
+                                                    {" "}
+                                                    {
+                                                        submission.status
+                                                    }
+                                                </p>
+
+                                                <p>
+                                                    Passed:
+                                                    {" "}
+                                                    {
+                                                        submission.passedTestCases
+                                                    }
+                                                    {" / "}
+                                                    {
+                                                        submission.totalTestCases
+                                                    }
+                                                </p>
+
+                                                <hr />
+
+                                            </div>
+                                        )
+                                    )
                             )
                         }
 

@@ -287,6 +287,31 @@ export async function getMySubmissions() {
     return response.json();
 }
 
+export async function getMySubmissionsForProblem(
+    problemId
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions/me/problem/${problemId}`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
+        );
+
+    return response.json();
+}
+
 export async function getSubmissionById(
     id
 ) {

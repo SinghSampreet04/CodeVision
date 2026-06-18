@@ -197,6 +197,33 @@ public class SubmissionService {
                 );
     }
 
+    public List<SubmissionResponse>
+    getMySubmissionsForProblem(
+            Long problemId,
+            String email
+    ) {
+
+        User user =
+                userRepository
+                        .findByEmail(
+                                email
+                        )
+                        .orElseThrow();
+
+        return submissionRepository
+                .findByUserIdAndProblemId(
+                        user.getId(),
+                        problemId
+                )
+                .stream()
+                .map(
+                        this::convertToResponse
+                )
+                .collect(
+                        Collectors.toList()
+                );
+    }
+
     private SubmissionResponse
     convertToResponse(
             Submission submission

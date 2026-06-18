@@ -16,6 +16,11 @@ public interface SubmissionRepository
             Long problemId
     );
 
+    List<Submission> findByUserIdAndProblemId(
+            Long userId,
+            Long problemId
+    );
+
     List<Submission>
     findByProblemIdAndStatusOrderByRuntimeAsc(
             Long problemId,

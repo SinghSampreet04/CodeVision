@@ -10,7 +10,8 @@ import {
     submitSolution,
     createTestCase,
     getTestCases,
-    deleteTestCase
+    deleteTestCase,
+    updateTestCase
 } from "../services/api";
 
 function ProblemDetails() {
@@ -50,6 +51,10 @@ public class Main {
 
     const [hidden, setHidden] =
         useState(false);
+
+    const [editingTestCaseId,
+        setEditingTestCaseId] =
+        useState(null);
 
     const user =
         JSON.parse(
@@ -169,9 +174,7 @@ public class Main {
                 }
             );
 
-            setInput("");
-            setExpectedOutput("");
-            setHidden(false);
+            resetForm();
 
             await loadTestCases();
 
@@ -183,6 +186,40 @@ public class Main {
 
             alert(
                 "Failed to create test case"
+            );
+        }
+    }
+
+    async function handleUpdateTestCase() {
+
+        try {
+
+            await updateTestCase(
+                editingTestCaseId,
+                {
+                    input:
+                        input,
+
+                    expectedOutput:
+                        expectedOutput,
+
+                    hidden:
+                        hidden
+                }
+            );
+
+            resetForm();
+
+            await loadTestCases();
+
+            alert(
+                "Test case updated"
+            );
+
+        } catch {
+
+            alert(
+                "Failed to update test case"
             );
         }
     }
@@ -211,6 +248,40 @@ public class Main {
         }
     }
 
+    function handleEditTestCase(
+            testCase
+    ) {
+
+        setEditingTestCaseId(
+            testCase.id
+        );
+
+        setInput(
+            testCase.input
+        );
+
+        setExpectedOutput(
+            testCase.expectedOutput
+        );
+
+        setHidden(
+            testCase.hidden
+        );
+    }
+
+    function resetForm() {
+
+        setEditingTestCaseId(
+            null
+        );
+
+        setInput("");
+
+        setExpectedOutput("");
+
+        setHidden(false);
+    }
+
     if (!problem) {
 
         return (
@@ -236,6 +307,7 @@ public class Main {
             {
                 user?.role ===
                 "ADMIN" && (
+
                     <div>
 
                         <Link
@@ -341,13 +413,37 @@ public class Main {
                         <br />
                         <br />
 
-                        <button
-                            onClick={
-                                handleCreateTestCase
-                            }
-                        >
-                            Add Test Case
-                        </button>
+                        {
+                            editingTestCaseId ? (
+                                <>
+                                    <button
+                                        onClick={
+                                            handleUpdateTestCase
+                                        }
+                                    >
+                                        Save Changes
+                                    </button>
+
+                                    {" "}
+
+                                    <button
+                                        onClick={
+                                            resetForm
+                                        }
+                                    >
+                                        Cancel
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    onClick={
+                                        handleCreateTestCase
+                                    }
+                                >
+                                    Add Test Case
+                                </button>
+                            )
+                        }
 
                         <h3>
                             Visible Test Cases
@@ -381,12 +477,24 @@ public class Main {
 
                                         <button
                                             onClick={() =>
+                                                handleEditTestCase(
+                                                    testCase
+                                                )
+                                            }
+                                        >
+                                            Edit
+                                        </button>
+
+                                        {" "}
+
+                                        <button
+                                            onClick={() =>
                                                 handleDeleteTestCase(
                                                     testCase.id
                                                 )
                                             }
                                         >
-                                            Delete Test Case
+                                            Delete
                                         </button>
 
                                         <hr />

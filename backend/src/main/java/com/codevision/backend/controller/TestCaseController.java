@@ -32,6 +32,19 @@ public class TestCaseController {
                 );
     }
 
+    @PutMapping("/{id}")
+    public TestCase updateTestCase(
+            @PathVariable Long id,
+            @RequestBody TestCase testCase
+    ) {
+
+        return testCaseService
+                .updateTestCase(
+                        id,
+                        testCase
+                );
+    }
+
     @GetMapping("/problem/{problemId}")
     public List<TestCase> getByProblemId(
             @PathVariable Long problemId

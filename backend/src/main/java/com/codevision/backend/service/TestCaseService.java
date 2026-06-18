@@ -39,6 +39,33 @@ public class TestCaseService {
                 );
     }
 
+    public TestCase updateTestCase(
+            Long id,
+            TestCase updatedTestCase
+    ) {
+
+        TestCase existingTestCase =
+                testCaseRepository
+                        .findById(id)
+                        .orElseThrow();
+
+        existingTestCase.setInput(
+                updatedTestCase.getInput()
+        );
+
+        existingTestCase.setExpectedOutput(
+                updatedTestCase.getExpectedOutput()
+        );
+
+        existingTestCase.setHidden(
+                updatedTestCase.getHidden()
+        );
+
+        return testCaseRepository.save(
+                existingTestCase
+        );
+    }
+
     public void deleteTestCase(
             Long id
     ) {

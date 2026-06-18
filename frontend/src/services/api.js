@@ -178,6 +178,48 @@ export async function createTestCase(
     return response.json();
 }
 
+export async function updateTestCase(
+    id,
+    testCase
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/testcases/${id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    testCase
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to update test case"
+        );
+    }
+
+    return response.json();
+}
+
 export async function deleteTestCase(
     id
 ) {

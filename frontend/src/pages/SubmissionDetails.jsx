@@ -34,6 +34,84 @@ function SubmissionDetails() {
 
     }, [id]);
 
+    function getStatusColor(
+            status
+    ) {
+
+        if (
+                status ===
+                "ACCEPTED"
+        ) {
+
+            return "limegreen";
+        }
+
+        if (
+                status ===
+                "WRONG_ANSWER"
+        ) {
+
+            return "red";
+        }
+
+        if (
+                status ===
+                "COMPILATION_ERROR"
+        ) {
+
+            return "orange";
+        }
+
+        if (
+                status ===
+                "PENDING"
+        ) {
+
+            return "gray";
+        }
+
+        return "white";
+    }
+
+    function getStatusIcon(
+            status
+    ) {
+
+        if (
+                status ===
+                "ACCEPTED"
+        ) {
+
+            return "🟢";
+        }
+
+        if (
+                status ===
+                "WRONG_ANSWER"
+        ) {
+
+            return "🔴";
+        }
+
+        if (
+                status ===
+                "COMPILATION_ERROR"
+        ) {
+
+            return "🟠";
+        }
+
+        if (
+                status ===
+                "PENDING"
+        ) {
+
+            return "⚪";
+        }
+
+        return "❓";
+    }
+
     if (!submission) {
 
         return (
@@ -51,8 +129,23 @@ function SubmissionDetails() {
                 {submission.id}
             </h1>
 
-            <p>
+            <p
+                style={{
+                    color:
+                        getStatusColor(
+                            submission.status
+                        ),
+                    fontWeight:
+                        "bold"
+                }}
+            >
                 Status:
+                {" "}
+                {
+                    getStatusIcon(
+                        submission.status
+                    )
+                }
                 {" "}
                 {submission.status}
             </p>

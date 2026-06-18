@@ -22,6 +22,10 @@ public class Submission {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+    @ManyToOne
+    @JoinColumn(name = "contest_id")
+    private Contest contest;
+
     private String language;
 
     @Column(columnDefinition = "TEXT")
@@ -74,6 +78,16 @@ public class Submission {
             Problem problem
     ) {
         this.problem = problem;
+    }
+
+    public Contest getContest() {
+        return contest;
+    }
+
+    public void setContest(
+            Contest contest
+    ) {
+        this.contest = contest;
     }
 
     public String getLanguage() {

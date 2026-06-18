@@ -12,8 +12,10 @@ import {
     getTestCases,
     deleteTestCase,
     updateTestCase,
-    getMySubmissionsForProblem
+    getMySubmissionsForProblem,
+    getProblemStats
 } from "../services/api";
+
 
 function ProblemDetails() {
 
@@ -43,6 +45,9 @@ public class Main {
     const [submissions, setSubmissions] =
         useState([]);
 
+        const [stats, setStats] =
+    useState(null);
+
     const [testCases, setTestCases] =
         useState([]);
 
@@ -69,16 +74,39 @@ public class Main {
 
     useEffect(() => {
 
-        loadProblem();
+    async function loadStats() {
 
-        loadTestCases();
+        try {
 
-        if (user) {
+            const data =
+                await getProblemStats(
+                    id
+                );
 
-            loadMySubmissions();
+            setStats(
+                data
+            );
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
         }
+    }
 
-    }, [id]);
+    loadProblem();
+
+    loadTestCases();
+
+    loadStats();
+
+    if (user) {
+
+        loadMySubmissions();
+    }
+
+}, [id]);
 
     async function loadProblem() {
 
@@ -143,46 +171,70 @@ public class Main {
         }
     }
 
-    async function handleSubmit() {
+   async function handleSubmit() {
 
-        try {
+    try {
 
-            if (!user) {
-
-                alert(
-                    "Please login first"
-                );
-
-                return;
-            }
-
-            const response =
-                await submitSolution(
-                    {
-                        problemId:
-                            Number(id),
-
-                        language:
-                            "java",
-
-                        code:
-                            code
-                    }
-                );
-
-            setResult(
-                response
-            );
-
-            await loadMySubmissions();
-
-        } catch {
+        if (!user) {
 
             alert(
-                "Submission failed"
+                "Please login first"
             );
+
+            return;
         }
+
+        const contestId =
+            new URLSearchParams(
+                window.location.search
+            )
+            .get(
+                "contestId"
+            );
+
+        const response =
+            await submitSolution(
+                {
+                    problemId:
+                        Number(id),
+
+                    contestId:
+                        contestId
+                            ? Number(
+                                    contestId
+                              )
+                            : null,
+
+                    language:
+                        "java",
+
+                    code:
+                        code
+                }
+            );
+
+        setResult(
+            response
+        );
+
+        await loadMySubmissions();
+
+        const statsData =
+            await getProblemStats(
+                id
+            );
+
+        setStats(
+            statsData
+        );
+
+    } catch {
+
+        alert(
+            "Submission failed"
+        );
     }
+}
 
     async function handleCreateTestCase() {
 
@@ -335,7 +387,38 @@ public class Main {
                 {" "}
                 {problem.difficulty}
             </p>
+{
+    stats && (
 
+        <div>
+
+            <p>
+                Total Submissions:
+                {" "}
+                {stats.totalSubmissions}
+            </p>
+
+            <p>
+                Accepted Submissions:
+                {" "}
+                {stats.acceptedSubmissions}
+            </p>
+
+            <p>
+                Accepted Users:
+                {" "}
+                {stats.acceptedUsers}
+            </p>
+
+            <p>
+                Acceptance Rate:
+                {" "}
+                {stats.acceptanceRate}%
+            </p>
+
+        </div>
+    )
+}
             {
                 user?.role ===
                 "ADMIN" && (
@@ -576,14 +659,20 @@ public class Main {
                             {" "}
                             {result.status}
                         </p>
+<p>
+    Passed:
+    {" "}
+    {result.passedTestCases}
+    {" / "}
+    {result.totalTestCases}
+</p>
 
-                        <p>
-                            Passed:
-                            {" "}
-                            {result.passedTestCases}
-                            {" / "}
-                            {result.totalTestCases}
-                        </p>
+<p>
+    Runtime:
+    {" "}
+    {result.runtime}
+    {" ms"}
+</p>
 
                         {
                             result.feedback && (

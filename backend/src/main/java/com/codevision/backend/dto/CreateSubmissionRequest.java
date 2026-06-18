@@ -4,6 +4,8 @@ public class CreateSubmissionRequest {
 
     private Long problemId;
 
+    private Long contestId;
+
     private String language;
 
     private String code;
@@ -19,6 +21,16 @@ public class CreateSubmissionRequest {
             Long problemId
     ) {
         this.problemId = problemId;
+    }
+
+    public Long getContestId() {
+        return contestId;
+    }
+
+    public void setContestId(
+            Long contestId
+    ) {
+        this.contestId = contestId;
     }
 
     public String getLanguage() {

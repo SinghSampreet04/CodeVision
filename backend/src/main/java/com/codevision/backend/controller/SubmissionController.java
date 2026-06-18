@@ -2,6 +2,7 @@ package com.codevision.backend.controller;
 
 import com.codevision.backend.dto.CreateSubmissionRequest;
 import com.codevision.backend.dto.LeaderboardEntryResponse;
+import com.codevision.backend.dto.ProblemStatsResponse;
 import com.codevision.backend.dto.SubmissionResponse;
 import com.codevision.backend.service.LeaderboardService;
 import com.codevision.backend.service.SubmissionService;
@@ -70,6 +71,18 @@ public class SubmissionController {
                 .getMySubmissionsForProblem(
                         problemId,
                         authentication.getName()
+                );
+    }
+
+    @GetMapping("/stats/problem/{problemId}")
+    public ProblemStatsResponse
+    getProblemStats(
+            @PathVariable Long problemId
+    ) {
+
+        return submissionService
+                .getProblemStats(
+                        problemId
                 );
     }
 

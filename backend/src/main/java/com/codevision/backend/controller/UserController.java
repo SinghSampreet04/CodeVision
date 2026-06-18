@@ -1,9 +1,11 @@
 package com.codevision.backend.controller;
 
 import com.codevision.backend.dto.CreateUserRequest;
+import com.codevision.backend.dto.UserProfileResponse;
 import com.codevision.backend.dto.UserResponse;
 import com.codevision.backend.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +19,9 @@ public class UserController {
     public UserController(
             UserService userService
     ) {
-        this.userService = userService;
+
+        this.userService =
+                userService;
     }
 
     @PostMapping
@@ -36,5 +40,15 @@ public class UserController {
     public List<UserResponse> getAllUsers() {
 
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/profile")
+    public UserProfileResponse getProfile(
+            Authentication authentication
+    ) {
+
+        return userService.getProfile(
+                authentication.getName()
+        );
     }
 }

@@ -64,6 +64,22 @@ function SubmissionDetails() {
 
         if (
                 status ===
+                "RUNTIME_ERROR"
+        ) {
+
+            return "darkred";
+        }
+
+        if (
+                status ===
+                "TIME_LIMIT_EXCEEDED"
+        ) {
+
+            return "gold";
+        }
+
+        if (
+                status ===
                 "PENDING"
         ) {
 
@@ -103,6 +119,22 @@ function SubmissionDetails() {
 
         if (
                 status ===
+                "RUNTIME_ERROR"
+        ) {
+
+            return "💥";
+        }
+
+        if (
+                status ===
+                "TIME_LIMIT_EXCEEDED"
+        ) {
+
+            return "⏱️";
+        }
+
+        if (
+                status ===
                 "PENDING"
         ) {
 
@@ -136,7 +168,9 @@ function SubmissionDetails() {
                             submission.status
                         ),
                     fontWeight:
-                        "bold"
+                        "bold",
+                    fontSize:
+                        "20px"
                 }}
             >
                 Status:
@@ -149,6 +183,12 @@ function SubmissionDetails() {
                 {" "}
                 {submission.status}
             </p>
+
+            <hr />
+
+            <h2>
+                Results
+            </h2>
 
             <p>
                 Passed:
@@ -165,16 +205,19 @@ function SubmissionDetails() {
             </p>
 
             <p>
-                Language:
+                Runtime:
                 {" "}
-                {submission.language}
+                {
+                    submission.runtime ??
+                    0
+                }
+                {" ms"}
             </p>
 
             <p>
-                Runtime:
+                Language:
                 {" "}
-                {submission.runtime}
-                {" ms"}
+                {submission.language}
             </p>
 
             <p>
@@ -185,25 +228,48 @@ function SubmissionDetails() {
 
             {
                 submission.feedback && (
-                    <>
-                        <h3>
-                            Feedback
-                        </h3>
 
-                        <pre>
+                    <div>
+
+                        <hr />
+
+                        <h2>
+                            AI Feedback
+                        </h2>
+
+                        <pre
+                            style={{
+                                whiteSpace:
+                                    "pre-wrap"
+                            }}
+                        >
                             {
                                 submission.feedback
                             }
                         </pre>
-                    </>
+
+                    </div>
                 )
             }
 
-            <h3>
-                Code
-            </h3>
+            <hr />
 
-            <pre>
+            <h2>
+                Source Code
+            </h2>
+
+            <pre
+                style={{
+                    overflowX:
+                        "auto",
+                    background:
+                        "#111",
+                    padding:
+                        "15px",
+                    borderRadius:
+                        "8px"
+                }}
+            >
                 {submission.code}
             </pre>
 

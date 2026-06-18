@@ -26,4 +26,32 @@ public interface SubmissionRepository
             Long problemId,
             String status
     );
+
+    List<Submission>
+    findByContestId(
+            Long contestId
+    );
+
+    long countByProblemId(
+            Long problemId
+    );
+
+    long countByProblemIdAndStatus(
+            Long problemId,
+            String status
+    );
+
+    long countDistinctUserIdByProblemIdAndStatus(
+            Long problemId,
+            String status
+    );
+
+    long countByUserId(
+            Long userId
+    );
+
+    long countByUserIdAndStatus(
+            Long userId,
+            String status
+    );
 }

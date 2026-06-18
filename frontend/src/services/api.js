@@ -312,6 +312,18 @@ export async function getMySubmissionsForProblem(
     return response.json();
 }
 
+export async function getProblemStats(
+    problemId
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/submissions/stats/problem/${problemId}`
+        );
+
+    return response.json();
+}
+
 export async function getSubmissionById(
     id
 ) {
@@ -417,6 +429,183 @@ export async function registerUser(
             "Registration failed"
         );
     }
+
+    return response.json();
+}
+export async function getProfile() {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/users/profile`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to load profile"
+        );
+    }
+
+    return response.json();
+}
+
+export async function getContests() {
+
+    const response =
+        await fetch(
+            `${API_URL}/contests`
+        );
+
+    return response.json();
+}
+
+export async function getContestById(
+    id
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/contests/${id}`
+        );
+
+    return response.json();
+}
+
+export async function createContest(
+    contest
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/contests`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    contest
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to create contest"
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateContest(
+    id,
+    contest
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/contests/${id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    contest
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to update contest"
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteContest(
+    id
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/contests/${id}`,
+            {
+                method: "DELETE",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to delete contest"
+        );
+    }
+}
+export async function getContestLeaderboard(
+    contestId
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/contests/${contestId}/leaderboard`
+        );
 
     return response.json();
 }

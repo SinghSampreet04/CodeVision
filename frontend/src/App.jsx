@@ -14,6 +14,11 @@ import SubmissionDetails from "./pages/SubmissionDetails";
 import Leaderboard from "./pages/Leaderboard";
 import CreateProblem from "./pages/CreateProblem";
 import EditProblem from "./pages/EditProblem";
+import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard";
+import Contests from "./pages/Contests";
+import ContestDetails from "./pages/ContestDetails";
+import ContestLeaderboard from "./pages/ContestLeaderboard";
 
 function App() {
 
@@ -45,10 +50,34 @@ function App() {
 
                 {" | "}
 
+                <Link to="/contests">
+                    Contests
+                </Link>
+
+                {" | "}
+
+                {user && (
+                    <>
+                        <Link to="/profile">
+                            Profile
+                        </Link>
+
+                        {" | "}
+                    </>
+                )}
+
                 {
                     user?.role ===
                     "ADMIN" && (
                         <>
+                            <Link
+                                to="/admin"
+                            >
+                                Dashboard
+                            </Link>
+
+                            {" | "}
+
                             <Link
                                 to="/create-problem"
                             >
@@ -104,6 +133,37 @@ function App() {
                 <Route
                     path="/"
                     element={<Problems />}
+                />
+
+                <Route
+                    path="/contests"
+                    element={<Contests />}
+                />
+
+                <Route
+                    path="/contests/:id"
+                    element={
+                        <ContestDetails />
+                    }
+                />
+
+                <Route
+                    path="/contests/:id/leaderboard"
+                    element={
+                        <ContestLeaderboard />
+                    }
+                />
+
+                <Route
+                    path="/profile"
+                    element={<Profile />}
+                />
+
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminDashboard />
+                    }
                 />
 
                 <Route

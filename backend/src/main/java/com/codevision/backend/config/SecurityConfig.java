@@ -89,12 +89,47 @@ public class SecurityConfig {
                                 )
 
                                 .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/contests/**"
+                                )
+                                .permitAll()
+
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/contests/**"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
+
+                                .requestMatchers(
+                                        HttpMethod.PUT,
+                                        "/contests/**"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
+
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/contests/**"
+                                )
+                                .hasRole(
+                                        "ADMIN"
+                                )
+
+                                .requestMatchers(
                                         "/execute/**"
                                 )
                                 .permitAll()
 
                                 .requestMatchers(
                                         "/submissions/leaderboard/**"
+                                )
+                                .permitAll()
+
+                                .requestMatchers(
+                                        "/submissions/stats/**"
                                 )
                                 .permitAll()
 

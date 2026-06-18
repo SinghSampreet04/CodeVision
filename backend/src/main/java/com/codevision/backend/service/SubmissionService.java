@@ -1,10 +1,13 @@
 package com.codevision.backend.service;
 
 import com.codevision.backend.dto.CreateSubmissionRequest;
+import com.codevision.backend.dto.ProblemStatsResponse;
 import com.codevision.backend.dto.SubmissionResponse;
+import com.codevision.backend.entity.Contest;
 import com.codevision.backend.entity.Problem;
 import com.codevision.backend.entity.Submission;
 import com.codevision.backend.entity.User;
+import com.codevision.backend.repository.ContestRepository;
 import com.codevision.backend.repository.ProblemRepository;
 import com.codevision.backend.repository.SubmissionRepository;
 import com.codevision.backend.repository.UserRepository;
@@ -22,6 +25,8 @@ public class SubmissionService {
 
     private final ProblemRepository problemRepository;
 
+    private final ContestRepository contestRepository;
+
     private final SubmissionExecutionService
             submissionExecutionService;
 
@@ -29,6 +34,7 @@ public class SubmissionService {
             SubmissionRepository submissionRepository,
             UserRepository userRepository,
             ProblemRepository problemRepository,
+            ContestRepository contestRepository,
             SubmissionExecutionService submissionExecutionService
     ) {
 
@@ -40,6 +46,9 @@ public class SubmissionService {
 
         this.problemRepository =
                 problemRepository;
+
+        this.contestRepository =
+                contestRepository;
 
         this.submissionExecutionService =
                 submissionExecutionService;
@@ -74,6 +83,23 @@ public class SubmissionService {
         submission.setProblem(
                 problem
         );
+
+        if (
+                request.getContestId()
+                        != null
+        ) {
+
+            Contest contest =
+                    contestRepository
+                            .findById(
+                                    request.getContestId()
+                            )
+                            .orElseThrow();
+
+            submission.setContest(
+                    contest
+            );
+        }
 
         submission.setLanguage(
                 request.getLanguage()
@@ -222,6 +248,70 @@ public class SubmissionService {
                 .collect(
                         Collectors.toList()
                 );
+    }
+
+    public ProblemStatsResponse
+    getProblemStats(
+            Long problemId
+    ) {
+
+        long totalSubmissions =
+                submissionRepository
+                        .countByProblemId(
+                                problemId
+                        );
+
+        long acceptedSubmissions =
+                submissionRepository
+                        .countByProblemIdAndStatus(
+                                problemId,
+                                "ACCEPTED"
+                        );
+
+        long acceptedUsers =
+                submissionRepository
+                        .countDistinctUserIdByProblemIdAndStatus(
+                                problemId,
+                                "ACCEPTED"
+                        );
+
+        double acceptanceRate = 0.0;
+
+        if (
+                totalSubmissions > 0
+        ) {
+
+            acceptanceRate =
+                    (
+                            acceptedSubmissions
+                            * 100.0
+                    )
+                    / totalSubmissions;
+        }
+
+        ProblemStatsResponse response =
+                new ProblemStatsResponse();
+
+        response.setTotalSubmissions(
+                totalSubmissions
+        );
+
+        response.setAcceptedSubmissions(
+                acceptedSubmissions
+        );
+
+        response.setAcceptedUsers(
+                acceptedUsers
+        );
+
+        response.setAcceptanceRate(
+                Math.round(
+                        acceptanceRate
+                                * 100.0
+                ) / 100.0
+        );
+
+        return response;
     }
 
     private SubmissionResponse

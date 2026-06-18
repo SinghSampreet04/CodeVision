@@ -561,6 +561,25 @@ public class Main {
                             }
                         </p>
 
+                        {
+                            result.feedback && (
+
+                                <div>
+
+                                    <h4>
+                                        AI Feedback
+                                    </h4>
+
+                                    <pre>
+                                        {
+                                            result.feedback
+                                        }
+                                    </pre>
+
+                                </div>
+                            )
+                        }
+
                     </div>
                 )
             }

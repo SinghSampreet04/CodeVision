@@ -7,6 +7,12 @@ function Problems() {
     const [problems, setProblems] =
         useState([]);
 
+    const [search, setSearch] =
+        useState("");
+
+    const [difficulty, setDifficulty] =
+        useState("All");
+
     useEffect(() => {
 
         getProblems()
@@ -19,6 +25,28 @@ function Problems() {
 
     }, []);
 
+    const filteredProblems =
+        problems.filter(
+            problem => {
+
+                const matchesSearch =
+                    problem.title
+                        .toLowerCase()
+                        .includes(
+                            search.toLowerCase()
+                        );
+
+                const matchesDifficulty =
+                    difficulty === "All" ||
+                    problem.difficulty === difficulty;
+
+                return (
+                    matchesSearch &&
+                    matchesDifficulty
+                );
+            }
+        );
+
     return (
         <div>
 
@@ -30,8 +58,54 @@ function Problems() {
                 Problems
             </h2>
 
+            <div>
+
+                <input
+                    type="text"
+                    placeholder="Search problems..."
+                    value={search}
+                    onChange={(e) =>
+                        setSearch(
+                            e.target.value
+                        )
+                    }
+                />
+
+                {" "}
+
+                <select
+                    value={difficulty}
+                    onChange={(e) =>
+                        setDifficulty(
+                            e.target.value
+                        )
+                    }
+                >
+
+                    <option>
+                        All
+                    </option>
+
+                    <option>
+                        Easy
+                    </option>
+
+                    <option>
+                        Medium
+                    </option>
+
+                    <option>
+                        Hard
+                    </option>
+
+                </select>
+
+            </div>
+
+            <br />
+
             {
-                problems.map(
+                filteredProblems.map(
                     problem => (
 
                         <div
@@ -68,6 +142,14 @@ function Problems() {
 
                         </div>
                     )
+                )
+            }
+
+            {
+                filteredProblems.length === 0 && (
+                    <p>
+                        No problems found.
+                    </p>
                 )
             }
 

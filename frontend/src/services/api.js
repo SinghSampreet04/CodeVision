@@ -22,6 +22,206 @@ export async function getProblemById(
     return response.json();
 }
 
+export async function createProblem(
+    problem
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/problems`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    problem
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to create problem"
+        );
+    }
+
+    return response.json();
+}
+
+export async function updateProblem(
+    id,
+    problem
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/problems/${id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    problem
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to update problem"
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteProblem(
+    id
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/problems/${id}`,
+            {
+                method: "DELETE",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to delete problem"
+        );
+    }
+}
+
+export async function createTestCase(
+    testCase
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/testcases`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
+                },
+
+                body: JSON.stringify(
+                    testCase
+                )
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to create test case"
+        );
+    }
+
+    return response.json();
+}
+
+export async function deleteTestCase(
+    id
+) {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    const response =
+        await fetch(
+            `${API_URL}/testcases/${id}`,
+            {
+                method: "DELETE",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to delete test case"
+        );
+    }
+}
+
+export async function getTestCases(
+    problemId
+) {
+
+    const response =
+        await fetch(
+            `${API_URL}/testcases/problem/${problemId}`
+        );
+
+    return response.json();
+}
+
 export async function getMySubmissions() {
 
     const user =
@@ -132,10 +332,12 @@ export async function registerUser(
             `${API_URL}/auth/register`,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type":
                         "application/json"
                 },
+
                 body: JSON.stringify(
                     userData
                 )
@@ -161,10 +363,12 @@ export async function loginUser(
             `${API_URL}/auth/login`,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type":
                         "application/json"
                 },
+
                 body: JSON.stringify(
                     credentials
                 )

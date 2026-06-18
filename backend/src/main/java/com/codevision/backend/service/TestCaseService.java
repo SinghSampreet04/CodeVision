@@ -38,4 +38,13 @@ public class TestCaseService {
                         problemId
                 );
     }
+
+    public void deleteTestCase(
+            Long id
+    ) {
+
+        testCaseRepository.deleteById(
+                id
+        );
+    }
 }

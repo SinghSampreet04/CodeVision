@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Submissions from "./pages/Submissions";
 import SubmissionDetails from "./pages/SubmissionDetails";
 import Leaderboard from "./pages/Leaderboard";
+import CreateProblem from "./pages/CreateProblem";
 
 function App() {
 
@@ -42,6 +43,21 @@ function App() {
                 </Link>
 
                 {" | "}
+
+                {
+                    user?.role ===
+                    "ADMIN" && (
+                        <>
+                            <Link
+                                to="/create-problem"
+                            >
+                                Create Problem
+                            </Link>
+
+                            {" | "}
+                        </>
+                    )
+                }
 
                 {user && (
                     <>
@@ -114,6 +130,13 @@ function App() {
                     path="/submissions/:id"
                     element={
                         <SubmissionDetails />
+                    }
+                />
+
+                <Route
+                    path="/create-problem"
+                    element={
+                        <CreateProblem />
                     }
                 />
 

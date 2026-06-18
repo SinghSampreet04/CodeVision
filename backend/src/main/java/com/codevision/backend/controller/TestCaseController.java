@@ -42,4 +42,14 @@ public class TestCaseController {
                         problemId
                 );
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteTestCase(
+            @PathVariable Long id
+    ) {
+
+        testCaseService.deleteTestCase(
+                id
+        );
+    }
 }

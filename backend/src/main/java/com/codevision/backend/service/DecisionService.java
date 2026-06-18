@@ -17,6 +17,7 @@ public class DecisionService {
             TestCaseRepository testCaseRepository,
             DockerExecutionService dockerExecutionService
     ) {
+
         this.testCaseRepository =
                 testCaseRepository;
 
@@ -37,11 +38,37 @@ public class DecisionService {
                         problemId
                 );
 
+        if (
+                testCases.isEmpty()
+        ) {
+
+            result.setStatus(
+                    "NO_TEST_CASES"
+            );
+
+            result.setPassed(
+                    0
+            );
+
+            result.setTotal(
+                    0
+            );
+
+            result.setRuntime(
+                    0L
+            );
+
+            return result;
+        }
+
         int passed = 0;
 
         long totalRuntime = 0;
 
-        for (TestCase testCase : testCases) {
+        for (
+                TestCase testCase :
+                testCases
+        ) {
 
             ExecutionResult executionResult =
                     dockerExecutionService
@@ -66,7 +93,9 @@ public class DecisionService {
                         "COMPILATION_ERROR"
                 );
 
-                result.setPassed(0);
+                result.setPassed(
+                        0
+                );
 
                 result.setTotal(
                         testCases.size()
@@ -135,9 +164,11 @@ public class DecisionService {
                             .trim();
 
             if (
-                    actualOutput.trim().equals(
-                            expectedOutput
-                    )
+                    actualOutput
+                            .trim()
+                            .equals(
+                                    expectedOutput
+                            )
             ) {
 
                 passed++;
@@ -164,7 +195,8 @@ public class DecisionService {
             result.setStatus(
                     "ACCEPTED"
             );
-        } else {
+        }
+        else {
 
             result.setStatus(
                     "WRONG_ANSWER"

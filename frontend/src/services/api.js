@@ -26,9 +26,22 @@ export async function getUserSubmissions(
     userId
 ) {
 
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
     const response =
         await fetch(
-            `${API_URL}/submissions/user/${userId}`
+            `${API_URL}/submissions/user/${userId}`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
         );
 
     return response.json();
@@ -38,9 +51,22 @@ export async function getSubmissionById(
     id
 ) {
 
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
     const response =
         await fetch(
-            `${API_URL}/submissions/${id}`
+            `${API_URL}/submissions/${id}`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${user.token}`
+                }
+            }
         );
 
     return response.json();
@@ -62,15 +88,27 @@ export async function submitSolution(
     submission
 ) {
 
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
     const response =
         await fetch(
             `${API_URL}/submissions`,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type":
-                        "application/json"
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${user.token}`
                 },
+
                 body: JSON.stringify(
                     submission
                 )

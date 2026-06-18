@@ -5,6 +5,7 @@ import com.codevision.backend.dto.LeaderboardEntryResponse;
 import com.codevision.backend.dto.SubmissionResponse;
 import com.codevision.backend.service.LeaderboardService;
 import com.codevision.backend.service.SubmissionService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,11 +33,13 @@ public class SubmissionController {
     @PostMapping
     public SubmissionResponse createSubmission(
             @RequestBody
-            CreateSubmissionRequest request
+            CreateSubmissionRequest request,
+            Authentication authentication
     ) {
 
         return submissionService.createSubmission(
-                request
+                request,
+                authentication.getName()
         );
     }
 

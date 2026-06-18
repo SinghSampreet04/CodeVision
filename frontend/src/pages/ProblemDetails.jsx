@@ -67,9 +67,6 @@ public class Main {
             const response =
                 await submitSolution(
                     {
-                        userId:
-                            user.userId,
-
                         problemId:
                             Number(id),
 

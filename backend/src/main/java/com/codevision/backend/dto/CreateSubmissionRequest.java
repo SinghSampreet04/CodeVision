@@ -2,8 +2,6 @@ package com.codevision.backend.dto;
 
 public class CreateSubmissionRequest {
 
-    private Long userId;
-
     private Long problemId;
 
     private String language;
@@ -11,16 +9,6 @@ public class CreateSubmissionRequest {
     private String code;
 
     public CreateSubmissionRequest() {
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(
-            Long userId
-    ) {
-        this.userId = userId;
     }
 
     public Long getProblemId() {

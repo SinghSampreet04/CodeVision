@@ -25,27 +25,13 @@ function Submissions() {
                 )
             );
 
-        console.log(
-            "USER:",
-            user
-        );
-
         if (!user) {
-
-            console.log(
-                "NO USER FOUND"
-            );
 
             return;
         }
 
         getMySubmissions()
             .then(data => {
-
-                console.log(
-                    "SUBMISSIONS:",
-                    data
-                );
 
                 setSubmissions(
                     data
@@ -54,12 +40,89 @@ function Submissions() {
             .catch(error => {
 
                 console.error(
-                    "SUBMISSIONS ERROR:",
                     error
                 );
             });
 
     }, []);
+
+    function getStatusColor(
+            status
+    ) {
+
+        if (
+                status ===
+                "ACCEPTED"
+        ) {
+
+            return "limegreen";
+        }
+
+        if (
+                status ===
+                "WRONG_ANSWER"
+        ) {
+
+            return "red";
+        }
+
+        if (
+                status ===
+                "COMPILATION_ERROR"
+        ) {
+
+            return "orange";
+        }
+
+        if (
+                status ===
+                "PENDING"
+        ) {
+
+            return "gray";
+        }
+
+        return "white";
+    }
+
+    function getStatusIcon(
+            status
+    ) {
+
+        if (
+                status ===
+                "ACCEPTED"
+        ) {
+
+            return "🟢";
+        }
+
+        if (
+                status ===
+                "WRONG_ANSWER"
+        ) {
+
+            return "🔴";
+        }
+
+        if (
+                status ===
+                "COMPILATION_ERROR"
+        ) {
+
+            return "🟠";
+        }
+
+        if (
+                status ===
+                "PENDING"
+        ) {
+
+            return "⚪";
+        }
+
+        return "❓";
+    }
 
     return (
         <div>
@@ -96,8 +159,21 @@ function Submissions() {
 
                         </h3>
 
-                        <p>
-                            Status:
+                        <p
+                            style={{
+                                color:
+                                    getStatusColor(
+                                        submission.status
+                                    ),
+                                fontWeight:
+                                    "bold"
+                            }}
+                        >
+                            {
+                                getStatusIcon(
+                                    submission.status
+                                )
+                            }
                             {" "}
                             {submission.status}
                         </p>

@@ -49,22 +49,24 @@ public class SubmissionController {
         return submissionService.getAllSubmissions();
     }
 
-    @GetMapping("/{id}")
-    public SubmissionResponse getSubmissionById(
-            @PathVariable Long id
-    ) {
-
-        return submissionService.getSubmissionById(
-                id
-        );
-    }
-
     @GetMapping("/me")
     public List<SubmissionResponse> getMySubmissions(
             Authentication authentication
     ) {
 
         return submissionService.getMySubmissions(
+                authentication.getName()
+        );
+    }
+
+    @GetMapping("/{id}")
+    public SubmissionResponse getSubmissionById(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+
+        return submissionService.getSubmissionById(
+                id,
                 authentication.getName()
         );
     }

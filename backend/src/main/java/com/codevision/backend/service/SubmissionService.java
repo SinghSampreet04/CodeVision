@@ -119,12 +119,22 @@ public class SubmissionService {
 
     public SubmissionResponse
     getSubmissionById(
-            Long id
+            Long id,
+            String email
     ) {
+
+        User currentUser =
+                userRepository
+                        .findByEmail(
+                                email
+                        )
+                        .orElseThrow();
 
         Submission submission =
                 submissionRepository
-                        .findById(id)
+                        .findById(
+                                id
+                        )
                         .orElse(null);
 
         if (
@@ -132,6 +142,29 @@ public class SubmissionService {
         ) {
 
             return null;
+        }
+
+        boolean isOwner =
+                submission
+                        .getUser()
+                        .getId()
+                        .equals(
+                                currentUser.getId()
+                        );
+
+        boolean isAdmin =
+                "ADMIN".equals(
+                        currentUser.getRole()
+                );
+
+        if (
+                !isOwner &&
+                !isAdmin
+        ) {
+
+            throw new RuntimeException(
+                    "Access denied"
+            );
         }
 
         return convertToResponse(

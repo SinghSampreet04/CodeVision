@@ -25,13 +25,27 @@ function Submissions() {
                 )
             );
 
+        console.log(
+            "USER:",
+            user
+        );
+
         if (!user) {
+
+            console.log(
+                "NO USER FOUND"
+            );
 
             return;
         }
 
         getMySubmissions()
             .then(data => {
+
+                console.log(
+                    "SUBMISSIONS:",
+                    data
+                );
 
                 setSubmissions(
                     data
@@ -40,6 +54,7 @@ function Submissions() {
             .catch(error => {
 
                 console.error(
+                    "SUBMISSIONS ERROR:",
                     error
                 );
             });
@@ -52,6 +67,12 @@ function Submissions() {
             <h1>
                 My Submissions
             </h1>
+
+            <p>
+                Total submissions:
+                {" "}
+                {submissions.length}
+            </p>
 
             {submissions.map(
                 submission => (

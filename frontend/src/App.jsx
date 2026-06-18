@@ -15,6 +15,23 @@ import Leaderboard from "./pages/Leaderboard";
 
 function App() {
 
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
+
+    function handleLogout() {
+
+        localStorage.removeItem(
+            "user"
+        );
+
+        window.location.href =
+            "/login";
+    }
+
     return (
         <BrowserRouter>
 
@@ -26,21 +43,42 @@ function App() {
 
                 {" | "}
 
-                <Link to="/submissions">
-                    My Submissions
-                </Link>
+                {user && (
+                    <>
+                        <Link to="/submissions">
+                            My Submissions
+                        </Link>
 
-                {" | "}
+                        {" | "}
+                    </>
+                )}
 
-                <Link to="/login">
-                    Login
-                </Link>
+                {!user && (
+                    <>
+                        <Link to="/login">
+                            Login
+                        </Link>
 
-                {" | "}
+                        {" | "}
 
-                <Link to="/register">
-                    Register
-                </Link>
+                        <Link to="/register">
+                            Register
+                        </Link>
+                    </>
+                )}
+
+                {user && (
+                    <button
+                        onClick={
+                            handleLogout
+                        }
+                        style={{
+                            marginLeft: "10px"
+                        }}
+                    >
+                        Logout
+                    </button>
+                )}
 
             </nav>
 

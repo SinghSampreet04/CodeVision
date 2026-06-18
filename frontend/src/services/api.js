@@ -22,9 +22,7 @@ export async function getProblemById(
     return response.json();
 }
 
-export async function getUserSubmissions(
-    userId
-) {
+export async function getMySubmissions() {
 
     const user =
         JSON.parse(
@@ -35,7 +33,7 @@ export async function getUserSubmissions(
 
     const response =
         await fetch(
-            `${API_URL}/submissions/user/${userId}`,
+            `${API_URL}/submissions/me`,
             {
                 headers: {
                     Authorization:

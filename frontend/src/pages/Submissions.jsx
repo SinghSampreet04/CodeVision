@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import {
-    getUserSubmissions
+    getMySubmissions
 } from "../services/api";
 
 function Submissions() {
@@ -30,9 +30,7 @@ function Submissions() {
             return;
         }
 
-        getUserSubmissions(
-            user.userId
-        )
+        getMySubmissions()
             .then(data => {
 
                 setSubmissions(

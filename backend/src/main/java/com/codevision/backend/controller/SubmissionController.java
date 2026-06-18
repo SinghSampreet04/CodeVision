@@ -59,13 +59,13 @@ public class SubmissionController {
         );
     }
 
-    @GetMapping("/user/{userId}")
-    public List<SubmissionResponse> getUserSubmissions(
-            @PathVariable Long userId
+    @GetMapping("/me")
+    public List<SubmissionResponse> getMySubmissions(
+            Authentication authentication
     ) {
 
-        return submissionService.getUserSubmissions(
-                userId
+        return submissionService.getMySubmissions(
+                authentication.getName()
         );
     }
 

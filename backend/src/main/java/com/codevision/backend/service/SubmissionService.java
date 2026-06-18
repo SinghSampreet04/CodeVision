@@ -58,9 +58,11 @@ public class SubmissionService {
                         .orElseThrow();
 
         Problem problem =
-                problemRepository.findById(
-                        request.getProblemId()
-                ).orElseThrow();
+                problemRepository
+                        .findById(
+                                request.getProblemId()
+                        )
+                        .orElseThrow();
 
         Submission submission =
                 new Submission();
@@ -138,13 +140,20 @@ public class SubmissionService {
     }
 
     public List<SubmissionResponse>
-    getUserSubmissions(
-            Long userId
+    getMySubmissions(
+            String email
     ) {
+
+        User user =
+                userRepository
+                        .findByEmail(
+                                email
+                        )
+                        .orElseThrow();
 
         return submissionRepository
                 .findByUserId(
-                        userId
+                        user.getId()
                 )
                 .stream()
                 .map(

@@ -27,6 +27,11 @@ function ProblemDetails() {
     const [problem, setProblem] =
         useState(null);
 
+        const [language, setLanguage] =
+    useState(
+        "java"
+    );
+
     const [code, setCode] =
         useState(
 `import java.util.*;
@@ -237,7 +242,7 @@ useEffect(() => {
                             : null,
 
                     language:
-                        "java",
+                     language,
 
                     code:
                         code
@@ -695,12 +700,42 @@ async function handleDiscussionSubmit() {
             }
 
             <h3>
-                Code Editor
-            </h3>
+    Code Editor
+</h3>
+
+<select
+    value={language}
+    onChange={(e) =>
+        setLanguage(
+            e.target.value
+        )
+    }
+>
+
+    <option value="java">
+        Java
+    </option>
+
+    <option value="python">
+        Python
+    </option>
+
+    <option value="cpp">
+        C++
+    </option>
+
+    <option value="javascript">
+        JavaScript
+    </option>
+
+</select>
+
+<br />
+<br />
 
             <Editor
-                height="500px"
-                defaultLanguage="java"
+    height="500px"
+    language={language}
                 value={code}
                 onChange={(value) =>
                     setCode(

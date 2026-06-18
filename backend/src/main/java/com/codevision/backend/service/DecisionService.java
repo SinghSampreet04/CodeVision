@@ -26,9 +26,10 @@ public class DecisionService {
     }
 
     public DecisionResult evaluateSubmission(
-            String code,
-            Long problemId
-    ) {
+        String code,
+        String language,
+        Long problemId
+) {
 
         DecisionResult result =
                 new DecisionResult();
@@ -71,11 +72,12 @@ public class DecisionService {
         ) {
 
             ExecutionResult executionResult =
-                    dockerExecutionService
-                            .executeJavaCode(
-                                    code,
-                                    testCase.getInput()
-                            );
+                   dockerExecutionService
+        .executeCode(
+                code,
+                testCase.getInput(),
+                language
+        );
 
             String actualOutput =
                     executionResult.getOutput();

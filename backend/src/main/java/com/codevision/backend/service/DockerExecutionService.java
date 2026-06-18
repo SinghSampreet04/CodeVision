@@ -12,6 +12,18 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DockerExecutionService {
 
+    public ExecutionResult executeCode(
+            String code,
+            String input,
+            String language
+    ) {
+
+        return executeJavaCode(
+                code,
+                input
+        );
+    }
+
     public ExecutionResult executeJavaCode(
             String code,
             String input
@@ -59,28 +71,20 @@ public class DockerExecutionService {
                             "run",
                             "--rm",
                             "-i",
-
                             "--network",
                             "none",
-
                             "--memory",
                             "256m",
-
                             "--cpus",
                             "1",
-
                             "--pids-limit",
                             "100",
-
                             "-v",
                             directory +
                                     ":/workspace",
-
                             "-w",
                             "/workspace",
-
                             "eclipse-temurin:21",
-
                             "sh",
                             "-c",
                             "javac Main.java && java Main"

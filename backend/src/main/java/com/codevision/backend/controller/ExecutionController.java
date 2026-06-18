@@ -18,6 +18,7 @@ public class ExecutionController {
             CodeExecutionService codeExecutionService,
             DockerExecutionService dockerExecutionService
     ) {
+
         this.codeExecutionService =
                 codeExecutionService;
 
@@ -31,9 +32,10 @@ public class ExecutionController {
     ) {
 
         return codeExecutionService
-                .executeJavaCode(
+                .executeCode(
                         request.getCode(),
-                        request.getInput()
+                        request.getInput(),
+                        request.getLanguage()
                 );
     }
 

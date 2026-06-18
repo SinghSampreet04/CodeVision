@@ -13,6 +13,7 @@ public class DecisionController {
     public DecisionController(
             DecisionService decisionService
     ) {
+
         this.decisionService =
                 decisionService;
     }
@@ -26,6 +27,7 @@ public class DecisionController {
         return decisionService
                 .evaluateSubmission(
                         code,
+                        "java",
                         problemId
                 );
     }

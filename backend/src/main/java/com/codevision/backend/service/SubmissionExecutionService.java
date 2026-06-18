@@ -37,13 +37,14 @@ public class SubmissionExecutionService {
     ) {
 
         DecisionResult decisionResult =
-                decisionService
-                        .evaluateSubmission(
-                                submission.getCode(),
-                                submission
-                                        .getProblem()
-                                        .getId()
-                        );
+               decisionService
+        .evaluateSubmission(
+                submission.getCode(),
+                submission.getLanguage(),
+                submission
+                        .getProblem()
+                        .getId()
+        );
 
         submission.setStatus(
                 decisionResult.getStatus()

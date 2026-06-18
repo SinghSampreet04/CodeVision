@@ -13,6 +13,7 @@ import Submissions from "./pages/Submissions";
 import SubmissionDetails from "./pages/SubmissionDetails";
 import Leaderboard from "./pages/Leaderboard";
 import CreateProblem from "./pages/CreateProblem";
+import EditProblem from "./pages/EditProblem";
 
 function App() {
 
@@ -109,6 +110,13 @@ function App() {
                     path="/problems/:id"
                     element={
                         <ProblemDetails />
+                    }
+                />
+
+                <Route
+                    path="/edit-problem/:id"
+                    element={
+                        <EditProblem />
                     }
                 />
 

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {
+    useParams,
+    Link
+} from "react-router-dom";
 import Editor from "@monaco-editor/react";
 
 import {
@@ -229,6 +232,26 @@ public class Main {
                 {" "}
                 {problem.difficulty}
             </p>
+
+            {
+                user?.role ===
+                "ADMIN" && (
+                    <div>
+
+                        <Link
+                            to={`/edit-problem/${id}`}
+                        >
+                            <button>
+                                Edit Problem
+                            </button>
+                        </Link>
+
+                        <br />
+                        <br />
+
+                    </div>
+                )
+            }
 
             <h3>
                 Description

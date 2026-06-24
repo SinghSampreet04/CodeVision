@@ -807,11 +807,13 @@ async function handleDiscussionSubmit() {
                             Result
                         </h3>
 
-                        <p>
-                            Status:
-                            {" "}
-                            {result.status}
-                        </p>
+                     <div
+    className={
+        `status-badge status-${result.status.toLowerCase()}`
+    }
+>
+    {result.status}
+</div>
 <p>
     Passed:
     {" "}
@@ -889,13 +891,13 @@ async function handleDiscussionSubmit() {
                                                     }
                                                 </Link>
 
-                                                <p>
-                                                    Status:
-                                                    {" "}
-                                                    {
-                                                        submission.status
-                                                    }
-                                                </p>
+                                       <div
+    className={
+        `status-badge status-${submission.status.toLowerCase()}`
+    }
+>
+    {submission.status}
+</div>      
 
                                                 <p>
                                                     Passed:

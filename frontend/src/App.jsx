@@ -42,91 +42,88 @@ function App() {
     return (
         <BrowserRouter>
 
-            <nav>
+            <nav className="navbar">
 
-                <Link to="/">
-                    Problems
+    <div className="nav-left">
+
+        <Link
+            className="logo"
+            to="/"
+        >
+            CodeVision
+        </Link>
+
+    </div>
+
+    <div className="nav-right">
+
+        <Link to="/">
+            Problems
+        </Link>
+
+        <Link to="/contests">
+            Contests
+        </Link>
+
+        {user && (
+
+            <Link to="/profile">
+                Profile
+            </Link>
+
+        )}
+
+        {user?.role === "ADMIN" && (
+
+            <>
+                <Link to="/admin">
+                    Dashboard
                 </Link>
 
-                {" | "}
+                <Link to="/create-problem">
+                    Create Problem
+                </Link>
+            </>
 
-                <Link to="/contests">
-                    Contests
+        )}
+
+        {user && (
+
+            <Link to="/submissions">
+                Submissions
+            </Link>
+
+        )}
+
+        {!user && (
+
+            <>
+                <Link to="/login">
+                    Login
                 </Link>
 
-                {" | "}
+                <Link to="/register">
+                    Register
+                </Link>
+            </>
 
-                {user && (
-                    <>
-                        <Link to="/profile">
-                            Profile
-                        </Link>
+        )}
 
-                        {" | "}
-                    </>
-                )}
+        {user && (
 
-                {
-                    user?.role ===
-                    "ADMIN" && (
-                        <>
-                            <Link
-                                to="/admin"
-                            >
-                                Dashboard
-                            </Link>
-
-                            {" | "}
-
-                            <Link
-                                to="/create-problem"
-                            >
-                                Create Problem
-                            </Link>
-
-                            {" | "}
-                        </>
-                    )
+            <button
+                onClick={
+                    handleLogout
                 }
+            >
+                Logout
+            </button>
 
-                {user && (
-                    <>
-                        <Link to="/submissions">
-                            My Submissions
-                        </Link>
+        )}
 
-                        {" | "}
-                    </>
-                )}
+    </div>
 
-                {!user && (
-                    <>
-                        <Link to="/login">
-                            Login
-                        </Link>
-
-                        {" | "}
-
-                        <Link to="/register">
-                            Register
-                        </Link>
-                    </>
-                )}
-
-                {user && (
-                    <button
-                        onClick={
-                            handleLogout
-                        }
-                        style={{
-                            marginLeft: "10px"
-                        }}
-                    >
-                        Logout
-                    </button>
-                )}
-
-            </nav>
+</nav>
 
             <Routes>
 

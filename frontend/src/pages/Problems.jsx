@@ -17,10 +17,18 @@ function Problems() {
 
         getProblems()
             .then(data => {
-                setProblems(data);
+
+                setProblems(
+                    data
+                );
+
             })
             .catch(error => {
-                console.error(error);
+
+                console.error(
+                    error
+                );
+
             });
 
     }, []);
@@ -48,6 +56,7 @@ function Problems() {
         );
 
     return (
+
         <div>
 
             <h1>
@@ -112,33 +121,35 @@ function Problems() {
                             key={
                                 problem.id
                             }
+                            className="problem-card"
                         >
 
                             <Link
+                                className="problem-title"
                                 to={`/problems/${problem.id}`}
                             >
-                                <h3>
-                                    {
-                                        problem.title
-                                    }
-                                </h3>
+                                {
+                                    problem.title
+                                }
                             </Link>
 
-                            <p>
-                                Difficulty:
-                                {" "}
+                            <p
+                                className={`difficulty ${
+                                    problem.difficulty
+                                        .toLowerCase()
+                                }`}
+                            >
                                 {
                                     problem.difficulty
                                 }
                             </p>
 
                             <Link
+                                className="leaderboard-link"
                                 to={`/leaderboard/${problem.id}`}
                             >
-                                View Leaderboard
+                                Leaderboard →
                             </Link>
-
-                            <hr />
 
                         </div>
                     )
@@ -147,9 +158,11 @@ function Problems() {
 
             {
                 filteredProblems.length === 0 && (
+
                     <p>
                         No problems found.
                     </p>
+
                 )
             }
 

@@ -1,8 +1,190 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family:
+      Inter,
+      Arial,
+      sans-serif;
 }
 
-div {
-  padding: 40px;
+.navbar {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 32px;
+
+  border-bottom:
+      1px solid #333;
+
+  background:
+      #111;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 1000;
 }
+
+.logo {
+
+  font-size: 24px;
+  font-weight: bold;
+
+  text-decoration: none;
+
+  color: white;
+}
+
+.nav-right {
+
+  display: flex;
+
+  gap: 18px;
+
+  align-items: center;
+}
+
+.nav-right a {
+
+  color: white;
+
+  text-decoration: none;
+
+  font-weight: 500;
+}
+
+.nav-right a:hover {
+
+  color: #7c3aed;
+}
+
+.nav-right button {
+
+  border: none;
+
+  background: #7c3aed;
+
+  color: white;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.nav-right button:hover {
+
+  opacity: 0.9;
+}
+.problem-card {
+
+    background: #151515;
+
+    border: 1px solid #2a2a2a;
+
+    border-radius: 12px;
+
+    padding: 24px;
+
+    margin-bottom: 16px;
+
+    transition: 0.2s;
+}
+
+.problem-card:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #7c3aed;
+}
+
+.problem-title {
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+.problem-title:hover {
+
+    color: #a855f7;
+}
+
+.difficulty.easy {
+
+    color: #22c55e;
+}
+
+.difficulty.medium {
+
+    color: #f59e0b;
+}
+
+.difficulty.hard {
+
+    color: #ef4444;
+}
+
+.leaderboard-link {
+
+    color: #a855f7;
+
+    text-decoration: none;
+}
+
+.status-badge {
+
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-top: 8px;
+}
+
+.status-accepted {
+
+    background: rgba(34,197,94,.15);
+
+    color: #22c55e;
+}
+
+.status-wrong_answer {
+
+    background: rgba(239,68,68,.15);
+
+    color: #ef4444;
+}
+
+.status-runtime_error {
+
+    background: rgba(249,115,22,.15);
+
+    color: #f97316;
+}
+
+.status-compilation_error {
+
+    background: rgba(244,63,94,.15);
+
+    color: #f43f5e;
+}
+
+.status-time_limit_exceeded {
+
+    background: rgba(245,158,11,.15);
+
+    color: #f59e0b;
+}
+

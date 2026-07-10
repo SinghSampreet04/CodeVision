@@ -22,12 +22,14 @@ import ContestLeaderboard from "./pages/ContestLeaderboard";
 
 function App() {
 
-    const user =
-        JSON.parse(
-            localStorage.getItem(
-                "user"
-            )
-        );
+ console.log("APP RENDER");
+
+const user =
+    JSON.parse(
+        localStorage.getItem("user")
+    );
+
+console.log(user);
 
     function handleLogout() {
 

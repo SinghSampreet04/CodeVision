@@ -188,3 +188,107 @@ body {
     color: #f59e0b;
 }
 
+.problem-card {
+
+    background: #171717;
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    margin-bottom: 20px;
+
+    transition: 0.2s;
+}
+
+.problem-card:hover {
+
+    transform: translateY(-2px);
+
+    border-color: #8b5cf6;
+}
+
+.card-link {
+
+    color: #a855f7;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.card-link:hover {
+
+    color: #c084fc;
+}
+
+.section-card {
+
+    background: #171717;
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    margin-bottom: 24px;
+}
+
+.section-title {
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    margin-bottom: 16px;
+}
+
+.stats-grid {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin-top: 20px;
+}
+
+.stat-box {
+
+    background: #111111;
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 12px;
+
+    padding: 16px;
+
+    min-width: 180px;
+}
+
+.accepted {
+
+    color: #22c55e;
+
+    font-weight: 700;
+}
+
+.wrong {
+
+    color: #ef4444;
+
+    font-weight: 700;
+}
+
+.pending {
+
+    color: #f59e0b;
+
+    font-weight: 700;
+}

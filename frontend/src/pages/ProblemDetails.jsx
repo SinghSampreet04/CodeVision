@@ -492,47 +492,88 @@ async function handleDiscussionSubmit() {
     return (
         <div>
 
-            <h1>
-                {problem.title}
-            </h1>
+<div className="section-card">
 
-            <p>
-                Difficulty:
-                {" "}
-                {problem.difficulty}
-            </p>
-{
-    stats && (
+    <h1>
+        {problem.title}
+    </h1>
 
-        <div>
+    <h3>
+        Difficulty:
+        {" "}
+        {problem.difficulty}
+    </h3>
 
-            <p>
-                Total Submissions:
-                {" "}
-                {stats.totalSubmissions}
-            </p>
+    {
+        stats && (
 
-            <p>
-                Accepted Submissions:
-                {" "}
-                {stats.acceptedSubmissions}
-            </p>
+            <div
+                className="stats-grid"
+            >
 
-            <p>
-                Accepted Users:
-                {" "}
-                {stats.acceptedUsers}
-            </p>
+                <div
+                    className="stat-box"
+                >
+                    <strong>
+                        Total Submissions
+                    </strong>
 
-            <p>
-                Acceptance Rate:
-                {" "}
-                {stats.acceptanceRate}%
-            </p>
+                    <p>
+                        {
+                            stats.totalSubmissions
+                        }
+                    </p>
+                </div>
 
-        </div>
-    )
-}
+                <div
+                    className="stat-box"
+                >
+                    <strong>
+                        Accepted
+                    </strong>
+
+                    <p>
+                        {
+                            stats.acceptedSubmissions
+                        }
+                    </p>
+                </div>
+
+                <div
+                    className="stat-box"
+                >
+                    <strong>
+                        Users Solved
+                    </strong>
+
+                    <p>
+                        {
+                            stats.acceptedUsers
+                        }
+                    </p>
+                </div>
+
+                <div
+                    className="stat-box"
+                >
+                    <strong>
+                        Acceptance Rate
+                    </strong>
+
+                    <p>
+                        {
+                            stats.acceptanceRate
+                        }%
+                    </p>
+                </div>
+
+            </div>
+
+        )
+    }
+
+</div>
+
             {
                 user?.role ===
                 "ADMIN" && (
@@ -554,30 +595,37 @@ async function handleDiscussionSubmit() {
                 )
             }
 
-            <h3>
-                Description
-            </h3>
+<div className="section-card">
 
-            <p>
-                {problem.description}
-            </p>
+    <h2
+        className="section-title"
+    >
+        Problem Description
+    </h2>
 
-            <h3>
-                Sample Input
-            </h3>
+    <p>
+        {problem.description}
+    </p>
 
-            <pre>
-                {problem.sampleInput}
-            </pre>
+    <br />
 
-            <h3>
-                Sample Output
-            </h3>
+    <h3>
+        Sample Input
+    </h3>
 
-            <pre>
-                {problem.sampleOutput}
-            </pre>
+    <pre>
+        {problem.sampleInput}
+    </pre>
 
+    <h3>
+        Sample Output
+    </h3>
+
+    <pre>
+        {problem.sampleOutput}
+    </pre>
+
+</div>
             {
                 user?.role ===
                 "ADMIN" && (

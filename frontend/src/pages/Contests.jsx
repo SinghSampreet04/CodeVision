@@ -56,13 +56,26 @@ function Contests() {
                             key={
                                 contest.id
                             }
+                            className="problem-card"
                         >
 
-                            <h2>
-                                {
-                                    contest.title
-                                }
-                            </h2>
+                            <Link
+                                to={`/contests/${contest.id}`}
+                                style={{
+                                    textDecoration:
+                                        "none",
+                                    color:
+                                        "inherit"
+                                }}
+                            >
+
+                                <h2>
+                                    {
+                                        contest.title
+                                    }
+                                </h2>
+
+                            </Link>
 
                             <p>
                                 {
@@ -71,36 +84,49 @@ function Contests() {
                             </p>
 
                             <p>
-                                Start:
+                                Starts:
                                 {" "}
                                 {
-                                    contest.startTime
+                                    new Date(
+                                        contest.startTime
+                                    ).toLocaleString()
                                 }
                             </p>
 
                             <p>
-                                End:
+                                Ends:
                                 {" "}
                                 {
-                                    contest.endTime
+                                    new Date(
+                                        contest.endTime
+                                    ).toLocaleString()
                                 }
                             </p>
 
-                            <Link
-                                to={`/contests/${contest.id}`}
+                            <div
+                                style={{
+                                    marginTop:
+                                        "15px"
+                                }}
                             >
-                                View Contest
-                            </Link>
 
-                            {" | "}
+                                <Link
+                                    to={`/contests/${contest.id}`}
+                                    className="card-link"
+                                >
+                                    View Contest →
+                                </Link>
 
-                            <Link
-                                to={`/contests/${contest.id}/leaderboard`}
-                            >
-                                Leaderboard
-                            </Link>
+                                {"  |  "}
 
-                            <hr />
+                                <Link
+                                    to={`/contests/${contest.id}/leaderboard`}
+                                    className="card-link"
+                                >
+                                    Leaderboard →
+                                </Link>
+
+                            </div>
 
                         </div>
                     )
@@ -109,9 +135,11 @@ function Contests() {
 
             {
                 contests.length === 0 && (
+
                     <p>
                         No contests found.
                     </p>
+
                 )
             }
 

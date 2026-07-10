@@ -3,6 +3,7 @@ import { loginUser } from "../services/api";
 
 function Login() {
 
+
     const [email, setEmail] =
         useState("");
 
@@ -30,6 +31,8 @@ function Login() {
                 "user",
                 JSON.stringify(result)
             );
+
+            window.location.href = "/";
 
             setMessage(
                 `Welcome ${result.username}`

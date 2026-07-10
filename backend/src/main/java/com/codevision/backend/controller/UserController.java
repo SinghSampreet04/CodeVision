@@ -41,14 +41,31 @@ public class UserController {
 
         return userService.getAllUsers();
     }
+@GetMapping("/profile")
+public UserProfileResponse getProfile(
+        Authentication authentication
+) {
 
-    @GetMapping("/profile")
-    public UserProfileResponse getProfile(
-            Authentication authentication
-    ) {
+    System.out.println("--------------------------------");
+    System.out.println("Authentication Object:");
+    System.out.println(authentication);
 
-        return userService.getProfile(
-                authentication.getName()
+    if (authentication == null) {
+
+        System.out.println("Authentication is NULL");
+
+        throw new RuntimeException(
+                "Authentication is NULL"
         );
     }
+
+    System.out.println("Authenticated User:");
+    System.out.println(authentication.getName());
+
+    System.out.println("--------------------------------");
+
+    return userService.getProfile(
+            authentication.getName()
+    );
+}
 }

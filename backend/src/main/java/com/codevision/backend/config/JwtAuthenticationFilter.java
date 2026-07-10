@@ -42,10 +42,17 @@ public class JwtAuthenticationFilter
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String header =
-                request.getHeader(
-                        "Authorization"
-                );
+       System.out.println("--------------------------------");
+System.out.println(request.getMethod());
+System.out.println(request.getRequestURI());
+
+String header =
+        request.getHeader(
+                "Authorization"
+        );
+
+System.out.println("Authorization Header:");
+System.out.println(header);
 
         if (
                 header != null &&
@@ -53,51 +60,65 @@ public class JwtAuthenticationFilter
                         "Bearer "
                 )
         ) {
+                System.out.println("Bearer token found");
 
             String token =
                     header.substring(
                             7
                     );
 
-            if (
-                    jwtService.isValid(
-                            token
+         System.out.println("Checking token...");
+
+boolean valid = jwtService.isValid(token);
+
+System.out.println("TOKEN VALID = " + valid);
+
+if (valid)  {
+
+    String email =
+            jwtService.extractEmail(
+                    token
+            );
+
+    System.out.println("EMAIL = " + email);
+
+    User user =
+            userRepository
+                    .findByEmail(
+                            email
                     )
-            ) {
+                    .orElse(null);
 
-                String email =
-                        jwtService.extractEmail(
-                                token
-                        );
+    System.out.println("USER = " + user);
 
-                User user =
-                        userRepository
-                                .findByEmail(
-                                        email
-                                )
-                                .orElse(null);
+    if (
+            user != null
+    ) {
 
-                if (
-                        user != null
-                ) {
+        UsernamePasswordAuthenticationToken
+                authentication =
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        null,
+                        AuthorityUtils.createAuthorityList(
+                                "ROLE_" + user.getRole()
+                        )
+                );
 
-                    UsernamePasswordAuthenticationToken
-                            authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    email,
-                                    null,
-                                    AuthorityUtils.createAuthorityList(
-                                            "ROLE_" + user.getRole()
-                                    )
-                            );
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(
+                        authentication
+                );
 
-                    SecurityContextHolder
-                            .getContext()
-                            .setAuthentication(
-                                    authentication
-                            );
-                }
-            }
+        System.out.println(
+                "AUTH = "
+                        + SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+        );
+    }
+}
         }
 
         filterChain.doFilter(

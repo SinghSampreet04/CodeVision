@@ -52,19 +52,22 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean isValid(
-            String token
-    ) {
+  public boolean isValid(
+        String token
+) {
 
-        try {
+    try {
 
-            extractEmail(token);
+        extractEmail(token);
 
-            return true;
+        return true;
 
-        } catch (Exception e) {
+    } catch (Exception e) {
 
-            return false;
-        }
+        System.out.println("JWT ERROR:");
+        e.printStackTrace();
+
+        return false;
     }
+}
 }

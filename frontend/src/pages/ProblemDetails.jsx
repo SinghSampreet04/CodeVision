@@ -3,7 +3,6 @@ import {
     useParams,
     Link
 } from "react-router-dom";
-import Editor from "@monaco-editor/react";
 
 import {
     getProblemById,
@@ -17,7 +16,13 @@ import {
     getDiscussions,
     createDiscussion
 } from "../services/api";
-
+import ProblemHeader from "../components/ProblemHeader";
+import ProblemDescription from "../components/ProblemDescription";
+import CodeEditor from "../components/CodeEditor";
+import SubmissionResult from "../components/SubmissionResult";
+import MyAttempts from "../components/MyAttempts";
+import DiscussionSection from "../components/DiscussionSection";
+import TestCaseManager from "../components/TestCaseManager";
 
 function ProblemDetails() {
 
@@ -492,87 +497,13 @@ async function handleDiscussionSubmit() {
     return (
         <div>
 
-<div className="section-card">
+<ProblemHeader
 
-    <h1>
-        {problem.title}
-    </h1>
+    problem={problem}
 
-    <h3>
-        Difficulty:
-        {" "}
-        {problem.difficulty}
-    </h3>
+    stats={stats}
 
-    {
-        stats && (
-
-            <div
-                className="stats-grid"
-            >
-
-                <div
-                    className="stat-box"
-                >
-                    <strong>
-                        Total Submissions
-                    </strong>
-
-                    <p>
-                        {
-                            stats.totalSubmissions
-                        }
-                    </p>
-                </div>
-
-                <div
-                    className="stat-box"
-                >
-                    <strong>
-                        Accepted
-                    </strong>
-
-                    <p>
-                        {
-                            stats.acceptedSubmissions
-                        }
-                    </p>
-                </div>
-
-                <div
-                    className="stat-box"
-                >
-                    <strong>
-                        Users Solved
-                    </strong>
-
-                    <p>
-                        {
-                            stats.acceptedUsers
-                        }
-                    </p>
-                </div>
-
-                <div
-                    className="stat-box"
-                >
-                    <strong>
-                        Acceptance Rate
-                    </strong>
-
-                    <p>
-                        {
-                            stats.acceptanceRate
-                        }%
-                    </p>
-                </div>
-
-            </div>
-
-        )
-    }
-
-</div>
+/>
 
             {
                 user?.role ===
@@ -595,467 +526,86 @@ async function handleDiscussionSubmit() {
                 )
             }
 
-<div className="section-card">
+<ProblemDescription
 
-    <h2
-        className="section-title"
-    >
-        Problem Description
-    </h2>
+    problem={problem}
 
-    <p>
-        {problem.description}
-    </p>
+/>
 
-    <br />
+{
+    user?.role === "ADMIN" && (
 
-    <h3>
-        Sample Input
-    </h3>
+        <TestCaseManager
 
-    <pre>
-        {problem.sampleInput}
-    </pre>
+            input={input}
+            setInput={setInput}
 
-    <h3>
-        Sample Output
-    </h3>
+            expectedOutput={expectedOutput}
+            setExpectedOutput={setExpectedOutput}
 
-    <pre>
-        {problem.sampleOutput}
-    </pre>
+            hidden={hidden}
+            setHidden={setHidden}
 
-</div>
-            {
-                user?.role ===
-                "ADMIN" && (
+            editingTestCaseId={editingTestCaseId}
 
-                    <div>
+            handleCreateTestCase={handleCreateTestCase}
+            handleUpdateTestCase={handleUpdateTestCase}
+            resetForm={resetForm}
 
-                        <hr />
+            testCases={testCases}
 
-                        <h2>
-                            Manage Test Cases
-                        </h2>
+            handleEditTestCase={handleEditTestCase}
+            handleDeleteTestCase={handleDeleteTestCase}
 
-                        <textarea
-                            placeholder="Input"
-                            value={input}
-                            onChange={(e) =>
-                                setInput(
-                                    e.target.value
-                                )
-                            }
-                            rows={4}
-                            cols={60}
-                        />
+        />
 
-                        <br />
-                        <br />
+    )
+}
 
-                        <textarea
-                            placeholder="Expected Output"
-                            value={expectedOutput}
-                            onChange={(e) =>
-                                setExpectedOutput(
-                                    e.target.value
-                                )
-                            }
-                            rows={4}
-                            cols={60}
-                        />
+<CodeEditor
 
-                        <br />
-                        <br />
-
-                        <label>
-
-                            <input
-                                type="checkbox"
-                                checked={
-                                    hidden
-                                }
-                                onChange={(e) =>
-                                    setHidden(
-                                        e.target.checked
-                                    )
-                                }
-                            />
-
-                            {" "}
-                            Hidden Test Case
-
-                        </label>
-
-                        <br />
-                        <br />
-
-                        {
-                            editingTestCaseId ? (
-                                <>
-                                    <button
-                                        onClick={
-                                            handleUpdateTestCase
-                                        }
-                                    >
-                                        Save Changes
-                                    </button>
-
-                                    {" "}
-
-                                    <button
-                                        onClick={
-                                            resetForm
-                                        }
-                                    >
-                                        Cancel
-                                    </button>
-                                </>
-                            ) : (
-                                <button
-                                    onClick={
-                                        handleCreateTestCase
-                                    }
-                                >
-                                    Add Test Case
-                                </button>
-                            )
-                        }
-
-                        <h3>
-                            Visible Test Cases
-                        </h3>
-
-                        {
-                            testCases.map(
-                                testCase => (
-
-                                    <div
-                                        key={
-                                            testCase.id
-                                        }
-                                    >
-
-                                        <pre>
-                                            Input:
-                                            {"\n"}
-                                            {testCase.input}
-                                        </pre>
-
-                                        <pre>
-                                            Expected:
-                                            {"\n"}
-                                            {testCase.expectedOutput}
-                                        </pre>
-
-                                        <button
-                                            onClick={() =>
-                                                handleEditTestCase(
-                                                    testCase
-                                                )
-                                            }
-                                        >
-                                            Edit
-                                        </button>
-
-                                        {" "}
-
-                                        <button
-                                            onClick={() =>
-                                                handleDeleteTestCase(
-                                                    testCase.id
-                                                )
-                                            }
-                                        >
-                                            Delete
-                                        </button>
-
-                                        <hr />
-
-                                    </div>
-                                )
-                            )
-                        }
-
-                    </div>
-                )
-            }
-
-            <h3>
-    Code Editor
-</h3>
-
-<select
-    value={language}
-    onChange={(e) => {
-
-        const newLanguage =
-            e.target.value;
-
-        setLanguage(
-            newLanguage
-        );
-
-        setCode(
-            templates[
-                newLanguage
-            ]
-        );
-    }}
->
-    <option value="java">
-        Java
-    </option>
-
-    <option value="python">
-        Python
-    </option>
-
-    <option value="cpp">
-        C++
-    </option>
-
-    <option value="javascript">
-        JavaScript
-    </option>
-
-</select>
-
-<br />
-<br />
-
-            <Editor
-    height="500px"
     language={language}
-                value={code}
-                onChange={(value) =>
-                    setCode(
-                        value || ""
-                    )
-                }
-                theme="vs-dark"
-            />
 
-            <br />
+    setLanguage={setLanguage}
 
-            <button
-                onClick={
-                    handleSubmit
-                }
-            >
-                Submit Solution
-            </button>
+    code={code}
 
-            {
-                result && (
+    setCode={setCode}
 
-                    <div>
+    templates={templates}
 
-                        <h3>
-                            Result
-                        </h3>
+    handleSubmit={handleSubmit}
 
-                     <div
-    className={
-        `status-badge status-${result.status.toLowerCase()}`
-    }
->
-    {result.status}
-</div>
-<p>
-    Passed:
-    {" "}
-    {result.passedTestCases}
-    {" / "}
-    {result.totalTestCases}
-</p>
+/>
 
-<p>
-    Runtime:
-    {" "}
-    {result.runtime}
-    {" ms"}
-</p>
+<SubmissionResult
 
-                        {
-                            result.feedback && (
+    result={result}
 
-                                <div>
+/>
 
-                                    <h4>
-                                        AI Feedback
-                                    </h4>
+<MyAttempts
 
-                                    <pre>
-                                        {result.feedback}
-                                    </pre>
+    user={user}
 
-                                </div>
-                            )
-                        }
+    submissions={submissions}
 
-                    </div>
-                )
-            }
+/>
 
-            {
-                user && (
+<DiscussionSection
 
-                    <div>
+    user={user}
 
-                        <hr />
+    discussions={discussions}
 
-                        <h2>
-                            My Attempts
-                        </h2>
+    discussionText={discussionText}
 
-                        {
-                            submissions.length === 0 ? (
+    setDiscussionText={setDiscussionText}
 
-                                <p>
-                                    No submissions yet.
-                                </p>
+    handleDiscussionSubmit={handleDiscussionSubmit}
 
-                            ) : (
+/>
 
-                                submissions
-                                    .slice()
-                                    .reverse()
-                                    .map(
-                                        submission => (
-
-                                            <div
-                                                key={
-                                                    submission.id
-                                                }
-                                            >
-
-                                                <Link
-                                                    to={`/submissions/${submission.id}`}
-                                                >
-                                                    Submission #
-                                                    {
-                                                        submission.id
-                                                    }
-                                                </Link>
-
-                                       <div
-    className={
-        `status-badge status-${submission.status.toLowerCase()}`
-    }
->
-    {submission.status}
-</div>      
-
-                                                <p>
-                                                    Passed:
-                                                    {" "}
-                                                    {
-                                                        submission.passedTestCases
-                                                    }
-                                                    {" / "}
-                                                    {
-                                                        submission.totalTestCases
-                                                    }
-                                                </p>
-
-                                                <hr />
-
-                                            </div>
-                                        )
-                                    )
-                            )
-                        }
-
-                    </div>
-                )
-            }
-
-<hr />
-
-<h2>
-    Discussions
-</h2>
-
-{
-    user && (
-
-        <>
-
-            <textarea
-                rows={4}
-                cols={80}
-                value={discussionText}
-                onChange={(e) =>
-                    setDiscussionText(
-                        e.target.value
-                    )
-                }
-                placeholder="Write a comment..."
-            />
-
-            <br />
-            <br />
-
-            <button
-                onClick={
-                    handleDiscussionSubmit
-                }
-            >
-                Post Comment
-            </button>
-
-            <br />
-            <br />
-
-        </>
-
-    )
-}
-
-{
-    discussions.length === 0 ? (
-
-        <p>
-            No discussions yet.
-        </p>
-
-    ) : (
-
-        discussions.map(
-            discussion => (
-
-                <div
-                    key={
-                        discussion.id
-                    }
-                >
-
-                    <strong>
-                        {
-                            discussion.username
-                        }
-                    </strong>
-
-                    <p>
-                        {
-                            discussion.content
-                        }
-                    </p>
-
-                    <small>
-                        {
-                            discussion.createdAt
-                        }
-                    </small>
-
-                    <hr />
-
-                </div>
-            )
-        )
-    )
-}
         </div>
     );
 }

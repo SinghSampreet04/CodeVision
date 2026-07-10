@@ -1,9 +1,10 @@
 import {
     BrowserRouter,
     Routes,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
+
+import Layout from "./components/Layout";
 
 import Problems from "./pages/Problems";
 import ProblemDetails from "./pages/ProblemDetails";
@@ -22,205 +23,92 @@ import ContestLeaderboard from "./pages/ContestLeaderboard";
 
 function App() {
 
- console.log("APP RENDER");
-
-const user =
-    JSON.parse(
-        localStorage.getItem("user")
-    );
-
-console.log(user);
-
-    function handleLogout() {
-
-        localStorage.removeItem(
-            "user"
-        );
-
-        window.location.href =
-            "/login";
-    }
-
     return (
+
         <BrowserRouter>
-
-            <nav className="navbar">
-
-    <div className="nav-left">
-
-        <Link
-            className="logo"
-            to="/"
-        >
-            CodeVision
-        </Link>
-
-    </div>
-
-    <div className="nav-right">
-
-        <Link to="/">
-            Problems
-        </Link>
-
-        <Link to="/contests">
-            Contests
-        </Link>
-
-        {user && (
-
-            <Link to="/profile">
-                Profile
-            </Link>
-
-        )}
-
-        {user?.role === "ADMIN" && (
-
-            <>
-                <Link to="/admin">
-                    Dashboard
-                </Link>
-
-                <Link to="/create-problem">
-                    Create Problem
-                </Link>
-            </>
-
-        )}
-
-        {user && (
-
-            <Link to="/submissions">
-                Submissions
-            </Link>
-
-        )}
-
-        {!user && (
-
-            <>
-                <Link to="/login">
-                    Login
-                </Link>
-
-                <Link to="/register">
-                    Register
-                </Link>
-            </>
-
-        )}
-
-        {user && (
-
-            <button
-                onClick={
-                    handleLogout
-                }
-            >
-                Logout
-            </button>
-
-        )}
-
-    </div>
-
-</nav>
 
             <Routes>
 
-                <Route
-                    path="/"
-                    element={<Problems />}
-                />
+                <Route element={<Layout />}>
 
-                <Route
-                    path="/contests"
-                    element={<Contests />}
-                />
+                    <Route
+                        path="/"
+                        element={<Problems />}
+                    />
 
-                <Route
-                    path="/contests/:id"
-                    element={
-                        <ContestDetails />
-                    }
-                />
+                    <Route
+                        path="/contests"
+                        element={<Contests />}
+                    />
 
-                <Route
-                    path="/contests/:id/leaderboard"
-                    element={
-                        <ContestLeaderboard />
-                    }
-                />
+                    <Route
+                        path="/contests/:id"
+                        element={<ContestDetails />}
+                    />
 
-                <Route
-                    path="/profile"
-                    element={<Profile />}
-                />
+                    <Route
+                        path="/contests/:id/leaderboard"
+                        element={<ContestLeaderboard />}
+                    />
 
-                <Route
-                    path="/admin"
-                    element={
-                        <AdminDashboard />
-                    }
-                />
+                    <Route
+                        path="/profile"
+                        element={<Profile />}
+                    />
 
-                <Route
-                    path="/problems/:id"
-                    element={
-                        <ProblemDetails />
-                    }
-                />
+                    <Route
+                        path="/admin"
+                        element={<AdminDashboard />}
+                    />
 
-                <Route
-                    path="/edit-problem/:id"
-                    element={
-                        <EditProblem />
-                    }
-                />
+                    <Route
+                        path="/problems/:id"
+                        element={<ProblemDetails />}
+                    />
 
-                <Route
-                    path="/leaderboard/:problemId"
-                    element={
-                        <Leaderboard />
-                    }
-                />
+                    <Route
+                        path="/edit-problem/:id"
+                        element={<EditProblem />}
+                    />
 
-                <Route
-                    path="/submissions"
-                    element={
-                        <Submissions />
-                    }
-                />
+                    <Route
+                        path="/leaderboard/:problemId"
+                        element={<Leaderboard />}
+                    />
 
-                <Route
-                    path="/submissions/:id"
-                    element={
-                        <SubmissionDetails />
-                    }
-                />
+                    <Route
+                        path="/submissions"
+                        element={<Submissions />}
+                    />
 
-                <Route
-                    path="/create-problem"
-                    element={
-                        <CreateProblem />
-                    }
-                />
+                    <Route
+                        path="/submissions/:id"
+                        element={<SubmissionDetails />}
+                    />
 
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
+                    <Route
+                        path="/create-problem"
+                        element={<CreateProblem />}
+                    />
 
-                <Route
-                    path="/register"
-                    element={<Register />}
-                />
+                    <Route
+                        path="/login"
+                        element={<Login />}
+                    />
+
+                    <Route
+                        path="/register"
+                        element={<Register />}
+                    />
+
+                </Route>
 
             </Routes>
 
         </BrowserRouter>
+
     );
+
 }
 
 export default App;

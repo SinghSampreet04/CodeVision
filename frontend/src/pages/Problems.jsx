@@ -58,100 +58,95 @@ function Problems() {
     return (
 
         <div>
+<div className="problems-header">
 
-            <h1>
-                CodeVision
-            </h1>
+    <h1>
+        Problems
+    </h1>
 
-            <h2>
-                Problems
-            </h2>
+    <p>
+        Solve coding challenges, improve your skills,
+        and climb the leaderboard.
+    </p>
 
-            <div>
+    <div className="problem-filters">
 
-                <input
-                    type="text"
-                    placeholder="Search problems..."
-                    value={search}
-                    onChange={(e) =>
-                        setSearch(
-                            e.target.value
-                        )
-                    }
-                />
+        <input
+            type="text"
+            placeholder="Search problems..."
+            value={search}
+            onChange={(e) =>
+                setSearch(
+                    e.target.value
+                )
+            }
+        />
 
-                {" "}
+        <select
+            value={difficulty}
+            onChange={(e) =>
+                setDifficulty(
+                    e.target.value
+                )
+            }
+        >
 
-                <select
-                    value={difficulty}
-                    onChange={(e) =>
-                        setDifficulty(
-                            e.target.value
-                        )
-                    }
-                >
+            <option>All</option>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
 
-                    <option>
-                        All
-                    </option>
+        </select>
 
-                    <option>
-                        Easy
-                    </option>
+    </div>
 
-                    <option>
-                        Medium
-                    </option>
-
-                    <option>
-                        Hard
-                    </option>
-
-                </select>
-
-            </div>
-
-            <br />
+</div>
 
             {
                 filteredProblems.map(
                     problem => (
 
                         <div
-                            key={
-                                problem.id
-                            }
-                            className="problem-card"
-                        >
+    key={problem.id}
+    className="problem-card"
+>
 
-                            <Link
-                                className="problem-title"
-                                to={`/problems/${problem.id}`}
-                            >
-                                {
-                                    problem.title
-                                }
-                            </Link>
+    <div className="problem-card-top">
 
-                            <p
-                                className={`difficulty ${
-                                    problem.difficulty
-                                        .toLowerCase()
-                                }`}
-                            >
-                                {
-                                    problem.difficulty
-                                }
-                            </p>
+        <Link
+            className="problem-title"
+            to={`/problems/${problem.id}`}
+        >
+            {problem.title}
+        </Link>
 
-                            <Link
-                                className="leaderboard-link"
-                                to={`/leaderboard/${problem.id}`}
-                            >
-                                Leaderboard →
-                            </Link>
+        <span
+            className={`difficulty-badge ${problem.difficulty.toLowerCase()}`}
+        >
+            {problem.difficulty}
+        </span>
 
-                        </div>
+    </div>
+
+    <div className="problem-card-bottom">
+
+        <Link
+            className="card-link"
+            to={`/problems/${problem.id}`}
+        >
+            Solve Problem →
+        </Link>
+
+        <Link
+            className="card-link"
+            to={`/leaderboard/${problem.id}`}
+        >
+            Leaderboard →
+        </Link>
+
+    </div>
+
+</div>
                     )
                 )
             }

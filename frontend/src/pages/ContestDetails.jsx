@@ -40,7 +40,9 @@ function ContestDetails() {
                 console.error(
                     error
                 );
+
             }
+
         }
 
         loadContest();
@@ -50,95 +52,181 @@ function ContestDetails() {
     if (!contest) {
 
         return (
+
             <p>
+
                 Loading...
+
             </p>
+
         );
+
     }
 
     return (
-        <div>
 
-            <h1>
-                {contest.title}
-            </h1>
+        <div className="contest-page">
 
-            <p>
-                {contest.description}
-            </p>
+            <div className="section-card">
 
-            <p>
-                <strong>
-                    Status:
-                </strong>
-                {" "}
-                {contest.status}
-            </p>
+                <h1>
 
-            <p>
-                <strong>
-                    Start:
-                </strong>
-                {" "}
-                {contest.startTime}
-            </p>
+                    🏁 {contest.title}
 
-            <p>
-                <strong>
-                    End:
-                </strong>
-                {" "}
-                {contest.endTime}
-            </p>
+                </h1>
 
-            <hr />
+                <p className="contest-description">
 
-            <h2>
-                Contest Problems
-            </h2>
+                    {contest.description}
 
-            {
-                contest.problems?.length > 0
-                ? (
-                    contest.problems.map(
-                        problem => (
-                            <div
-                                key={
-                                    problem.id
-                                }
-                            >
+                </p>
 
-                                <Link
-                                    to={`/problems/${problem.id}`}
-                                >
-                                    <h3>
-                                        #{problem.id}
-                                        {" - "}
-                                        {problem.title}
-                                    </h3>
-                                </Link>
+                <div className="contest-stats">
 
-                                <p>
-                                    Difficulty:
-                                    {" "}
-                                    {problem.difficulty}
-                                </p>
+                    <div className="contest-stat">
 
-                                <hr />
+                        <h3>
 
-                            </div>
+                            Status
+
+                        </h3>
+
+                        <span>
+
+                            {contest.status}
+
+                        </span>
+
+                    </div>
+
+                    <div className="contest-stat">
+
+                        <h3>
+
+                            Starts
+
+                        </h3>
+
+                        <span>
+
+                            {contest.startTime}
+
+                        </span>
+
+                    </div>
+
+                    <div className="contest-stat">
+
+                        <h3>
+
+                            Ends
+
+                        </h3>
+
+                        <span>
+
+                            {contest.endTime}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2>
+
+                    Contest Problems
+
+                </h2>
+
+                {
+
+                    contest.problems?.length > 0
+
+                        ? (
+
+                            contest.problems.map(
+
+                                problem => (
+
+                                    <div
+
+                                        key={problem.id}
+
+                                        className="contest-problem-card"
+
+                                    >
+
+                                        <div>
+
+                                            <Link
+
+                                                className="problem-title"
+
+                                                to={`/problems/${problem.id}`}
+
+                                            >
+
+                                                #{problem.id} — {problem.title}
+
+                                            </Link>
+
+                                            <div
+                                                className={`difficulty-badge ${problem.difficulty.toLowerCase()}`}
+                                                style={{
+                                                    marginTop: "12px",
+                                                    display: "inline-block"
+                                                }}
+                                            >
+
+                                                {problem.difficulty}
+
+                                            </div>
+
+                                        </div>
+
+                                        <Link
+
+                                            className="primary-btn"
+
+                                            to={`/problems/${problem.id}?contestId=${contest.id}`}
+
+                                        >
+
+                                            Solve →
+
+                                        </Link>
+
+                                    </div>
+
+                                )
+
+                            )
+
                         )
-                    )
-                )
-                : (
-                    <p>
-                        No problems assigned.
-                    </p>
-                )
-            }
+
+                        : (
+
+                            <p>
+
+                                No problems assigned.
+
+                            </p>
+
+                        )
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default ContestDetails;

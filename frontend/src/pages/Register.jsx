@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { registerUser } from "../services/api";
 
 function Register() {
@@ -25,93 +26,161 @@ function Register() {
 
             const result =
                 await registerUser({
+
                     username,
+
                     email,
+
                     password
+
                 });
 
             setMessage(
-                `Registered: ${result.username}`
+
+                `Account created successfully for ${result.username}!`
+
             );
 
             setUsername("");
+
             setEmail("");
+
             setPassword("");
 
         } catch {
 
-    setMessage(
-        "Registration failed"
-    );
-}
+            setMessage(
+
+                "Registration failed."
+
+            );
+
+        }
+
     }
 
     return (
-        <div>
 
-            <h1>Register</h1>
+        <div className="auth-page">
 
-            <form
-                onSubmit={
-                    handleSubmit
-                }
-            >
+            <div className="auth-card">
 
-                <div>
+                <h1>
+
+                    Create Account 🚀
+
+                </h1>
+
+                <p>
+
+                    Join CodeVision and start solving coding challenges.
+
+                </p>
+
+                <form
+                    onSubmit={handleSubmit}
+                >
+
+                    <label>
+
+                        Username
+
+                    </label>
+
                     <input
+                        className="auth-input"
                         type="text"
-                        placeholder="Username"
+                        placeholder="Choose a username"
                         value={username}
                         onChange={(e) =>
                             setUsername(
                                 e.target.value
                             )
                         }
+                        required
                     />
-                </div>
 
-                <br />
+                    <label>
 
-                <div>
+                        Email
+
+                    </label>
+
                     <input
+                        className="auth-input"
                         type="email"
-                        placeholder="Email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) =>
                             setEmail(
                                 e.target.value
                             )
                         }
+                        required
                     />
-                </div>
 
-                <br />
+                    <label>
 
-                <div>
+                        Password
+
+                    </label>
+
                     <input
+                        className="auth-input"
                         type="password"
-                        placeholder="Password"
+                        placeholder="Create a password"
                         value={password}
                         onChange={(e) =>
                             setPassword(
                                 e.target.value
                             )
                         }
+                        required
                     />
-                </div>
 
-                <br />
+                    <button
+                        className="submit-btn"
+                        type="submit"
+                    >
 
-                <button type="submit">
-                    Register
-                </button>
+                        Create Account
 
-            </form>
+                    </button>
 
-            <p>{message}</p>
+                </form>
+
+                {
+
+                    message && (
+
+                        <p className="auth-message">
+
+                            {message}
+
+                        </p>
+
+                    )
+
+                }
+
+                <p className="auth-footer">
+
+                    Already have an account?{" "}
+
+                    <Link to="/login">
+
+                        Login
+
+                    </Link>
+
+                </p>
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default Register;

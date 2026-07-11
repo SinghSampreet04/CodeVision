@@ -1,7 +1,8 @@
 import {
     BrowserRouter,
     Routes,
-    Route
+    Route,
+    Navigate
 } from "react-router-dom";
 
 import Layout from "./components/Layout";
@@ -22,6 +23,13 @@ import ContestDetails from "./pages/ContestDetails";
 import ContestLeaderboard from "./pages/ContestLeaderboard";
 
 function App() {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "user"
+            )
+        );
 
     return (
 
@@ -58,7 +66,11 @@ function App() {
 
                     <Route
                         path="/admin"
-                        element={<AdminDashboard />}
+                        element={
+                            user?.role === "ADMIN"
+                                ? <AdminDashboard />
+                                : <Navigate to="/" replace />
+                        }
                     />
 
                     <Route
@@ -68,7 +80,11 @@ function App() {
 
                     <Route
                         path="/edit-problem/:id"
-                        element={<EditProblem />}
+                        element={
+                            user?.role === "ADMIN"
+                                ? <EditProblem />
+                                : <Navigate to="/" replace />
+                        }
                     />
 
                     <Route
@@ -88,7 +104,11 @@ function App() {
 
                     <Route
                         path="/create-problem"
-                        element={<CreateProblem />}
+                        element={
+                            user?.role === "ADMIN"
+                                ? <CreateProblem />
+                                : <Navigate to="/" replace />
+                        }
                     />
 
                     <Route

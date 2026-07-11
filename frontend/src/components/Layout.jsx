@@ -26,110 +26,114 @@ function Layout() {
 
             <nav className="navbar">
 
-                <div className="nav-left">
+    <div className="nav-left">
+
+        <Link
+            className="logo"
+            to="/"
+        >
+            CodeVision
+        </Link>
+
+        <div className="nav-links">
+
+            <Link to="/">
+                Problems
+            </Link>
+
+            <Link to="/contests">
+                Contests
+            </Link>
+
+            {
+
+                user && (
+
+                    <Link to="/submissions">
+                        Submissions
+                    </Link>
+
+                )
+
+            }
+
+            {
+
+                user?.role === "ADMIN" && (
+
+                    <Link to="/admin">
+                        Dashboard
+                    </Link>
+
+                )
+
+            }
+
+        </div>
+
+    </div>
+
+    <div className="nav-right">
+
+        {
+
+            user ? (
+
+                <>
 
                     <Link
-                        className="logo"
-                        to="/"
+                        className="profile-link"
+                        to="/profile"
                     >
-                        CodeVision
-                    </Link>
-
-                </div>
-
-                <div className="nav-right">
-
-                    <Link to="/">
-                        Problems
-                    </Link>
-
-                    <Link to="/contests">
-                        Contests
+                        👤 {user.username}
                     </Link>
 
                     {
 
-                        user && (
+                        user.role === "ADMIN" && (
 
-                            <Link to="/profile">
-                                Profile
-                            </Link>
-
-                        )
-
-                    }
-
-                    {
-
-                        user?.role === "ADMIN" && (
-
-                            <>
-
-                                <Link to="/admin">
-                                    Dashboard
-                                </Link>
-
-                                <Link to="/create-problem">
-                                    Create Problem
-                                </Link>
-
-                            </>
-
-                        )
-
-                    }
-
-                    {
-
-                        user && (
-
-                            <Link to="/submissions">
-                                Submissions
-                            </Link>
-
-                        )
-
-                    }
-
-                    {
-
-                        !user && (
-
-                            <>
-
-                                <Link to="/login">
-                                    Login
-                                </Link>
-
-                                <Link to="/register">
-                                    Register
-                                </Link>
-
-                            </>
-
-                        )
-
-                    }
-
-                    {
-
-                        user && (
-
-                            <button
-                                onClick={
-                                    handleLogout
-                                }
+                            <Link
+                                className="create-btn"
+                                to="/create-problem"
                             >
-                                Logout
-                            </button>
+                                + Create Problem
+                            </Link>
 
                         )
 
                     }
 
-                </div>
+                    <button
+                        onClick={
+                            handleLogout
+                        }
+                    >
+                        Logout
+                    </button>
 
-            </nav>
+                </>
+
+            ) : (
+
+                <>
+
+                    <Link to="/login">
+                        Login
+                    </Link>
+
+                    <Link to="/register">
+                        Register
+                    </Link>
+
+                </>
+
+            )
+
+        }
+
+    </div>
+
+</nav>
 
             <div className="app-container">
 

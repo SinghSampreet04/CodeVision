@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { loginUser } from "../services/api";
 
 function Login() {
-
 
     const [email, setEmail] =
         useState("");
@@ -32,71 +32,126 @@ function Login() {
                 JSON.stringify(result)
             );
 
-            window.location.href = "/";
-
             setMessage(
                 `Welcome ${result.username}`
             );
 
+            window.location.href =
+                "/";
+
         } catch {
 
             setMessage(
-                "Login failed"
+                "Invalid email or password."
             );
+
         }
+
     }
 
     return (
-        <div>
 
-            <h1>Login</h1>
+        <div className="auth-page">
 
-            <form
-                onSubmit={
-                    handleSubmit
-                }
-            >
+            <div className="auth-card">
 
-                <div>
+                <h1>
+
+                    Welcome Back 👋
+
+                </h1>
+
+                <p>
+
+                    Sign in to continue coding on CodeVision.
+
+                </p>
+
+                <form
+                    onSubmit={handleSubmit}
+                >
+
+                    <label>
+
+                        Email
+
+                    </label>
+
                     <input
+                        className="auth-input"
                         type="email"
-                        placeholder="Email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) =>
                             setEmail(
                                 e.target.value
                             )
                         }
+                        required
                     />
-                </div>
 
-                <br />
+                    <label>
 
-                <div>
+                        Password
+
+                    </label>
+
                     <input
+                        className="auth-input"
                         type="password"
-                        placeholder="Password"
+                        placeholder="Enter your password"
                         value={password}
                         onChange={(e) =>
                             setPassword(
                                 e.target.value
                             )
                         }
+                        required
                     />
-                </div>
 
-                <br />
+                    <button
+                        className="submit-btn"
+                        type="submit"
+                    >
 
-                <button type="submit">
-                    Login
-                </button>
+                        Login
 
-            </form>
+                    </button>
 
-            <p>{message}</p>
+                </form>
+
+                {
+
+                    message && (
+
+                        <p className="auth-message">
+
+                            {message}
+
+                        </p>
+
+                    )
+
+                }
+
+                <p className="auth-footer">
+
+                    Don't have an account?{" "}
+
+                    <Link to="/register">
+
+                        Register
+
+                    </Link>
+
+                </p>
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default Login;

@@ -24,162 +24,210 @@ function TestCaseManager({
 
     return (
 
-        <div>
-
-            <hr />
+        <div className="testcase-card">
 
             <h2>
+
                 Manage Test Cases
+
             </h2>
 
             <textarea
+
+                className="testcase-input"
+
                 placeholder="Input"
+
                 value={input}
+
                 onChange={(e) =>
+
                     setInput(
                         e.target.value
                     )
+
                 }
-                rows={4}
-                cols={60}
+
             />
 
-            <br />
-            <br />
-
             <textarea
+
+                className="testcase-input"
+
                 placeholder="Expected Output"
+
                 value={expectedOutput}
+
                 onChange={(e) =>
+
                     setExpectedOutput(
                         e.target.value
                     )
+
                 }
-                rows={4}
-                cols={60}
+
             />
 
-            <br />
-            <br />
-
-            <label>
+            <label className="testcase-checkbox">
 
                 <input
+
                     type="checkbox"
+
                     checked={hidden}
+
                     onChange={(e) =>
+
                         setHidden(
                             e.target.checked
                         )
+
                     }
+
                 />
 
-                {" "}
                 Hidden Test Case
 
             </label>
 
-            <br />
-            <br />
-
             {
 
-                editingTestCaseId ?
+                editingTestCaseId ? (
 
-                <>
+                    <div className="testcase-actions">
+
+                        <button
+
+                            className="primary-btn"
+
+                            onClick={handleUpdateTestCase}
+
+                        >
+
+                            Save Changes
+
+                        </button>
+
+                        <button
+
+                            className="secondary-btn"
+
+                            onClick={resetForm}
+
+                        >
+
+                            Cancel
+
+                        </button>
+
+                    </div>
+
+                ) : (
 
                     <button
-                        onClick={
-                            handleUpdateTestCase
-                        }
+
+                        className="primary-btn"
+
+                        onClick={handleCreateTestCase}
+
                     >
-                        Save Changes
+
+                        Add Test Case
+
                     </button>
 
-                    {" "}
-
-                    <button
-                        onClick={
-                            resetForm
-                        }
-                    >
-                        Cancel
-                    </button>
-
-                </>
-
-                :
-
-                <button
-                    onClick={
-                        handleCreateTestCase
-                    }
-                >
-                    Add Test Case
-                </button>
+                )
 
             }
 
             <h3>
+
                 Visible Test Cases
+
             </h3>
 
             {
 
                 testCases.map(
+
                     testCase => (
 
                         <div
+
                             key={testCase.id}
+
+                            className="testcase-item"
+
                         >
 
+                            <h4>
+
+                                Input
+
+                            </h4>
+
                             <pre>
-
-                                Input:
-
-                                {"\n"}
 
                                 {testCase.input}
 
                             </pre>
 
+                            <h4>
+
+                                Expected Output
+
+                            </h4>
+
                             <pre>
-
-                                Expected:
-
-                                {"\n"}
 
                                 {testCase.expectedOutput}
 
                             </pre>
 
-                            <button
-                                onClick={() =>
-                                    handleEditTestCase(
-                                        testCase
-                                    )
-                                }
-                            >
-                                Edit
-                            </button>
+                            <div className="testcase-actions">
 
-                            {" "}
+                                <button
 
-                            <button
-                                onClick={() =>
-                                    handleDeleteTestCase(
-                                        testCase.id
-                                    )
-                                }
-                            >
-                                Delete
-                            </button>
+                                    className="primary-btn"
 
-                            <hr />
+                                    onClick={() =>
+
+                                        handleEditTestCase(
+                                            testCase
+                                        )
+
+                                    }
+
+                                >
+
+                                    Edit
+
+                                </button>
+
+                                <button
+
+                                    className="danger-btn"
+
+                                    onClick={() =>
+
+                                        handleDeleteTestCase(
+                                            testCase.id
+                                        )
+
+                                    }
+
+                                >
+
+                                    Delete
+
+                                </button>
+
+                            </div>
 
                         </div>
 
                     )
+
                 )
 
             }

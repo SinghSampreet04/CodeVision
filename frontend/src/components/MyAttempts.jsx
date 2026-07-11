@@ -16,9 +16,7 @@ function MyAttempts({
 
     return (
 
-        <div>
-
-            <hr />
+        <div className="attempts-card">
 
             <h2>
 
@@ -39,34 +37,43 @@ function MyAttempts({
                 ) : (
 
                     submissions
+
                         .slice()
+
                         .reverse()
+
                         .map(
 
                             submission => (
 
-                                <div
-                                    key={
-                                        submission.id
-                                    }
+                                <Link
+
+                                    key={submission.id}
+
+                                    to={`/submissions/${submission.id}`}
+
+                                    className="attempt-card"
+
                                 >
 
-                                    <Link
-                                        to={`/submissions/${submission.id}`}
-                                    >
+                                    <div>
 
-                                        Submission #
+                                        <strong>
 
-                                        {
-                                            submission.id
-                                        }
+                                            Submission #
 
-                                    </Link>
+                                            {submission.id}
+
+                                        </strong>
+
+                                    </div>
 
                                     <div
+
                                         className={
                                             `status-badge status-${submission.status.toLowerCase()}`
                                         }
+
                                     >
 
                                         {submission.status}
@@ -79,21 +86,15 @@ function MyAttempts({
 
                                         {" "}
 
-                                        {
-                                            submission.passedTestCases
-                                        }
+                                        {submission.passedTestCases}
 
                                         {" / "}
 
-                                        {
-                                            submission.totalTestCases
-                                        }
+                                        {submission.totalTestCases}
 
                                     </p>
 
-                                    <hr />
-
-                                </div>
+                                </Link>
 
                             )
 

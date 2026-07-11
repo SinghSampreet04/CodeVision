@@ -19,262 +19,219 @@ function SubmissionDetails() {
     useEffect(() => {
 
         getSubmissionById(id)
+
             .then(data => {
 
                 setSubmission(
                     data
                 );
+
             })
+
             .catch(error => {
 
                 console.error(
                     error
                 );
+
             });
 
     }, [id]);
 
-    function getStatusColor(
-            status
-    ) {
+    function getStatusIcon(status) {
 
-        if (
-                status ===
-                "ACCEPTED"
-        ) {
-
-            return "limegreen";
-        }
-
-        if (
-                status ===
-                "WRONG_ANSWER"
-        ) {
-
-            return "red";
-        }
-
-        if (
-                status ===
-                "COMPILATION_ERROR"
-        ) {
-
-            return "orange";
-        }
-
-        if (
-                status ===
-                "RUNTIME_ERROR"
-        ) {
-
-            return "darkred";
-        }
-
-        if (
-                status ===
-                "TIME_LIMIT_EXCEEDED"
-        ) {
-
-            return "gold";
-        }
-
-        if (
-                status ===
-                "PENDING"
-        ) {
-
-            return "gray";
-        }
-
-        return "white";
-    }
-
-    function getStatusIcon(
-            status
-    ) {
-
-        if (
-                status ===
-                "ACCEPTED"
-        ) {
+        if (status === "ACCEPTED") {
 
             return "🟢";
+
         }
 
-        if (
-                status ===
-                "WRONG_ANSWER"
-        ) {
+        if (status === "WRONG_ANSWER") {
 
             return "🔴";
+
         }
 
-        if (
-                status ===
-                "COMPILATION_ERROR"
-        ) {
+        if (status === "COMPILATION_ERROR") {
 
             return "🟠";
+
         }
 
-        if (
-                status ===
-                "RUNTIME_ERROR"
-        ) {
+        if (status === "RUNTIME_ERROR") {
 
             return "💥";
+
         }
 
-        if (
-                status ===
-                "TIME_LIMIT_EXCEEDED"
-        ) {
+        if (status === "TIME_LIMIT_EXCEEDED") {
 
             return "⏱️";
+
         }
 
-        if (
-                status ===
-                "PENDING"
-        ) {
+        if (status === "PENDING") {
 
             return "⚪";
+
         }
 
         return "❓";
+
     }
 
     if (!submission) {
 
-        return (
-            <p>
-                Loading...
-            </p>
-        );
+        return <p>Loading...</p>;
+
     }
 
     return (
-        <div>
 
-            <h1>
-                Submission #
-                {submission.id}
-            </h1>
+        <div className="submission-details-page">
 
-            <p
-                style={{
-                    color:
-                        getStatusColor(
-                            submission.status
-                        ),
-                    fontWeight:
-                        "bold",
-                    fontSize:
-                        "20px"
-                }}
-            >
-                Status:
-                {" "}
-                {
-                    getStatusIcon(
-                        submission.status
-                    )
-                }
-                {" "}
-                {submission.status}
-            </p>
+            <div className="section-card">
 
-            <hr />
-
-            <h2>
-                Results
-            </h2>
-
-            <p>
-                Passed:
-                {" "}
-                {
-                    submission
-                        .passedTestCases
-                }
-                {" / "}
-                {
-                    submission
-                        .totalTestCases
-                }
-            </p>
-
-            <p>
-                Runtime:
-                {" "}
-                {
-                    submission.runtime ??
-                    0
-                }
-                {" ms"}
-            </p>
-
-            <p>
-                Language:
-                {" "}
-                {submission.language}
-            </p>
-
-            <p>
-                Submitted:
-                {" "}
-                {submission.createdAt}
-            </p>
-
-            {
-                submission.feedback && (
+                <div className="submission-details-header">
 
                     <div>
 
-                        <hr />
+                        <h1>
+
+                            Submission #{submission.id}
+
+                        </h1>
+
+                        <p>
+
+                            Submitted on {submission.createdAt}
+
+                        </p>
+
+                    </div>
+
+                    <div
+                        className={`status-badge status-${submission.status.toLowerCase()}`}
+                    >
+
+                        {
+
+                            getStatusIcon(
+                                submission.status
+                            )
+
+                        }
+
+                        {" "}
+
+                        {submission.status}
+
+                    </div>
+
+                </div>
+
+                <div className="submission-details-grid">
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Passed
+
+                        </strong>
+
+                        <h3>
+
+                            {submission.passedTestCases}
+
+                            {" / "}
+
+                            {submission.totalTestCases}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Runtime
+
+                        </strong>
+
+                        <h3>
+
+                            {submission.runtime ?? 0} ms
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Language
+
+                        </strong>
+
+                        <h3>
+
+                            {submission.language}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {
+
+                submission.feedback && (
+
+                    <div className="section-card">
 
                         <h2>
-                            AI Feedback
+
+                            🤖 AI Feedback
+
                         </h2>
 
-                        <pre
-                            style={{
-                                whiteSpace:
-                                    "pre-wrap"
-                            }}
-                        >
-                            {
-                                submission.feedback
-                            }
+                        <pre className="feedback-box">
+
+                            {submission.feedback}
+
                         </pre>
 
                     </div>
+
                 )
+
             }
 
-            <hr />
+            <div className="section-card">
 
-            <h2>
-                Source Code
-            </h2>
+                <h2>
 
-            <pre
-                style={{
-                    overflowX:
-                        "auto",
-                    background:
-                        "#111",
-                    padding:
-                        "15px",
-                    borderRadius:
-                        "8px"
-                }}
-            >
-                {submission.code}
-            </pre>
+                    💻 Source Code
+
+                </h2>
+
+                <pre className="code-box">
+
+                    {submission.code}
+
+                </pre>
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default SubmissionDetails;

@@ -45,179 +45,366 @@ function Profile() {
 
     const badges = [];
 
-    if (
-        profile.acceptedSubmissions >= 1
-    ) {
+    if (profile.acceptedSubmissions >= 1) {
 
-        badges.push(
-            "🏆 First AC"
-        );
+        badges.push("🏆 First AC");
+
     }
 
-    if (
-        profile.solvedProblems >= 5
-    ) {
+    if (profile.solvedProblems >= 5) {
 
-        badges.push(
-            "🔥 Problem Solver"
-        );
+        badges.push("🔥 Problem Solver");
+
     }
 
-    if (
-        profile.solvedProblems >= 10
-    ) {
+    if (profile.solvedProblems >= 10) {
 
-        badges.push(
-            "⭐ Advanced Solver"
-        );
+        badges.push("⭐ Advanced Solver");
+
     }
 
-    if (
-        profile.solvedProblems >= 25
-    ) {
+    if (profile.solvedProblems >= 25) {
 
-        badges.push(
-            "💎 Elite Solver"
-        );
+        badges.push("💎 Elite Solver");
+
     }
 
-    if (
-        profile.hardSolved >= 1
-    ) {
+    if (profile.hardSolved >= 1) {
 
-        badges.push(
-            "🚀 Hard Problem Solver"
-        );
+        badges.push("🚀 Hard Problem Solver");
+
     }
 
-    if (
-        profile.hardSolved >= 5
-    ) {
+    if (profile.hardSolved >= 5) {
 
-        badges.push(
-            "👑 Hard Master"
-        );
+        badges.push("👑 Hard Master");
+
     }
 
-    if (
-        profile.acceptanceRate >= 80
-    ) {
+    if (profile.acceptanceRate >= 80) {
 
-        badges.push(
-            "🎯 Accuracy Master"
-        );
+        badges.push("🎯 Accuracy Master");
+
     }
 
     return (
-        <div>
 
-            <h1>
-                My Profile
-            </h1>
+        <div className="profile-page">
 
-            <p>
-                Username:
-                {" "}
-                {profile.username}
-            </p>
+            <div className="profile-header">
 
-            <p>
-                Email:
-                {" "}
-                {profile.email}
-            </p>
+                <div className="profile-user-info">
 
-            <p>
-                Role:
-                {" "}
-                {profile.role}
-            </p>
+                    <div className="profile-avatar">
 
-            <hr />
+                        👤
 
-            <h2>
-                Statistics
-            </h2>
+                    </div>
 
-            <p>
-                Total Submissions:
-                {" "}
-                {profile.totalSubmissions}
-            </p>
+                    <div className="profile-user-text">
 
-            <p>
-                Accepted Submissions:
-                {" "}
-                {profile.acceptedSubmissions}
-            </p>
+                        <h1>
 
-            <p>
-                Acceptance Rate:
-                {" "}
-                {profile.acceptanceRate}%
-            </p>
+                            {profile.username}
 
-            <hr />
+                        </h1>
 
-            <h2>
-                Solved Problems
-            </h2>
+                        <p className="profile-role-text">
 
-            <p>
-                Total Solved:
-                {" "}
-                {profile.solvedProblems}
-            </p>
+                            {profile.role}
 
-            <p>
-                Easy Solved:
-                {" "}
-                {profile.easySolved}
-            </p>
-
-            <p>
-                Medium Solved:
-                {" "}
-                {profile.mediumSolved}
-            </p>
-
-            <p>
-                Hard Solved:
-                {" "}
-                {profile.hardSolved}
-            </p>
-
-            <hr />
-
-            <h2>
-                Achievements
-            </h2>
-
-            {
-                badges.length === 0 && (
-                    <p>
-                        No achievements yet.
-                    </p>
-                )
-            }
-
-            {
-                badges.map(
-                    (
-                        badge,
-                        index
-                    ) => (
-                        <p
-                            key={index}
-                        >
-                            {badge}
                         </p>
+
+                        <p className="profile-email">
+
+                            {profile.email}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span className="profile-role">
+
+                    {profile.role}
+
+                </span>
+
+            </div>
+
+            <div className="profile-stats">
+
+                <div className="profile-stat">
+
+                    <h2>
+
+                        {profile.solvedProblems}
+
+                    </h2>
+
+                    <span>
+
+                        Solved
+
+                    </span>
+
+                </div>
+
+                <div className="profile-stat">
+
+                    <h2>
+
+                        {profile.totalSubmissions}
+
+                    </h2>
+
+                    <span>
+
+                        Submissions
+
+                    </span>
+
+                </div>
+
+                <div className="profile-stat">
+
+                    <h2>
+
+                        {profile.acceptanceRate}%
+
+                    </h2>
+
+                    <span>
+
+                        Acceptance
+
+                    </span>
+
+                </div>
+
+                <div className="profile-stat">
+
+                    <h2>
+
+                        {profile.hardSolved}
+
+                    </h2>
+
+                    <span>
+
+                        Hard Solved
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2 className="section-title">
+
+                    📊 Statistics
+
+                </h2>
+
+                <div className="stats-grid">
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Total Submissions
+
+                        </strong>
+
+                        <h3>
+
+                            {profile.totalSubmissions}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Accepted
+
+                        </strong>
+
+                        <h3 className="accepted">
+
+                            {profile.acceptedSubmissions}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Acceptance Rate
+
+                        </strong>
+
+                        <h3>
+
+                            {profile.acceptanceRate}%
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2 className="section-title">
+
+                    ✅ Solved Problems
+
+                </h2>
+
+                <div className="stats-grid">
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Total
+
+                        </strong>
+
+                        <h3>
+
+                            {profile.solvedProblems}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Easy
+
+                        </strong>
+
+                        <h3 className="accepted">
+
+                            {profile.easySolved}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Medium
+
+                        </strong>
+
+                        <h3 className="pending">
+
+                            {profile.mediumSolved}
+
+                        </h3>
+
+                    </div>
+
+                    <div className="stat-box">
+
+                        <strong>
+
+                            Hard
+
+                        </strong>
+
+                        <h3 className="wrong">
+
+                            {profile.hardSolved}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2 className="section-title">
+
+                    🏆 Achievements
+
+                </h2>
+
+                {
+
+                    badges.length === 0 ? (
+
+                        <p>
+
+                            No achievements yet.
+
+                        </p>
+
+                    ) : (
+
+                        <div className="badge-container">
+
+                            {
+
+                                badges.map(
+
+                                    (
+
+                                        badge,
+
+                                        index
+
+                                    ) => (
+
+                                        <div
+
+                                            key={index}
+
+                                            className="achievement-badge"
+
+                                        >
+
+                                            {badge}
+
+                                        </div>
+
+                                    )
+
+                                )
+
+                            }
+
+                        </div>
+
                     )
-                )
-            }
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default Profile;

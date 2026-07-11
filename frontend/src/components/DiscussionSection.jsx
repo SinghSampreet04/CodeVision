@@ -14,9 +14,7 @@ function DiscussionSection({
 
     return (
 
-        <>
-
-            <hr />
+        <div className="discussion-card">
 
             <h2>
 
@@ -31,34 +29,36 @@ function DiscussionSection({
                     <>
 
                         <textarea
+
+                            className="discussion-input"
+
                             rows={4}
-                            cols={80}
+
                             value={discussionText}
+
                             onChange={(e) =>
+
                                 setDiscussionText(
                                     e.target.value
                                 )
+
                             }
-                            placeholder="Write a comment..."
+
+                            placeholder="Share your thoughts..."
+
                         />
 
-                        <br />
-
-                        <br />
-
                         <button
-                            onClick={
-                                handleDiscussionSubmit
-                            }
+
+                            className="discussion-btn"
+
+                            onClick={handleDiscussionSubmit}
+
                         >
 
                             Post Comment
 
                         </button>
-
-                        <br />
-
-                        <br />
 
                     </>
 
@@ -83,36 +83,30 @@ function DiscussionSection({
                         discussion => (
 
                             <div
-                                key={
-                                    discussion.id
-                                }
+
+                                key={discussion.id}
+
+                                className="discussion-item"
+
                             >
 
-                                <strong>
+                                <div className="discussion-user">
 
-                                    {
-                                        discussion.username
-                                    }
+                                    {discussion.username}
 
-                                </strong>
+                                </div>
 
                                 <p>
 
-                                    {
-                                        discussion.content
-                                    }
+                                    {discussion.content}
 
                                 </p>
 
                                 <small>
 
-                                    {
-                                        discussion.createdAt
-                                    }
+                                    {discussion.createdAt}
 
                                 </small>
-
-                                <hr />
 
                             </div>
 
@@ -124,7 +118,7 @@ function DiscussionSection({
 
             }
 
-        </>
+        </div>
 
     );
 

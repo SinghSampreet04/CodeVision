@@ -12,23 +12,33 @@ function SubmissionResult({
 
     return (
 
-        <div>
+        <div className="submission-card">
 
-            <h3>
-                Result
-            </h3>
+            <h2>
+
+                Submission Result
+
+            </h2>
 
             <div
+
                 className={
                     `status-badge status-${result.status.toLowerCase()}`
                 }
+
             >
+
                 {result.status}
+
             </div>
 
             <p>
 
-                Passed:
+                <strong>
+
+                    Passed:
+
+                </strong>
 
                 {" "}
 
@@ -42,7 +52,11 @@ function SubmissionResult({
 
             <p>
 
-                Runtime:
+                <strong>
+
+                    Runtime:
+
+                </strong>
 
                 {" "}
 
@@ -56,13 +70,13 @@ function SubmissionResult({
 
                 result.feedback && (
 
-                    <div>
+                    <>
 
-                        <h4>
+                        <h3>
 
                             AI Feedback
 
-                        </h4>
+                        </h3>
 
                         <pre>
 
@@ -70,7 +84,7 @@ function SubmissionResult({
 
                         </pre>
 
-                    </div>
+                    </>
 
                 )
 
@@ -83,3 +97,4 @@ function SubmissionResult({
 }
 
 export default SubmissionResult;
+

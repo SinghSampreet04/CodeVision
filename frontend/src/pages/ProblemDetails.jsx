@@ -495,15 +495,19 @@ async function handleDiscussionSubmit() {
     }
 
     return (
-        <div>
+        <div className="problem-page">
 
-<ProblemHeader
+<div className="problem-layout">
 
-    problem={problem}
+    <div className="problem-left">
 
-    stats={stats}
+        <ProblemHeader
 
-/>
+            problem={problem}
+
+            stats={stats}
+
+        />
 
             {
                 user?.role ===
@@ -511,14 +515,14 @@ async function handleDiscussionSubmit() {
 
                     <div>
 
-                        <Link
-                            to={`/edit-problem/${id}`}
-                        >
-                            <button>
-                                Edit Problem
-                            </button>
-                        </Link>
+<Link
+    to={`/edit-problem/${id}`}
+    className="edit-problem-btn"
+>
 
+    ✏️ Edit Problem
+
+</Link>
                         <br />
                         <br />
 
@@ -562,35 +566,43 @@ async function handleDiscussionSubmit() {
     )
 }
 
-<CodeEditor
+    </div>
 
-    language={language}
+    <div className="problem-right">
 
-    setLanguage={setLanguage}
+        <CodeEditor
 
-    code={code}
+            language={language}
 
-    setCode={setCode}
+            setLanguage={setLanguage}
 
-    templates={templates}
+            code={code}
 
-    handleSubmit={handleSubmit}
+            setCode={setCode}
 
-/>
+            templates={templates}
 
-<SubmissionResult
+            handleSubmit={handleSubmit}
 
-    result={result}
+        />
 
-/>
+        <SubmissionResult
 
-<MyAttempts
+            result={result}
 
-    user={user}
+        />
 
-    submissions={submissions}
+        <MyAttempts
 
-/>
+            user={user}
+
+            submissions={submissions}
+
+        />
+
+    </div>
+
+</div>
 
 <DiscussionSection
 
@@ -606,7 +618,8 @@ async function handleDiscussionSubmit() {
 
 />
 
-        </div>
+</div>
+
     );
 }
 

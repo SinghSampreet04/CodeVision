@@ -69,6 +69,86 @@ function Problems() {
         and climb the leaderboard.
     </p>
 
+    <div className="problem-stats">
+
+    <div className="problem-stat">
+
+        <h3>
+
+            {problems.length}
+
+        </h3>
+
+        <span>
+
+            Total
+
+        </span>
+
+    </div>
+
+    <div className="problem-stat">
+
+        <h3>
+
+            {
+                problems.filter(
+                    p => p.difficulty === "Easy"
+                ).length
+            }
+
+        </h3>
+
+        <span>
+
+            Easy
+
+        </span>
+
+    </div>
+
+    <div className="problem-stat">
+
+        <h3>
+
+            {
+                problems.filter(
+                    p => p.difficulty === "Medium"
+                ).length
+            }
+
+        </h3>
+
+        <span>
+
+            Medium
+
+        </span>
+
+    </div>
+
+    <div className="problem-stat">
+
+        <h3>
+
+            {
+                problems.filter(
+                    p => p.difficulty === "Hard"
+                ).length
+            }
+
+        </h3>
+
+        <span>
+
+            Hard
+
+        </span>
+
+    </div>
+
+</div>
+
     <div className="problem-filters">
 
         <input
@@ -128,23 +208,37 @@ function Problems() {
 
     </div>
 
-    <div className="problem-card-bottom">
+<div className="problem-card-description">
 
-        <Link
-            className="card-link"
-            to={`/problems/${problem.id}`}
-        >
-            Solve Problem →
-        </Link>
+    <p>
 
-        <Link
-            className="card-link"
-            to={`/leaderboard/${problem.id}`}
-        >
-            Leaderboard →
-        </Link>
+        {
+            problem.description
+                ? problem.description.substring(0, 120) + "..."
+                : "No description available."
+        }
 
-    </div>
+    </p>
+
+</div>
+
+<div className="problem-card-bottom">
+
+    <Link
+        className="primary-btn"
+        to={`/problems/${problem.id}`}
+    >
+        Solve Problem
+    </Link>
+
+    <Link
+        className="secondary-btn"
+        to={`/leaderboard/${problem.id}`}
+    >
+        Leaderboard
+    </Link>
+
+</div>
 
 </div>
                     )

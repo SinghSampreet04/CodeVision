@@ -18,11 +18,13 @@ function CodeEditor({
 
     return (
 
-        <div>
+    <div className="editor-card">
 
-            <h3>
+        <div className="editor-header">
+
+            <h2>
                 Code Editor
-            </h3>
+            </h2>
 
             <select
                 value={language}
@@ -36,9 +38,7 @@ function CodeEditor({
                     );
 
                     setCode(
-                        templates[
-                            newLanguage
-                        ]
+                        templates[newLanguage]
                     );
 
                 }}
@@ -62,35 +62,41 @@ function CodeEditor({
 
             </select>
 
-            <br />
-
-            <br />
-
-            <Editor
-                height="500px"
-                language={language}
-                value={code}
-                onChange={(value) =>
-                    setCode(
-                        value || ""
-                    )
-                }
-                theme="vs-dark"
-            />
-
-            <br />
-
-            <button
-                onClick={
-                    handleSubmit
-                }
-            >
-                Submit Solution
-            </button>
-
         </div>
 
-    );
+        <Editor
+
+            height="650px"
+
+            language={language}
+
+            value={code}
+
+            onChange={(value) =>
+                setCode(
+                    value || ""
+                )
+            }
+
+            theme="vs-dark"
+
+        />
+
+        <button
+
+            className="submit-btn"
+
+            onClick={handleSubmit}
+
+        >
+
+            Submit Solution
+
+        </button>
+
+    </div>
+
+);
 
 }
 

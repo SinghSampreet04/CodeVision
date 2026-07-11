@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
 import {
+    Link
+} from "react-router-dom";
+
+import {
     getProblems,
     getProfile
 } from "../services/api";
@@ -38,7 +42,9 @@ function AdminDashboard() {
                 console.error(
                     error
                 );
+
             }
+
         }
 
         loadData();
@@ -48,106 +54,214 @@ function AdminDashboard() {
     if (!profile) {
 
         return (
+
             <p>
+
                 Loading...
+
             </p>
+
         );
+
     }
 
     return (
-        <div>
 
-            <h1>
-                Admin Dashboard
-            </h1>
+        <div className="admin-page">
 
-            <hr />
+            <div className="section-card">
 
-            <h2>
-                Admin Information
-            </h2>
+                <div className="admin-header">
 
-            <p>
-                Username:
-                {" "}
-                {profile.username}
-            </p>
+                    <div>
 
-            <p>
-                Email:
-                {" "}
-                {profile.email}
-            </p>
+                        <h1>
 
-            <p>
-                Role:
-                {" "}
-                {profile.role}
-            </p>
+                            👑 Admin Dashboard
 
-            <hr />
+                        </h1>
 
-            <h2>
-                Platform Statistics
-            </h2>
+                        <p>
 
-            <p>
-                Total Problems:
-                {" "}
-                {problems.length}
-            </p>
+                            Welcome back, {profile.username}
 
-            <p>
-                Total Submissions:
-                {" "}
-                {profile.totalSubmissions}
-            </p>
+                        </p>
 
-            <p>
-                Accepted Submissions:
-                {" "}
-                {profile.acceptedSubmissions}
-            </p>
+                    </div>
 
-            <p>
-                Acceptance Rate:
-                {" "}
-                {profile.acceptanceRate}%
-            </p>
+                    <span className="profile-role">
 
-            <hr />
+                        {profile.role}
 
-            <h2>
-                Problems
-            </h2>
+                    </span>
 
-            {
-                problems.map(
-                    problem => (
+                </div>
 
-                        <div
-                            key={
-                                problem.id
-                            }
-                        >
+            </div>
 
-                            <p>
-                                #
-                                {problem.id}
-                                {" - "}
-                                {problem.title}
-                                {" ("}
-                                {problem.difficulty}
-                                {")"}
-                            </p>
+            <div className="admin-stats">
 
-                        </div>
+                <div className="admin-stat">
+
+                    <h2>
+
+                        {problems.length}
+
+                    </h2>
+
+                    <span>
+
+                        Problems
+
+                    </span>
+
+                </div>
+
+                <div className="admin-stat">
+
+                    <h2>
+
+                        {profile.totalSubmissions}
+
+                    </h2>
+
+                    <span>
+
+                        Submissions
+
+                    </span>
+
+                </div>
+
+                <div className="admin-stat">
+
+                    <h2>
+
+                        {profile.acceptedSubmissions}
+
+                    </h2>
+
+                    <span>
+
+                        Accepted
+
+                    </span>
+
+                </div>
+
+                <div className="admin-stat">
+
+                    <h2>
+
+                        {profile.acceptanceRate}%
+
+                    </h2>
+
+                    <span>
+
+                        Acceptance
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2>
+
+                    ⚡ Quick Actions
+
+                </h2>
+
+                <div className="admin-actions">
+
+                    <Link
+
+                        className="primary-btn"
+
+                        to="/create-problem"
+
+                    >
+
+                        + Create Problem
+
+                    </Link>
+
+                </div>
+
+            </div>
+
+            <div className="section-card">
+
+                <h2>
+
+                    📚 Problems
+
+                </h2>
+
+                {
+
+                    problems.map(
+
+                        problem => (
+
+                            <div
+
+                                key={problem.id}
+
+                                className="admin-problem-card"
+
+                            >
+
+                                <div>
+
+                                    <h3>
+
+                                        #{problem.id} — {problem.title}
+
+                                    </h3>
+
+                                    <div
+                                        className={`difficulty-badge ${problem.difficulty.toLowerCase()}`}
+                                        style={{
+                                            display: "inline-block"
+                                        }}
+                                    >
+
+                                        {problem.difficulty}
+
+                                    </div>
+
+                                </div>
+
+                                <Link
+
+                                    className="secondary-btn"
+
+                                    to={`/edit-problem/${problem.id}`}
+
+                                >
+
+                                    Edit
+
+                                </Link>
+
+                            </div>
+
+                        )
+
                     )
-                )
-            }
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default AdminDashboard;

@@ -28,185 +28,226 @@ function Submissions() {
         if (!user) {
 
             return;
+
         }
 
         getMySubmissions()
+
             .then(data => {
 
                 setSubmissions(
                     data
                 );
+
             })
+
             .catch(error => {
 
                 console.error(
                     error
                 );
+
             });
 
     }, []);
 
-    function getStatusColor(
-            status
-    ) {
-
-        if (
-                status ===
-                "ACCEPTED"
-        ) {
-
-            return "limegreen";
-        }
-
-        if (
-                status ===
-                "WRONG_ANSWER"
-        ) {
-
-            return "red";
-        }
-
-        if (
-                status ===
-                "COMPILATION_ERROR"
-        ) {
-
-            return "orange";
-        }
-
-        if (
-                status ===
-                "PENDING"
-        ) {
-
-            return "gray";
-        }
-
-        return "white";
-    }
-
     function getStatusIcon(
-            status
+        status
     ) {
 
-        if (
-                status ===
-                "ACCEPTED"
-        ) {
+        if (status === "ACCEPTED") {
 
             return "🟢";
+
         }
 
-        if (
-                status ===
-                "WRONG_ANSWER"
-        ) {
+        if (status === "WRONG_ANSWER") {
 
             return "🔴";
+
         }
 
-        if (
-                status ===
-                "COMPILATION_ERROR"
-        ) {
+        if (status === "COMPILATION_ERROR") {
 
             return "🟠";
+
         }
 
-        if (
-                status ===
-                "PENDING"
-        ) {
+        if (status === "PENDING") {
 
             return "⚪";
+
         }
 
         return "❓";
+
     }
 
     return (
+
         <div>
 
-            <h1>
-                My Submissions
-            </h1>
+            <div className="problems-header">
 
-            <p>
-                Total submissions:
-                {" "}
-                {submissions.length}
-            </p>
+                <h1>
 
-            {submissions.map(
-                submission => (
+                    My Submissions
 
-                    <div
-                        key={
-                            submission.id
-                        }
-                    >
+                </h1>
 
-                        <h3>
+                <p>
 
-                            <Link
-                                to={
-                                    `/submissions/${submission.id}`
-                                }
-                            >
-                                Submission #
-                                {submission.id}
-                            </Link>
+                    View all of your previous submissions.
 
-                        </h3>
+                </p>
 
-                        <p
-                            style={{
-                                color:
-                                    getStatusColor(
-                                        submission.status
-                                    ),
-                                fontWeight:
-                                    "bold"
-                            }}
-                        >
-                            {
-                                getStatusIcon(
-                                    submission.status
-                                )
-                            }
-                            {" "}
-                            {submission.status}
-                        </p>
+            </div>
+
+            <div className="section-card">
+
+                <h2>
+
+                    Total Submissions: {submissions.length}
+
+                </h2>
+
+            </div>
+
+            {
+
+                submissions.length === 0 ? (
+
+                    <div className="section-card">
 
                         <p>
-                            Passed:
-                            {" "}
-                            {
-                                submission
-                                    .passedTestCases
-                            }
-                            {" / "}
-                            {
-                                submission
-                                    .totalTestCases
-                            }
-                        </p>
 
-                        <p>
-                            {
-                                submission
-                                    .createdAt
-                            }
-                        </p>
+                            No submissions yet.
 
-                        <hr />
+                        </p>
 
                     </div>
+
+                ) : (
+
+                    submissions
+                        .slice()
+                        .reverse()
+                        .map(
+
+                            submission => (
+
+                                <div
+
+                                    key={
+                                        submission.id
+                                    }
+
+                                    className="submission-history-card"
+
+                                >
+
+                                    <div className="submission-top">
+
+                                        <Link
+
+                                            className="submission-link"
+
+                                            to={`/submissions/${submission.id}`}
+
+                                        >
+
+                                            Submission #{submission.id}
+
+                                        </Link>
+
+                                        <div
+
+                                            className={`status-badge status-${submission.status.toLowerCase()}`}
+
+                                        >
+
+                                            {
+
+                                                getStatusIcon(
+                                                    submission.status
+                                                )
+
+                                            }
+
+                                            {" "}
+
+                                            {submission.status}
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="submission-grid">
+
+                                        <div>
+
+                                            <strong>
+
+                                                Passed
+
+                                            </strong>
+
+                                            <p>
+
+                                                {
+
+                                                    submission.passedTestCases
+
+                                                }
+
+                                                {" / "}
+
+                                                {
+
+                                                    submission.totalTestCases
+
+                                                }
+
+                                            </p>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+
+                                                Submitted
+
+                                            </strong>
+
+                                            <p>
+
+                                                {
+
+                                                    submission.createdAt
+
+                                                }
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            )
+
+                        )
+
                 )
-            )}
+
+            }
 
         </div>
+
     );
+
 }
 
 export default Submissions;

@@ -36,6 +36,7 @@ function Leaderboard() {
                 setLoading(
                     false
                 );
+
             })
             .catch(error => {
 
@@ -46,6 +47,7 @@ function Leaderboard() {
                 setLoading(
                     false
                 );
+
             });
 
     }, [problemId]);
@@ -53,129 +55,164 @@ function Leaderboard() {
     if (loading) {
 
         return (
-            <div>
+
+            <div className="leaderboard-page">
 
                 <h1>
-                    Leaderboard
+
+                    🏆 Leaderboard
+
                 </h1>
 
                 <p>
+
                     Loading...
+
                 </p>
 
             </div>
+
         );
+
     }
 
     return (
-        <div>
 
-            <h1>
-                Leaderboard
-            </h1>
+        <div className="leaderboard-page">
 
-            {entries.length === 0 && (
+            <div className="section-card">
 
-                <p>
-                    No accepted submissions yet.
+                <h1 className="leaderboard-title">
+
+                    🏆 Problem Leaderboard
+
+                </h1>
+
+                <p className="leaderboard-subtitle">
+
+                    Fastest accepted submissions for this problem.
+
                 </p>
 
-            )}
+                {
 
-            {entries.length > 0 && (
+                    entries.length === 0 ? (
 
-                <table
-                    border="1"
-                    cellPadding="10"
-                    style={{
-                        borderCollapse:
-                            "collapse",
-                        width: "100%"
-                    }}
-                >
+                        <p>
 
-                    <thead>
+                            No accepted submissions yet.
 
-                        <tr>
+                        </p>
 
-                            <th>
-                                Rank
-                            </th>
+                    ) : (
 
-                            <th>
-                                Username
-                            </th>
+                        <table className="leaderboard-table">
 
-                            <th>
-                                Runtime
-                            </th>
+                            <thead>
 
-                        </tr>
+                                <tr>
 
-                    </thead>
+                                    <th>
 
-                    <tbody>
+                                        Rank
 
-                        {
-                            entries.map(
-                                (
-                                    entry,
-                                    index
-                                ) => (
+                                    </th>
 
-                                    <tr
-                                        key={
-                                            entry
-                                                .submissionId
-                                        }
-                                    >
+                                    <th>
 
-                                        <td>
+                                        User
 
-                                            {
-                                                index === 0
-                                                    ? "🥇"
-                                                    : index === 1
-                                                    ? "🥈"
-                                                    : index === 2
-                                                    ? "🥉"
-                                                    : index + 1
-                                            }
+                                    </th>
 
-                                        </td>
+                                    <th>
 
-                                        <td>
+                                        Runtime
 
-                                            {
-                                                entry
-                                                    .username
-                                            }
+                                    </th>
 
-                                        </td>
+                                </tr>
 
-                                        <td>
+                            </thead>
 
-                                            {
-                                                entry
-                                                    .runtime
-                                            }
-                                            {" ms"}
+                            <tbody>
 
-                                        </td>
+                                {
 
-                                    </tr>
-                                )
-                            )
-                        }
+                                    entries.map(
 
-                    </tbody>
+                                        (
 
-                </table>
+                                            entry,
 
-            )}
+                                            index
+
+                                        ) => (
+
+                                            <tr
+
+                                                key={
+                                                    entry.submissionId
+                                                }
+
+                                            >
+
+                                                <td>
+
+                                                    {
+
+                                                        index === 0
+                                                            ? "🥇"
+
+                                                        : index === 1
+                                                            ? "🥈"
+
+                                                        : index === 2
+                                                            ? "🥉"
+
+                                                        : `#${index + 1}`
+
+                                                    }
+
+                                                </td>
+
+                                                <td>
+
+                                                    {entry.username}
+
+                                                </td>
+
+                                                <td>
+
+                                                    <span className="runtime-pill">
+
+                                                        {entry.runtime} ms
+
+                                                    </span>
+
+                                                </td>
+
+                                            </tr>
+
+                                        )
+
+                                    )
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    )
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default Leaderboard;

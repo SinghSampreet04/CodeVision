@@ -1,50 +1,33 @@
 import { useState } from "react";
-
 import {
     createProblem
 } from "../services/api";
 
 function CreateProblem() {
 
-    const [title, setTitle] =
-        useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [sampleInput, setSampleInput] = useState("");
+    const [sampleOutput, setSampleOutput] = useState("");
+    const [message, setMessage] = useState("");
 
-    const [description, setDescription] =
-        useState("");
-
-    const [difficulty, setDifficulty] =
-        useState("Easy");
-
-    const [sampleInput, setSampleInput] =
-        useState("");
-
-    const [sampleOutput, setSampleOutput] =
-        useState("");
-
-    const [message, setMessage] =
-        useState("");
-
-    async function handleSubmit(
-            event
-    ) {
+    async function handleSubmit(event) {
 
         event.preventDefault();
 
         try {
 
-            const result =
-                await createProblem(
-                    {
-                        title,
-                        description,
-                        difficulty,
-                        sampleInput,
-                        sampleOutput
-                    }
-                );
+            const result = await createProblem({
+                title,
+                description,
+                difficulty,
+                sampleInput,
+                sampleOutput
+            });
 
             setMessage(
-                `Problem created with ID ${result.id}`
+                `✅ Problem created successfully! (ID: ${result.id})`
             );
 
             setTitle("");
@@ -56,140 +39,118 @@ function CreateProblem() {
         } catch {
 
             setMessage(
-                "Failed to create problem"
+                "❌ Failed to create problem."
             );
+
         }
+
     }
 
     return (
-        <div>
 
-            <h1>
-                Create Problem
-            </h1>
+        <div className="create-problem-page">
 
-            <form
-                onSubmit={
-                    handleSubmit
-                }
-            >
+            <div className="create-problem-card">
 
-                <div>
+                <h1>Create Problem</h1>
+
+                <p className="create-problem-subtitle">
+                    Add a new coding challenge for users to solve.
+                </p>
+
+                <form
+                    onSubmit={handleSubmit}
+                    className="create-problem-form"
+                >
+
+                    <label>
+                        Problem Title
+                    </label>
 
                     <input
                         type="text"
-                        placeholder="Title"
+                        placeholder="e.g. Two Sum"
                         value={title}
-                        onChange={(e) =>
-                            setTitle(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                     />
 
-                </div>
-
-                <br />
-
-                <div>
+                    <label>
+                        Description
+                    </label>
 
                     <textarea
-                        placeholder="Description"
+                        placeholder="Describe the problem..."
                         value={description}
-                        onChange={(e) =>
-                            setDescription(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setDescription(e.target.value)}
                         rows={8}
-                        cols={60}
                         required
                     />
 
-                </div>
-
-                <br />
-
-                <div>
+                    <label>
+                        Difficulty
+                    </label>
 
                     <select
                         value={difficulty}
-                        onChange={(e) =>
-                            setDifficulty(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setDifficulty(e.target.value)}
                     >
-
-                        <option>
-                            Easy
-                        </option>
-
-                        <option>
-                            Medium
-                        </option>
-
-                        <option>
-                            Hard
-                        </option>
-
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
                     </select>
 
-                </div>
-
-                <br />
-
-                <div>
+                    <label>
+                        Sample Input
+                    </label>
 
                     <textarea
-                        placeholder="Sample Input"
+                        placeholder="Example input..."
                         value={sampleInput}
-                        onChange={(e) =>
-                            setSampleInput(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setSampleInput(e.target.value)}
                         rows={4}
-                        cols={60}
                     />
 
-                </div>
-
-                <br />
-
-                <div>
+                    <label>
+                        Sample Output
+                    </label>
 
                     <textarea
-                        placeholder="Sample Output"
+                        placeholder="Expected output..."
                         value={sampleOutput}
-                        onChange={(e) =>
-                            setSampleOutput(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setSampleOutput(e.target.value)}
                         rows={4}
-                        cols={60}
                     />
 
-                </div>
+                    <button
+                        type="submit"
+                        className="submit-btn"
+                    >
+                        Create Problem
+                    </button>
 
-                <br />
+                </form>
 
-                <button
-                    type="submit"
-                >
-                    Create Problem
-                </button>
+                {
 
-            </form>
+                    message && (
 
-            <p>
-                {message}
-            </p>
+                        <p className="create-message">
+
+                            {message}
+
+                        </p>
+
+                    )
+
+                }
+
+            </div>
 
         </div>
+
     );
+
 }
 
 export default CreateProblem;

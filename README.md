@@ -138,7 +138,7 @@ CodeVision
 ## Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/CodeVision.git
+git clone https://github.com/SinghSampreet04/CodeVision.git
 ```
 
 ---

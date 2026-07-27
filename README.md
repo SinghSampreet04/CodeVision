@@ -50,6 +50,8 @@ The project pairs a responsive React interface and Monaco editor with a secured 
 
 ### 🎨 User Experience
 
+- Distinct Charcoal, Amber, and Coral Visual Identity
+- Matching Warm-Toned Monaco Editor Theme
 - Responsive Desktop and Mobile Layouts
 - Active Navigation States
 - Loading, Empty, Error, and Success Feedback
@@ -140,21 +142,6 @@ The API is the source of truth for authorization, contest membership, hidden tes
 - Contest submissions are accepted only during the scheduled window and only for problems assigned to that contest.
 - Leaderboards retain each user’s best accepted runtime per problem, while contest rankings prioritize solved problems before cumulative runtime.
 - Integration and unit tests cover authentication, validation, authorization, hidden test protection, and judge-status regression cases.
-
----
-
-## 🖼 Interface
-
-<table>
-  <tr>
-    <td><img src="docs/Screenshots/Problems.png" alt="Problem catalog" /></td>
-    <td><img src="docs/Screenshots/SolveProblem%201:2.png" alt="Problem-solving workspace" /></td>
-  </tr>
-  <tr>
-    <td><img src="docs/Screenshots/Profile.png" alt="User progress profile" /></td>
-    <td><img src="docs/Screenshots/AdminDashboard.png" alt="Administrator dashboard" /></td>
-  </tr>
-</table>
 
 ---
 

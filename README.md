@@ -171,7 +171,6 @@ CodeVision
 │   │   └── utils
 │   └── package.json
 │
-├── docs/Screenshots
 ├── .github/workflows/ci.yml
 ├── compose.yaml
 └── README.md

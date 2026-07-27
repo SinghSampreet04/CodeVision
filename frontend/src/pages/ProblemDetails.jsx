@@ -23,6 +23,7 @@ import SubmissionResult from "../components/SubmissionResult";
 import MyAttempts from "../components/MyAttempts";
 import DiscussionSection from "../components/DiscussionSection";
 import TestCaseManager from "../components/TestCaseManager";
+import { getStoredUser } from "../utils/auth";
 
 function ProblemDetails() {
 
@@ -31,6 +32,12 @@ function ProblemDetails() {
 
     const [problem, setProblem] =
         useState(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
 
 const templates = {
 
@@ -47,7 +54,8 @@ public class Main {
 }`,
 
     python:
-`# Write your solution here
+`import sys
+
 `,
 
     javascript:
@@ -86,6 +94,9 @@ const [code, setCode] =
     const [result, setResult] =
         useState(null);
 
+    const [submitting, setSubmitting] =
+        useState(false);
+
     const [submissions, setSubmissions] =
         useState([]);
 
@@ -117,72 +128,54 @@ const [discussionText,
         setEditingTestCaseId] =
         useState(null);
 
-    const user =
-        JSON.parse(
-            localStorage.getItem(
-                "user"
-            )
-        );
+    const [user] = useState(getStoredUser);
 
 
-useEffect(() => {
+    useEffect(() => {
+        let active = true;
 
-    async function loadStats() {
+        async function loadPage() {
+            setLoading(true);
+            setError("");
 
-        try {
+            try {
+                const requests = [
+                    getProblemById(id).then((data) => active && setProblem(data)),
+                    getProblemStats(id).then((data) => active && setStats(data)),
+                    getDiscussions(id).then((data) => active && setDiscussions(data))
+                ];
 
-            const data =
-                await getProblemStats(
-                    id
-                );
+                if (user) {
+                    requests.push(
+                        getMySubmissionsForProblem(id)
+                            .then((data) => active && setSubmissions(data))
+                    );
+                }
 
-            setStats(
-                data
-            );
+                if (user?.role === "ADMIN") {
+                    requests.push(
+                        getTestCases(id).then((data) => active && setTestCases(data))
+                    );
+                }
 
-        } catch (error) {
-
-            console.error(
-                error
-            );
+                await Promise.all(requests);
+            } catch (requestError) {
+                if (active) {
+                    setError(requestError.message);
+                }
+            } finally {
+                if (active) {
+                    setLoading(false);
+                }
+            }
         }
-    }
 
-    loadProblem();
+        loadPage();
 
-    loadTestCases();
-
-    loadStats();
-
-    loadDiscussions();
-
-    if (user) {
-
-        loadMySubmissions();
-    }
-
-}, [id]);
-
-    async function loadProblem() {
-
-        try {
-
-            const data =
-                await getProblemById(
-                    id
-                );
-
-            setProblem(
-                data
-            );
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-        }
-    }
+        return () => {
+            active = false;
+        };
+    }, [id, user]);
 
     async function loadTestCases() {
 
@@ -247,18 +240,18 @@ useEffect(() => {
 }
 
    async function handleSubmit() {
-
-    try {
-
         if (!user) {
 
             alert(
-                "Please login first"
+                "Please sign in before submitting a solution."
             );
 
             return;
         }
 
+        setSubmitting(true);
+
+    try {
         const contestId =
             new URLSearchParams(
                 window.location.search
@@ -303,11 +296,13 @@ useEffect(() => {
             statsData
         );
 
-    } catch {
+    } catch (submissionError) {
 
         alert(
-            "Submission failed"
+            submissionError.message
         );
+    } finally {
+        setSubmitting(false);
     }
 }
 
@@ -347,10 +342,10 @@ async function handleDiscussionSubmit() {
 
         await loadDiscussions();
 
-    } catch {
+    } catch (discussionError) {
 
         alert(
-            "Failed to post discussion"
+            discussionError.message
         );
     }
 }
@@ -385,10 +380,10 @@ async function handleDiscussionSubmit() {
                 "Test case created"
             );
 
-        } catch {
+        } catch (testCaseError) {
 
             alert(
-                "Failed to create test case"
+                testCaseError.message
             );
         }
     }
@@ -419,10 +414,10 @@ async function handleDiscussionSubmit() {
                 "Test case updated"
             );
 
-        } catch {
+        } catch (testCaseError) {
 
             alert(
-                "Failed to update test case"
+                testCaseError.message
             );
         }
     }
@@ -430,6 +425,9 @@ async function handleDiscussionSubmit() {
     async function handleDeleteTestCase(
             testCaseId
     ) {
+        if (!window.confirm("Delete this test case?")) {
+            return;
+        }
 
         try {
 
@@ -443,10 +441,10 @@ async function handleDiscussionSubmit() {
                 "Test case deleted"
             );
 
-        } catch {
+        } catch (testCaseError) {
 
             alert(
-                "Failed to delete test case"
+                testCaseError.message
             );
         }
     }
@@ -485,12 +483,23 @@ async function handleDiscussionSubmit() {
         setHidden(false);
     }
 
-    if (!problem) {
-
+    if (loading) {
         return (
-            <p>
-                Loading...
-            </p>
+            <div className="section-card page-state" role="status">
+                <p>Loading problem workspace...</p>
+            </div>
+        );
+    }
+
+    if (error || !problem) {
+        return (
+            <div className="section-card page-state" role="alert">
+                <h1>Problem unavailable</h1>
+                <p>{error || "This problem could not be found."}</p>
+                <Link className="secondary-btn" to="/">
+                    Back to problems
+                </Link>
+            </div>
         );
     }
 
@@ -583,6 +592,8 @@ async function handleDiscussionSubmit() {
             templates={templates}
 
             handleSubmit={handleSubmit}
+
+            submitting={submitting}
 
         />
 

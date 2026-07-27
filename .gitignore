@@ -8,3 +8,7 @@ dist
 .vscode
 
 target
+
+.env
+backend/.env
+frontend/.env

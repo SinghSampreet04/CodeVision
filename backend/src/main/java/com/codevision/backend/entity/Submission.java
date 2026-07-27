@@ -1,6 +1,8 @@
 package com.codevision.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -15,22 +17,28 @@ public class Submission {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "problem_id")
+    @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
 
     @ManyToOne
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
+    @Column(nullable = false, length = 20)
+    @NotBlank
     private String language;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank
+    @Size(max = 50000)
     private String code;
 
+    @Column(nullable = false, length = 32)
+    @NotBlank
     private String status;
 
     private Integer passedTestCases;
@@ -44,6 +52,7 @@ public class Submission {
     @Column(columnDefinition = "TEXT")
     private String feedback;
 
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt =
             LocalDateTime.now();
 

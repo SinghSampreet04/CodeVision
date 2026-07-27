@@ -1,278 +1,170 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
-    useParams,
-    useNavigate
-} from "react-router-dom";
-
-import {
+    deleteProblem,
     getProblemById,
-    updateProblem,
-    deleteProblem
+    updateProblem
 } from "../services/api";
 
 function EditProblem() {
+    const { id } = useParams();
+    const navigate = useNavigate();
 
-    const { id } =
-        useParams();
-
-    const navigate =
-        useNavigate();
-
-    const [title, setTitle] =
-        useState("");
-
-    const [description, setDescription] =
-        useState("");
-
-    const [difficulty, setDifficulty] =
-        useState("Easy");
-
-    const [sampleInput, setSampleInput] =
-        useState("");
-
-    const [sampleOutput, setSampleOutput] =
-        useState("");
-
-    const [message, setMessage] =
-        useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [sampleInput, setSampleInput] = useState("");
+    const [sampleOutput, setSampleOutput] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
-
-        async function loadProblem() {
-
-            try {
-
-                const problem =
-                    await getProblemById(
-                        id
-                    );
-
-                setTitle(
-                    problem.title
-                );
-
-                setDescription(
-                    problem.description
-                );
-
-                setDifficulty(
-                    problem.difficulty
-                );
-
-                setSampleInput(
-                    problem.sampleInput || ""
-                );
-
-                setSampleOutput(
-                    problem.sampleOutput || ""
-                );
-
-            } catch {
-
-                setMessage(
-                    "Failed to load problem"
-                );
-            }
-        }
-
-        loadProblem();
-
+        getProblemById(id)
+            .then(problem => {
+                setTitle(problem.title);
+                setDescription(problem.description);
+                setDifficulty(problem.difficulty);
+                setSampleInput(problem.sampleInput || "");
+                setSampleOutput(problem.sampleOutput || "");
+            })
+            .catch(error => setMessage(error.message))
+            .finally(() => setLoading(false));
     }, [id]);
 
-    async function handleUpdate(
-            event
-    ) {
-
+    async function handleUpdate(event) {
         event.preventDefault();
+        setSubmitting(true);
+        setMessage("");
 
         try {
-
-            await updateProblem(
-                id,
-                {
-                    title,
-                    description,
-                    difficulty,
-                    sampleInput,
-                    sampleOutput
-                }
-            );
-
-            setMessage(
-                "Problem updated successfully"
-            );
-
-        } catch {
-
-            setMessage(
-                "Failed to update problem"
-            );
+            await updateProblem(id, {
+                title,
+                description,
+                difficulty,
+                sampleInput,
+                sampleOutput
+            });
+            setMessage("Problem updated successfully.");
+        } catch (error) {
+            setMessage(error.message);
+        } finally {
+            setSubmitting(false);
         }
     }
 
     async function handleDelete() {
-
-        const confirmed =
-            window.confirm(
-                "Delete this problem?"
-            );
-
-        if (!confirmed) {
-
+        if (!window.confirm("Delete this problem? This cannot be undone.")) {
             return;
         }
 
+        setSubmitting(true);
+        setMessage("");
+
         try {
-
-            await deleteProblem(
-                id
-            );
-
-            navigate("/");
-
-        } catch {
-
-            alert(
-                "Failed to delete problem"
-            );
+            await deleteProblem(id);
+            navigate("/", { replace: true });
+        } catch (error) {
+            setMessage(error.message);
+            setSubmitting(false);
         }
     }
 
+    if (loading) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading problem...</p>
+            </div>
+        );
+    }
+
     return (
-        <div>
+        <div className="create-problem-page">
+            <div className="create-problem-card">
+                <h1>Edit Problem</h1>
+                <p className="create-problem-subtitle">
+                    Update the challenge content, examples, or difficulty.
+                </p>
 
-            <h1>
-                Edit Problem
-            </h1>
-
-            <form
-                onSubmit={
-                    handleUpdate
-                }
-            >
-
-                <div>
-
+                <form
+                    className="create-problem-form"
+                    onSubmit={handleUpdate}
+                >
+                    <label htmlFor="problem-title">Problem Title</label>
                     <input
+                        id="problem-title"
                         type="text"
                         value={title}
-                        onChange={(e) =>
-                            setTitle(
-                                e.target.value
-                            )
-                        }
+                        onChange={event => setTitle(event.target.value)}
+                        maxLength={150}
                         required
                     />
 
-                </div>
-
-                <br />
-
-                <div>
-
+                    <label htmlFor="problem-description">Description</label>
                     <textarea
+                        id="problem-description"
                         value={description}
-                        onChange={(e) =>
-                            setDescription(
-                                e.target.value
-                            )
-                        }
+                        onChange={event => setDescription(event.target.value)}
                         rows={8}
-                        cols={60}
+                        maxLength={20000}
                         required
                     />
 
-                </div>
-
-                <br />
-
-                <div>
-
+                    <label htmlFor="problem-difficulty">Difficulty</label>
                     <select
+                        id="problem-difficulty"
                         value={difficulty}
-                        onChange={(e) =>
-                            setDifficulty(
-                                e.target.value
-                            )
-                        }
+                        onChange={event => setDifficulty(event.target.value)}
                     >
-
-                        <option>
-                            Easy
-                        </option>
-
-                        <option>
-                            Medium
-                        </option>
-
-                        <option>
-                            Hard
-                        </option>
-
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
                     </select>
 
-                </div>
-
-                <br />
-
-                <div>
-
+                    <label htmlFor="sample-input">Sample Input</label>
                     <textarea
+                        id="sample-input"
                         value={sampleInput}
-                        onChange={(e) =>
-                            setSampleInput(
-                                e.target.value
-                            )
-                        }
+                        onChange={event => setSampleInput(event.target.value)}
                         rows={4}
-                        cols={60}
+                        maxLength={10000}
                     />
 
-                </div>
-
-                <br />
-
-                <div>
-
+                    <label htmlFor="sample-output">Sample Output</label>
                     <textarea
+                        id="sample-output"
                         value={sampleOutput}
-                        onChange={(e) =>
-                            setSampleOutput(
-                                e.target.value
-                            )
-                        }
+                        onChange={event => setSampleOutput(event.target.value)}
                         rows={4}
-                        cols={60}
+                        maxLength={10000}
                     />
 
-                </div>
+                    <div className="form-actions">
+                        <button
+                            className="submit-btn"
+                            type="submit"
+                            disabled={submitting}
+                        >
+                            {submitting ? "Saving..." : "Save Changes"}
+                        </button>
+                        <button
+                            className="danger-btn"
+                            type="button"
+                            onClick={handleDelete}
+                            disabled={submitting}
+                        >
+                            Delete Problem
+                        </button>
+                    </div>
+                </form>
 
-                <br />
-
-                <button
-                    type="submit"
-                >
-                    Save Changes
-                </button>
-
-                {" "}
-
-                <button
-                    type="button"
-                    onClick={
-                        handleDelete
-                    }
-                >
-                    Delete Problem
-                </button>
-
-            </form>
-
-            <p>
-                {message}
-            </p>
-
+                {message && (
+                    <p className="create-message" role="status">
+                        {message}
+                    </p>
+                )}
+            </div>
         </div>
     );
 }

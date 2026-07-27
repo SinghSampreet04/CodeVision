@@ -13,6 +13,12 @@ function Problems() {
     const [difficulty, setDifficulty] =
         useState("All");
 
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
+
     useEffect(() => {
 
         getProblems()
@@ -23,13 +29,12 @@ function Problems() {
                 );
 
             })
-            .catch(error => {
+            .catch(requestError => {
 
-                console.error(
-                    error
-                );
+                setError(requestError.message);
 
-            });
+            })
+            .finally(() => setLoading(false));
 
     }, []);
 
@@ -54,6 +59,16 @@ function Problems() {
                 );
             }
         );
+
+    function summarize(description) {
+        if (!description) {
+            return "No description available.";
+        }
+
+        return description.length > 120
+            ? `${description.slice(0, 120)}...`
+            : description;
+    }
 
     return (
 
@@ -152,6 +167,7 @@ function Problems() {
     <div className="problem-filters">
 
         <input
+            aria-label="Search problems"
             type="text"
             placeholder="Search problems..."
             value={search}
@@ -163,6 +179,7 @@ function Problems() {
         />
 
         <select
+            aria-label="Filter by difficulty"
             value={difficulty}
             onChange={(e) =>
                 setDifficulty(
@@ -213,9 +230,7 @@ function Problems() {
     <p>
 
         {
-            problem.description
-                ? problem.description.substring(0, 120) + "..."
-                : "No description available."
+            summarize(problem.description)
         }
 
     </p>
@@ -246,7 +261,29 @@ function Problems() {
             }
 
             {
-                filteredProblems.length === 0 && (
+                loading && (
+
+                    <div className="section-card">
+                        <p>Loading problems...</p>
+                    </div>
+
+                )
+            }
+
+            {
+                !loading && error && (
+
+                    <div className="section-card" role="alert">
+                        <p>
+                            Problems are temporarily unavailable. {error}
+                        </p>
+                    </div>
+
+                )
+            }
+
+            {
+                !loading && !error && filteredProblems.length === 0 && (
 
                     <p>
                         No problems found.

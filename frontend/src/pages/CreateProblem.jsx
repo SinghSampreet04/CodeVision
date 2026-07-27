@@ -11,13 +11,16 @@ function CreateProblem() {
     const [sampleInput, setSampleInput] = useState("");
     const [sampleOutput, setSampleOutput] = useState("");
     const [message, setMessage] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
     async function handleSubmit(event) {
 
         event.preventDefault();
 
-        try {
+        setSubmitting(true);
+        setMessage("");
 
+        try {
             const result = await createProblem({
                 title,
                 description,
@@ -36,12 +39,13 @@ function CreateProblem() {
             setSampleInput("");
             setSampleOutput("");
 
-        } catch {
+        } catch (error) {
 
             setMessage(
-                "❌ Failed to create problem."
+                `❌ ${error.message}`
             );
-
+        } finally {
+            setSubmitting(false);
         }
 
     }
@@ -63,35 +67,40 @@ function CreateProblem() {
                     className="create-problem-form"
                 >
 
-                    <label>
+                    <label htmlFor="create-problem-title">
                         Problem Title
                     </label>
 
                     <input
+                        id="create-problem-title"
                         type="text"
                         placeholder="e.g. Two Sum"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        maxLength={150}
                         required
                     />
 
-                    <label>
+                    <label htmlFor="create-problem-description">
                         Description
                     </label>
 
                     <textarea
+                        id="create-problem-description"
                         placeholder="Describe the problem..."
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows={8}
+                        maxLength={20000}
                         required
                     />
 
-                    <label>
+                    <label htmlFor="create-problem-difficulty">
                         Difficulty
                     </label>
 
                     <select
+                        id="create-problem-difficulty"
                         value={difficulty}
                         onChange={(e) => setDifficulty(e.target.value)}
                     >
@@ -100,33 +109,38 @@ function CreateProblem() {
                         <option>Hard</option>
                     </select>
 
-                    <label>
+                    <label htmlFor="create-sample-input">
                         Sample Input
                     </label>
 
                     <textarea
+                        id="create-sample-input"
                         placeholder="Example input..."
                         value={sampleInput}
                         onChange={(e) => setSampleInput(e.target.value)}
                         rows={4}
+                        maxLength={10000}
                     />
 
-                    <label>
+                    <label htmlFor="create-sample-output">
                         Sample Output
                     </label>
 
                     <textarea
+                        id="create-sample-output"
                         placeholder="Expected output..."
                         value={sampleOutput}
                         onChange={(e) => setSampleOutput(e.target.value)}
                         rows={4}
+                        maxLength={10000}
                     />
 
                     <button
                         type="submit"
                         className="submit-btn"
+                        disabled={submitting}
                     >
-                        Create Problem
+                        {submitting ? "Creating..." : "Create Problem"}
                     </button>
 
                 </form>
@@ -135,7 +149,7 @@ function CreateProblem() {
 
                     message && (
 
-                        <p className="create-message">
+                        <p className="create-message" role="status">
 
                             {message}
 

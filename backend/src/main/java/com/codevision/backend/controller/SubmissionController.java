@@ -6,6 +6,8 @@ import com.codevision.backend.dto.ProblemStatsResponse;
 import com.codevision.backend.dto.SubmissionResponse;
 import com.codevision.backend.service.LeaderboardService;
 import com.codevision.backend.service.SubmissionService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,10 @@ public class SubmissionController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public SubmissionResponse createSubmission(
             @RequestBody
+            @Valid
             CreateSubmissionRequest request,
             Authentication authentication
     ) {

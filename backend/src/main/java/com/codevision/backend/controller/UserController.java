@@ -5,6 +5,7 @@ import com.codevision.backend.dto.UserProfileResponse;
 import com.codevision.backend.dto.UserResponse;
 import com.codevision.backend.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class UserController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(
             @Valid
             @RequestBody
@@ -45,25 +47,6 @@ public class UserController {
 public UserProfileResponse getProfile(
         Authentication authentication
 ) {
-
-    System.out.println("--------------------------------");
-    System.out.println("Authentication Object:");
-    System.out.println(authentication);
-
-    if (authentication == null) {
-
-        System.out.println("Authentication is NULL");
-
-        throw new RuntimeException(
-                "Authentication is NULL"
-        );
-    }
-
-    System.out.println("Authenticated User:");
-    System.out.println(authentication.getName());
-
-    System.out.println("--------------------------------");
-
     return userService.getProfile(
             authentication.getName()
     );

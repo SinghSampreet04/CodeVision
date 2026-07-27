@@ -2,11 +2,23 @@ package com.codevision.backend.service;
 
 public class ExecutionResult {
 
+    private String status;
+
     private String output;
 
     private Long runtime;
 
     public ExecutionResult() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(
+            String status
+    ) {
+        this.status = status;
     }
 
     public String getOutput() {

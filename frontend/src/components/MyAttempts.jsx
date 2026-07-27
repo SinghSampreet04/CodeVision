@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatStatus } from "../utils/format";
 
 function MyAttempts({
 
@@ -76,7 +77,7 @@ function MyAttempts({
 
                                     >
 
-                                        {submission.status}
+                                        {formatStatus(submission.status)}
 
                                     </div>
 

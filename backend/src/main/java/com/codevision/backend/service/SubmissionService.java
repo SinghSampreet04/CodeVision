@@ -11,9 +11,13 @@ import com.codevision.backend.repository.ContestRepository;
 import com.codevision.backend.repository.ProblemRepository;
 import com.codevision.backend.repository.SubmissionRepository;
 import com.codevision.backend.repository.UserRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,17 +65,21 @@ public class SubmissionService {
 
         User user =
                 userRepository
-                        .findByEmail(
+                        .findByEmailIgnoreCase(
                                 email
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("User not found")
+                        );
 
         Problem problem =
                 problemRepository
                         .findById(
                                 request.getProblemId()
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Problem not found")
+                        );
 
         Submission submission =
                 new Submission();
@@ -94,7 +102,11 @@ public class SubmissionService {
                             .findById(
                                     request.getContestId()
                             )
-                            .orElseThrow();
+                            .orElseThrow(
+                                    () -> new NoSuchElementException("Contest not found")
+                            );
+
+            validateContestSubmission(contest, problem);
 
             submission.setContest(
                     contest
@@ -102,7 +114,7 @@ public class SubmissionService {
         }
 
         submission.setLanguage(
-                request.getLanguage()
+                request.getLanguage().toLowerCase(Locale.ROOT)
         );
 
         submission.setCode(
@@ -151,24 +163,21 @@ public class SubmissionService {
 
         User currentUser =
                 userRepository
-                        .findByEmail(
+                        .findByEmailIgnoreCase(
                                 email
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("User not found")
+                        );
 
         Submission submission =
                 submissionRepository
                         .findById(
                                 id
                         )
-                        .orElse(null);
-
-        if (
-                submission == null
-        ) {
-
-            return null;
-        }
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Submission not found")
+                        );
 
         boolean isOwner =
                 submission
@@ -188,7 +197,7 @@ public class SubmissionService {
                 !isAdmin
         ) {
 
-            throw new RuntimeException(
+            throw new AccessDeniedException(
                     "Access denied"
             );
         }
@@ -205,10 +214,12 @@ public class SubmissionService {
 
         User user =
                 userRepository
-                        .findByEmail(
+                        .findByEmailIgnoreCase(
                                 email
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("User not found")
+                        );
 
         return submissionRepository
                 .findByUserId(
@@ -228,13 +239,18 @@ public class SubmissionService {
             Long problemId,
             String email
     ) {
+        if (!problemRepository.existsById(problemId)) {
+            throw new NoSuchElementException("Problem not found");
+        }
 
         User user =
                 userRepository
-                        .findByEmail(
+                        .findByEmailIgnoreCase(
                                 email
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("User not found")
+                        );
 
         return submissionRepository
                 .findByUserIdAndProblemId(
@@ -254,6 +270,9 @@ public class SubmissionService {
     getProblemStats(
             Long problemId
     ) {
+        if (!problemRepository.existsById(problemId)) {
+            throw new NoSuchElementException("Problem not found");
+        }
 
         long totalSubmissions =
                 submissionRepository
@@ -359,5 +378,27 @@ public class SubmissionService {
         );
 
         return response;
+    }
+
+    private void validateContestSubmission(
+            Contest contest,
+            Problem problem
+    ) {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (contest.getStartTime() == null || contest.getEndTime() == null
+                || now.isBefore(contest.getStartTime())
+                || now.isAfter(contest.getEndTime())) {
+            throw new IllegalArgumentException("Contest submissions are only accepted while the contest is active");
+        }
+
+        boolean problemIsAssigned = contest.getProblems() != null
+                && contest.getProblems()
+                .stream()
+                .anyMatch(contestProblem -> contestProblem.getId().equals(problem.getId()));
+
+        if (!problemIsAssigned) {
+            throw new IllegalArgumentException("Problem is not assigned to this contest");
+        }
     }
 }

@@ -1,7 +1,10 @@
 package com.codevision.backend.controller;
 
+import com.codevision.backend.dto.UpdateTestCaseRequest;
 import com.codevision.backend.entity.TestCase;
 import com.codevision.backend.service.TestCaseService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +25,9 @@ public class TestCaseController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public TestCase createTestCase(
-            @RequestBody TestCase testCase
+            @Valid @RequestBody TestCase testCase
     ) {
 
         return testCaseService
@@ -35,13 +39,13 @@ public class TestCaseController {
     @PutMapping("/{id}")
     public TestCase updateTestCase(
             @PathVariable Long id,
-            @RequestBody TestCase testCase
+            @Valid @RequestBody UpdateTestCaseRequest request
     ) {
 
         return testCaseService
                 .updateTestCase(
                         id,
-                        testCase
+                        request
                 );
     }
 
@@ -57,6 +61,7 @@ public class TestCaseController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTestCase(
             @PathVariable Long id
     ) {

@@ -1,3 +1,5 @@
+import { formatDateTime } from "../utils/format";
+
 function DiscussionSection({
 
     user,
@@ -31,6 +33,8 @@ function DiscussionSection({
                         <textarea
 
                             className="discussion-input"
+
+                            aria-label="Discussion comment"
 
                             rows={4}
 
@@ -103,9 +107,9 @@ function DiscussionSection({
                                 </p>
 
                                 <small>
-
-                                    {discussion.createdAt}
-
+                                    <time dateTime={discussion.createdAt}>
+                                        {formatDateTime(discussion.createdAt)}
+                                    </time>
                                 </small>
 
                             </div>

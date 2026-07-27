@@ -12,7 +12,9 @@ function CodeEditor({
 
     templates,
 
-    handleSubmit
+    handleSubmit,
+
+    submitting
 
 }) {
 
@@ -27,6 +29,7 @@ function CodeEditor({
             </h2>
 
             <select
+                aria-label="Programming language"
                 value={language}
                 onChange={(e) => {
 
@@ -88,9 +91,10 @@ function CodeEditor({
 
             onClick={handleSubmit}
 
-        >
+            disabled={submitting}
 
-            Submit Solution
+        >
+            {submitting ? "Evaluating..." : "Submit Solution"}
 
         </button>
 

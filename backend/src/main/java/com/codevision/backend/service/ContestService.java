@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class ContestService {
@@ -33,15 +36,20 @@ public class ContestService {
     public Contest createContest(
             Contest contest
     ) {
-
+        validateSchedule(contest);
+        contest.setId(null);
+        contest.setProblems(resolveProblems(contest.getProblems()));
         return contestRepository.save(
                 contest
         );
     }
 
-    public List<Contest> getAllContests() {
+    public List<ContestResponse> getAllContests() {
 
-        return contestRepository.findAll();
+        return contestRepository.findAll()
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
     public ContestResponse getContestById(
@@ -51,14 +59,9 @@ public class ContestService {
         Contest contest =
                 contestRepository
                         .findById(id)
-                        .orElse(null);
-
-        if (
-                contest == null
-        ) {
-
-            return null;
-        }
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Contest not found")
+                        );
 
         return convertToResponse(
                 contest
@@ -69,11 +72,14 @@ public class ContestService {
             Long id,
             Contest updatedContest
     ) {
+        validateSchedule(updatedContest);
 
         Contest contest =
                 contestRepository
                         .findById(id)
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Contest not found")
+                        );
 
         contest.setTitle(
                 updatedContest.getTitle()
@@ -92,7 +98,7 @@ public class ContestService {
         );
 
         contest.setProblems(
-                updatedContest.getProblems()
+                resolveProblems(updatedContest.getProblems())
         );
 
         return contestRepository.save(
@@ -110,14 +116,18 @@ public class ContestService {
                         .findById(
                                 contestId
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Contest not found")
+                        );
 
         Problem problem =
                 problemRepository
                         .findById(
                                 problemId
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Problem not found")
+                        );
 
         if (
                 contest.getProblems()
@@ -129,18 +139,23 @@ public class ContestService {
             );
         }
 
-        contest.getProblems().add(
-                problem
-        );
+        boolean alreadyAssigned = contest.getProblems()
+                .stream()
+                .anyMatch(existingProblem -> existingProblem.getId().equals(problemId));
 
-        return contestRepository.save(
-                contest
-        );
+        if (!alreadyAssigned) {
+            contest.getProblems().add(problem);
+        }
+
+        return contestRepository.save(contest);
     }
 
     public void deleteContest(
             Long id
     ) {
+        if (!contestRepository.existsById(id)) {
+            throw new NoSuchElementException("Contest not found");
+        }
 
         contestRepository.deleteById(
                 id
@@ -181,6 +196,11 @@ public class ContestService {
         LocalDateTime now =
                 LocalDateTime.now();
 
+        if (contest.getStartTime() == null || contest.getEndTime() == null) {
+            response.setStatus("UNSCHEDULED");
+            return response;
+        }
+
         if (
                 now.isBefore(
                         contest.getStartTime()
@@ -211,5 +231,40 @@ public class ContestService {
         }
 
         return response;
+    }
+
+    private void validateSchedule(
+            Contest contest
+    ) {
+        if (contest.getStartTime() == null || contest.getEndTime() == null) {
+            throw new IllegalArgumentException("Contest start and end times are required");
+        }
+        if (!contest.getEndTime().isAfter(contest.getStartTime())) {
+            throw new IllegalArgumentException("Contest end time must be after its start time");
+        }
+    }
+
+    private List<Problem> resolveProblems(
+            List<Problem> problems
+    ) {
+        if (problems == null || problems.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Map<Long, Problem> resolvedProblems = new LinkedHashMap<>();
+
+        for (Problem problem : problems) {
+            if (problem == null || problem.getId() == null) {
+                throw new IllegalArgumentException("Contest problems must reference existing problem IDs");
+            }
+
+            resolvedProblems.computeIfAbsent(
+                    problem.getId(),
+                    problemId -> problemRepository.findById(problemId)
+                            .orElseThrow(() -> new NoSuchElementException("Problem not found"))
+            );
+        }
+
+        return new ArrayList<>(resolvedProblems.values());
     }
 }

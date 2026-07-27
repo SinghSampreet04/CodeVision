@@ -5,6 +5,8 @@ import com.codevision.backend.dto.ContestResponse;
 import com.codevision.backend.entity.Contest;
 import com.codevision.backend.service.ContestLeaderboardService;
 import com.codevision.backend.service.ContestService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +33,9 @@ public class ContestController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Contest createContest(
-            @RequestBody Contest contest
+            @Valid @RequestBody Contest contest
     ) {
 
         return contestService.createContest(
@@ -41,7 +44,7 @@ public class ContestController {
     }
 
     @GetMapping
-    public List<Contest> getAllContests() {
+    public List<ContestResponse> getAllContests() {
 
         return contestService.getAllContests();
     }
@@ -88,7 +91,7 @@ public class ContestController {
     @PutMapping("/{id}")
     public Contest updateContest(
             @PathVariable Long id,
-            @RequestBody Contest contest
+            @Valid @RequestBody Contest contest
     ) {
 
         return contestService.updateContest(
@@ -98,6 +101,7 @@ public class ContestController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteContest(
             @PathVariable Long id
     ) {

@@ -5,6 +5,7 @@ import com.codevision.backend.repository.ProblemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProblemService {
@@ -20,6 +21,8 @@ public class ProblemService {
     public Problem createProblem(
             Problem problem
     ) {
+        problem.setId(null);
+        problem.setDifficulty(normalizeDifficulty(problem.getDifficulty()));
 
         return problemRepository.save(
                 problem
@@ -37,7 +40,9 @@ public class ProblemService {
 
         return problemRepository
                 .findById(id)
-                .orElse(null);
+                .orElseThrow(
+                        () -> new NoSuchElementException("Problem not found")
+                );
     }
 
     public Problem updateProblem(
@@ -48,7 +53,9 @@ public class ProblemService {
         Problem existingProblem =
                 problemRepository
                         .findById(id)
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Problem not found")
+                        );
 
         existingProblem.setTitle(
                 updatedProblem.getTitle()
@@ -59,7 +66,7 @@ public class ProblemService {
         );
 
         existingProblem.setDifficulty(
-                updatedProblem.getDifficulty()
+                normalizeDifficulty(updatedProblem.getDifficulty())
         );
 
         existingProblem.setSampleInput(
@@ -78,9 +85,19 @@ public class ProblemService {
     public void deleteProblem(
             Long id
     ) {
+        if (!problemRepository.existsById(id)) {
+            throw new NoSuchElementException("Problem not found");
+        }
 
         problemRepository.deleteById(
                 id
         );
+    }
+
+    private String normalizeDifficulty(
+            String difficulty
+    ) {
+        return difficulty.substring(0, 1).toUpperCase()
+                + difficulty.substring(1).toLowerCase();
     }
 }

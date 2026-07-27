@@ -22,6 +22,9 @@ function Leaderboard() {
     const [loading, setLoading] =
         useState(true);
 
+    const [error, setError] =
+        useState("");
+
     useEffect(() => {
 
         getLeaderboard(
@@ -39,10 +42,7 @@ function Leaderboard() {
 
             })
             .catch(error => {
-
-                console.error(
-                    error
-                );
+                setError(error.message);
 
                 setLoading(
                     false
@@ -74,6 +74,17 @@ function Leaderboard() {
 
         );
 
+    }
+
+    if (error) {
+        return (
+            <div className="leaderboard-page">
+                <div className="section-card page-state" role="alert">
+                    <h1>Leaderboard unavailable</h1>
+                    <p>{error}</p>
+                </div>
+            </div>
+        );
     }
 
     return (

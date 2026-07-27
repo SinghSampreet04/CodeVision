@@ -13,13 +13,13 @@ public class SubmissionExecutionService {
     private final DecisionService
             decisionService;
 
-    private final AIReviewService
-            aiReviewService;
+    private final SubmissionFeedbackService
+            submissionFeedbackService;
 
     public SubmissionExecutionService(
             SubmissionRepository submissionRepository,
             DecisionService decisionService,
-            AIReviewService aiReviewService
+            SubmissionFeedbackService submissionFeedbackService
     ) {
 
         this.submissionRepository =
@@ -28,8 +28,8 @@ public class SubmissionExecutionService {
         this.decisionService =
                 decisionService;
 
-        this.aiReviewService =
-                aiReviewService;
+        this.submissionFeedbackService =
+                submissionFeedbackService;
     }
 
     public Submission executeSubmission(
@@ -63,7 +63,7 @@ public class SubmissionExecutionService {
         );
 
         String feedback =
-                aiReviewService
+                submissionFeedbackService
                         .generateFeedback(
                                 submission.getCode(),
                                 decisionResult.getStatus()

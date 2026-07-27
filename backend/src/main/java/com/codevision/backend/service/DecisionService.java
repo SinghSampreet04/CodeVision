@@ -85,11 +85,7 @@ public class DecisionService {
             totalRuntime +=
                     executionResult.getRuntime();
 
-            if (
-                    actualOutput.equals(
-                            "COMPILATION_ERROR"
-                    )
-            ) {
+            if ("COMPILATION_ERROR".equals(executionResult.getStatus())) {
 
                 result.setStatus(
                         "COMPILATION_ERROR"
@@ -110,11 +106,7 @@ public class DecisionService {
                 return result;
             }
 
-            if (
-                    actualOutput.equals(
-                            "RUNTIME_ERROR"
-                    )
-            ) {
+            if ("RUNTIME_ERROR".equals(executionResult.getStatus())) {
 
                 result.setStatus(
                         "RUNTIME_ERROR"
@@ -135,11 +127,7 @@ public class DecisionService {
                 return result;
             }
 
-            if (
-                    actualOutput.equals(
-                            "TIME_LIMIT_EXCEEDED"
-                    )
-            ) {
+            if ("TIME_LIMIT_EXCEEDED".equals(executionResult.getStatus())) {
 
                 result.setStatus(
                         "TIME_LIMIT_EXCEEDED"
@@ -157,6 +145,14 @@ public class DecisionService {
                         totalRuntime
                 );
 
+                return result;
+            }
+
+            if (!"SUCCESS".equals(executionResult.getStatus())) {
+                result.setStatus("RUNTIME_ERROR");
+                result.setPassed(passed);
+                result.setTotal(testCases.size());
+                result.setRuntime(totalRuntime);
                 return result;
             }
 

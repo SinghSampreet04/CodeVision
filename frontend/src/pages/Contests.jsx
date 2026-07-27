@@ -10,11 +10,18 @@ import {
 import {
     getContests
 } from "../services/api";
+import { formatDateTime, formatStatus } from "../utils/format";
 
 function Contests() {
 
     const [contests, setContests] =
         useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
 
@@ -29,11 +36,12 @@ function Contests() {
                     data
                 );
 
-            } catch (error) {
+            } catch (requestError) {
 
-                console.error(
-                    error
-                );
+                setError(requestError.message);
+            } finally {
+
+                setLoading(false);
             }
         }
 
@@ -43,10 +51,10 @@ function Contests() {
 
     return (
         <div>
-
-            <h1>
-                Contests
-            </h1>
+            <div className="problems-header">
+                <h1>Contests</h1>
+                <p>Join timed challenges and compare your best solutions.</p>
+            </div>
 
             {
                 contests.map(
@@ -59,23 +67,17 @@ function Contests() {
                             className="problem-card"
                         >
 
-                            <Link
-                                to={`/contests/${contest.id}`}
-                                style={{
-                                    textDecoration:
-                                        "none",
-                                    color:
-                                        "inherit"
-                                }}
-                            >
-
-                                <h2>
-                                    {
-                                        contest.title
-                                    }
-                                </h2>
-
-                            </Link>
+                            <div className="problem-card-top">
+                                <Link
+                                    className="problem-title"
+                                    to={`/contests/${contest.id}`}
+                                >
+                                    {contest.title}
+                                </Link>
+                                <span className={`contest-status contest-status-${contest.status.toLowerCase()}`}>
+                                    {formatStatus(contest.status)}
+                                </span>
+                            </div>
 
                             <p>
                                 {
@@ -87,9 +89,7 @@ function Contests() {
                                 Starts:
                                 {" "}
                                 {
-                                    new Date(
-                                        contest.startTime
-                                    ).toLocaleString()
+                                    formatDateTime(contest.startTime)
                                 }
                             </p>
 
@@ -97,18 +97,11 @@ function Contests() {
                                 Ends:
                                 {" "}
                                 {
-                                    new Date(
-                                        contest.endTime
-                                    ).toLocaleString()
+                                    formatDateTime(contest.endTime)
                                 }
                             </p>
 
-                            <div
-                                style={{
-                                    marginTop:
-                                        "15px"
-                                }}
-                            >
+                            <div className="problem-card-bottom">
 
                                 <Link
                                     to={`/contests/${contest.id}`}
@@ -116,8 +109,6 @@ function Contests() {
                                 >
                                     View Contest →
                                 </Link>
-
-                                {"  |  "}
 
                                 <Link
                                     to={`/contests/${contest.id}/leaderboard`}
@@ -134,7 +125,29 @@ function Contests() {
             }
 
             {
-                contests.length === 0 && (
+                loading && (
+
+                    <div className="section-card">
+                        <p>Loading contests...</p>
+                    </div>
+
+                )
+            }
+
+            {
+                !loading && error && (
+
+                    <div className="section-card" role="alert">
+                        <p>
+                            Contests are temporarily unavailable. {error}
+                        </p>
+                    </div>
+
+                )
+            }
+
+            {
+                !loading && !error && contests.length === 0 && (
 
                     <p>
                         No contests found.

@@ -9,6 +9,9 @@ function Profile() {
     const [profile, setProfile] =
         useState(null);
 
+    const [error, setError] =
+        useState("");
+
     useEffect(() => {
 
         async function loadProfile() {
@@ -23,10 +26,7 @@ function Profile() {
                 );
 
             } catch (error) {
-
-                console.error(
-                    error
-                );
+                setError(error.message);
             }
         }
 
@@ -34,12 +34,20 @@ function Profile() {
 
     }, []);
 
-    if (!profile) {
-
+    if (error) {
         return (
-            <p>
-                Loading...
-            </p>
+            <div className="section-card page-state" role="alert">
+                <h1>Profile unavailable</h1>
+                <p>{error}</p>
+            </div>
+        );
+    }
+
+    if (!profile) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading profile...</p>
+            </div>
         );
     }
 

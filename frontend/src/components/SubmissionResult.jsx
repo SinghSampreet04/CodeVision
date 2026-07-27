@@ -1,3 +1,5 @@
+import { formatStatus } from "../utils/format";
+
 function SubmissionResult({
 
     result
@@ -28,7 +30,7 @@ function SubmissionResult({
 
             >
 
-                {result.status}
+                {formatStatus(result.status)}
 
             </div>
 
@@ -74,7 +76,7 @@ function SubmissionResult({
 
                         <h3>
 
-                            AI Feedback
+                            Automated Feedback
 
                         </h3>
 
@@ -97,4 +99,3 @@ function SubmissionResult({
 }
 
 export default SubmissionResult;
-

@@ -2,6 +2,8 @@ package com.codevision.backend.controller;
 
 import com.codevision.backend.entity.Problem;
 import com.codevision.backend.service.ProblemService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,9 @@ public class ProblemController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Problem createProblem(
-            @RequestBody Problem problem
+            @Valid @RequestBody Problem problem
     ) {
 
         return problemService.createProblem(
@@ -48,7 +51,7 @@ public class ProblemController {
     @PutMapping("/{id}")
     public Problem updateProblem(
             @PathVariable Long id,
-            @RequestBody Problem problem
+            @Valid @RequestBody Problem problem
     ) {
 
         return problemService.updateProblem(
@@ -58,6 +61,7 @@ public class ProblemController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProblem(
             @PathVariable Long id
     ) {

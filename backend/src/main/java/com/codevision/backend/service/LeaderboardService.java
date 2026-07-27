@@ -2,6 +2,7 @@ package com.codevision.backend.service;
 
 import com.codevision.backend.dto.LeaderboardEntryResponse;
 import com.codevision.backend.entity.Submission;
+import com.codevision.backend.repository.ProblemRepository;
 import com.codevision.backend.repository.SubmissionRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,27 @@ public class LeaderboardService {
     private final SubmissionRepository
             submissionRepository;
 
+    private final ProblemRepository problemRepository;
+
     public LeaderboardService(
-            SubmissionRepository submissionRepository
+            SubmissionRepository submissionRepository,
+            ProblemRepository problemRepository
     ) {
 
         this.submissionRepository =
                 submissionRepository;
+
+        this.problemRepository =
+                problemRepository;
     }
 
     public List<LeaderboardEntryResponse>
     getLeaderboard(
             Long problemId
     ) {
+        if (!problemRepository.existsById(problemId)) {
+            throw new NoSuchElementException("Problem not found");
+        }
 
         List<Submission> submissions =
                 submissionRepository
@@ -34,7 +44,7 @@ public class LeaderboardService {
                                 "ACCEPTED"
                         );
 
-        Map<String, Submission>
+        Map<Long, Submission>
                 bestSubmissionPerUser =
                 new HashMap<>();
 
@@ -51,21 +61,18 @@ public class LeaderboardService {
                 continue;
             }
 
-            String username =
-                    submission
-                            .getUser()
-                            .getUsername();
+            Long userId = submission.getUser().getId();
 
             Submission existing =
                     bestSubmissionPerUser
-                            .get(username);
+                            .get(userId);
 
             if (
                     existing == null
             ) {
 
                 bestSubmissionPerUser.put(
-                        username,
+                        userId,
                         submission
                 );
 
@@ -79,7 +86,7 @@ public class LeaderboardService {
             ) {
 
                 bestSubmissionPerUser.put(
-                        username,
+                        userId,
                         submission
                 );
             }

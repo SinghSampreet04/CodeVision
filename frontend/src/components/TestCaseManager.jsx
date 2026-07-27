@@ -36,6 +36,8 @@ function TestCaseManager({
 
                 className="testcase-input"
 
+                aria-label="Test case input"
+
                 placeholder="Input"
 
                 value={input}
@@ -53,6 +55,8 @@ function TestCaseManager({
             <textarea
 
                 className="testcase-input"
+
+                aria-label="Expected output"
 
                 placeholder="Expected Output"
 
@@ -142,7 +146,7 @@ function TestCaseManager({
 
             <h3>
 
-                Visible Test Cases
+                Test Cases
 
             </h3>
 
@@ -165,6 +169,10 @@ function TestCaseManager({
                                 Input
 
                             </h4>
+
+                            <span className={`testcase-visibility ${testCase.hidden ? "hidden" : "public"}`}>
+                                {testCase.hidden ? "Hidden" : "Public"}
+                            </span>
 
                             <pre>
 

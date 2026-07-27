@@ -42,8 +42,8 @@ public class AuthService {
 
         if (
                 userRepository
-                        .findByEmail(
-                                request.getEmail()
+                        .findByEmailIgnoreCase(
+                                request.getEmail().trim()
                         )
                         .isPresent()
         ) {
@@ -57,11 +57,11 @@ public class AuthService {
                 new User();
 
         user.setUsername(
-                request.getUsername()
+                request.getUsername().trim()
         );
 
         user.setEmail(
-                request.getEmail()
+                request.getEmail().trim().toLowerCase()
         );
 
         user.setPassword(
@@ -107,8 +107,8 @@ public class AuthService {
 
         User user =
                 userRepository
-                        .findByEmail(
-                                request.getEmail()
+                        .findByEmailIgnoreCase(
+                                request.getEmail().trim()
                         )
                         .orElseThrow(
                                 () ->

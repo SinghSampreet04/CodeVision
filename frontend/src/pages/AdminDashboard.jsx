@@ -17,6 +17,9 @@ function AdminDashboard() {
     const [problems, setProblems] =
         useState([]);
 
+    const [error, setError] =
+        useState("");
+
     useEffect(() => {
 
         async function loadData() {
@@ -38,11 +41,7 @@ function AdminDashboard() {
                 );
 
             } catch (error) {
-
-                console.error(
-                    error
-                );
-
+                setError(error.message);
             }
 
         }
@@ -51,16 +50,20 @@ function AdminDashboard() {
 
     }, []);
 
-    if (!profile) {
-
+    if (error) {
         return (
+            <div className="section-card page-state" role="alert">
+                <h1>Dashboard unavailable</h1>
+                <p>{error}</p>
+            </div>
+        );
+    }
 
-            <p>
-
-                Loading...
-
-            </p>
-
+    if (!profile) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading dashboard...</p>
+            </div>
         );
 
     }

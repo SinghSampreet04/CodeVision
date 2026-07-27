@@ -55,9 +55,24 @@ body {
 
     text-decoration: none;
 
-    font-size: 30px;
+    font-size: 26px;
 
     font-weight: 800;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.logo-mark {
+
+    width: 42px;
+
+    height: 42px;
+
+    object-fit: contain;
 }
 
 .nav-left {
@@ -92,6 +107,11 @@ body {
 .nav-links a:hover {
 
     color: white;
+}
+
+.nav-links a.active {
+
+    color: #67e8f9;
 }
 
 .nav-right {
@@ -141,6 +161,206 @@ body {
 .nav-right button:hover {
 
     background: #8b5cf6;
+}
+
+button:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .65;
+
+    transform: none !important;
+}
+
+@media (max-width: 900px) {
+
+    .navbar {
+
+        height: auto;
+
+        min-height: 72px;
+
+        padding: 12px 20px;
+
+        gap: 16px;
+    }
+
+    .nav-left {
+
+        gap: 20px;
+    }
+
+    .nav-links {
+
+        gap: 14px;
+    }
+
+    .nav-right {
+
+        gap: 12px;
+    }
+
+    .profile-link,
+    .create-btn {
+
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .navbar {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .nav-left {
+
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .nav-links {
+
+        font-size: 14px;
+    }
+
+    .nav-right {
+
+        margin-left: auto;
+    }
+
+    .logo {
+
+        font-size: 21px;
+    }
+
+    .logo-mark {
+
+        width: 36px;
+
+        height: 36px;
+    }
+
+    .app-container {
+
+        padding: 22px 16px;
+    }
+
+}
+
+.page-state {
+
+    text-align: center;
+
+    max-width: 760px;
+
+    margin: 48px auto;
+}
+
+.page-state h1 {
+
+    margin-top: 0;
+}
+
+.page-state .primary-btn,
+.page-state .secondary-btn {
+
+    display: inline-flex;
+
+    margin-top: 12px;
+}
+
+.contest-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 11px;
+
+    border: 1px solid #475569;
+
+    border-radius: 999px;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: .04em;
+
+    text-transform: uppercase;
+}
+
+.contest-status-active {
+
+    border-color: #22c55e;
+
+    color: #86efac;
+}
+
+.contest-status-upcoming {
+
+    border-color: #38bdf8;
+
+    color: #7dd3fc;
+}
+
+.contest-status-ended {
+
+    color: #94a3b8;
+}
+
+.form-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    margin-top: 8px;
+}
+
+.form-actions .submit-btn {
+
+    margin: 0;
+}
+
+.testcase-visibility {
+
+    display: inline-flex;
+
+    padding: 4px 9px;
+
+    margin-bottom: 8px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.testcase-visibility.public {
+
+    background: rgba(34, 197, 94, .14);
+
+    color: #86efac;
+}
+
+.testcase-visibility.hidden {
+
+    background: rgba(168, 85, 247, .16);
+
+    color: #d8b4fe;
 }
 
 /* =========================
@@ -2307,4 +2527,30 @@ body {
 
     text-align: center;
 
+}
+
+@media (max-width: 640px) {
+
+    .problem-stats {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    .problem-stat {
+
+        padding: 18px 12px;
+    }
+
+    .problem-filters {
+
+        flex-direction: column;
+    }
+
+    .problem-filters input,
+    .problem-filters select {
+
+        width: 100%;
+    }
 }

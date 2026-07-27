@@ -9,6 +9,7 @@ import com.codevision.backend.exception.EmailAlreadyExistsException;
 import com.codevision.backend.repository.SubmissionRepository;
 import com.codevision.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,10 +21,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final SubmissionRepository submissionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(
             UserRepository userRepository,
-            SubmissionRepository submissionRepository
+            SubmissionRepository submissionRepository,
+            PasswordEncoder passwordEncoder
     ) {
 
         this.userRepository =
@@ -31,6 +34,9 @@ public class UserService {
 
         this.submissionRepository =
                 submissionRepository;
+
+        this.passwordEncoder =
+                passwordEncoder;
     }
 
     public UserResponse createUser(
@@ -39,8 +45,8 @@ public class UserService {
 
         if (
                 userRepository
-                        .findByEmail(
-                                request.getEmail()
+                        .findByEmailIgnoreCase(
+                                request.getEmail().trim()
                         )
                         .isPresent()
         ) {
@@ -54,19 +60,19 @@ public class UserService {
                 new User();
 
         user.setUsername(
-                request.getUsername()
+                request.getUsername().trim()
         );
 
         user.setEmail(
-                request.getEmail()
+                request.getEmail().trim().toLowerCase()
         );
 
         user.setPassword(
-                request.getPassword()
+                passwordEncoder.encode(request.getPassword())
         );
 
         user.setRole(
-                request.getRole()
+                normalizeRole(request.getRole())
         );
 
         User savedUser =
@@ -96,10 +102,12 @@ public class UserService {
 
         User user =
                 userRepository
-                        .findByEmail(
+                        .findByEmailIgnoreCase(
                                 email
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new java.util.NoSuchElementException("User not found")
+                        );
 
         long totalSubmissions =
                 submissionRepository
@@ -282,5 +290,17 @@ public class UserService {
         );
 
         return response;
+    }
+
+    private String normalizeRole(
+            String role
+    ) {
+        String normalizedRole = role.trim().toUpperCase();
+
+        if (!"USER".equals(normalizedRole) && !"ADMIN".equals(normalizedRole)) {
+            throw new IllegalArgumentException("Role must be USER or ADMIN");
+        }
+
+        return normalizedRole;
     }
 }

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 
 function Login() {
+    const navigate = useNavigate();
 
     const [email, setEmail] =
         useState("");
@@ -13,14 +14,19 @@ function Login() {
     const [message, setMessage] =
         useState("");
 
+    const [submitting, setSubmitting] =
+        useState(false);
+
     async function handleSubmit(
         event
     ) {
 
         event.preventDefault();
 
-        try {
+        setSubmitting(true);
+        setMessage("");
 
+        try {
             const result =
                 await loginUser({
                     email,
@@ -32,19 +38,14 @@ function Login() {
                 JSON.stringify(result)
             );
 
+            navigate("/", { replace: true });
+
+        } catch (error) {
             setMessage(
-                `Welcome ${result.username}`
+                error.message
             );
-
-            window.location.href =
-                "/";
-
-        } catch {
-
-            setMessage(
-                "Invalid email or password."
-            );
-
+        } finally {
+            setSubmitting(false);
         }
 
     }
@@ -71,15 +72,17 @@ function Login() {
                     onSubmit={handleSubmit}
                 >
 
-                    <label>
+                    <label htmlFor="login-email">
 
                         Email
 
                     </label>
 
                     <input
+                        id="login-email"
                         className="auth-input"
                         type="email"
+                        autoComplete="email"
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) =>
@@ -90,15 +93,17 @@ function Login() {
                         required
                     />
 
-                    <label>
+                    <label htmlFor="login-password">
 
                         Password
 
                     </label>
 
                     <input
+                        id="login-password"
                         className="auth-input"
                         type="password"
+                        autoComplete="current-password"
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) =>
@@ -112,9 +117,9 @@ function Login() {
                     <button
                         className="submit-btn"
                         type="submit"
+                        disabled={submitting}
                     >
-
-                        Login
+                        {submitting ? "Signing in..." : "Login"}
 
                     </button>
 
@@ -124,7 +129,7 @@ function Login() {
 
                     message && (
 
-                        <p className="auth-message">
+                        <p className="auth-message" role="alert">
 
                             {message}
 

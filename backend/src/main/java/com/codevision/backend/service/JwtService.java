@@ -2,6 +2,7 @@ package com.codevision.backend.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -11,15 +12,23 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final String SECRET =
-            "codevision-super-secret-key-for-jwt-authentication-2026";
+    private final SecretKey key;
+    private final long expirationMs;
 
-    private final SecretKey key =
-            Keys.hmacShaKeyFor(
-                    SECRET.getBytes(
-                            StandardCharsets.UTF_8
-                    )
-            );
+    public JwtService(
+            @Value("${app.jwt.secret}") String secret,
+            @Value("${app.jwt.expiration-ms}") long expirationMs
+    ) {
+        if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalArgumentException("JWT_SECRET must contain at least 32 bytes");
+        }
+        if (expirationMs <= 0) {
+            throw new IllegalArgumentException("JWT_EXPIRATION_MS must be greater than zero");
+        }
+
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.expirationMs = expirationMs;
+    }
 
     public String generateToken(
             String email
@@ -31,9 +40,9 @@ public class JwtService {
                         new Date()
                 )
                 .expiration(
-                        new Date(
-                                System.currentTimeMillis()
-                                        + 86400000
+                                new Date(
+                                        System.currentTimeMillis()
+                                        + expirationMs
                         )
                 )
                 .signWith(key)
@@ -52,22 +61,14 @@ public class JwtService {
                 .getSubject();
     }
 
-  public boolean isValid(
-        String token
-) {
-
-    try {
-
-        extractEmail(token);
-
-        return true;
-
-    } catch (Exception e) {
-
-        System.out.println("JWT ERROR:");
-        e.printStackTrace();
-
-        return false;
+    public boolean isValid(
+            String token
+    ) {
+        try {
+            extractEmail(token);
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
-}
 }

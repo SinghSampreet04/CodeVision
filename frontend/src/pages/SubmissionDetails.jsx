@@ -7,6 +7,7 @@ import {
 import {
     getSubmissionById
 } from "../services/api";
+import { formatDateTime, formatStatus } from "../utils/format";
 
 function SubmissionDetails() {
 
@@ -15,6 +16,9 @@ function SubmissionDetails() {
 
     const [submission, setSubmission] =
         useState(null);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
 
@@ -29,10 +33,7 @@ function SubmissionDetails() {
             })
 
             .catch(error => {
-
-                console.error(
-                    error
-                );
+                setError(error.message);
 
             });
 
@@ -80,9 +81,21 @@ function SubmissionDetails() {
 
     }
 
-    if (!submission) {
+    if (error) {
+        return (
+            <div className="section-card page-state" role="alert">
+                <h1>Submission unavailable</h1>
+                <p>{error}</p>
+            </div>
+        );
+    }
 
-        return <p>Loading...</p>;
+    if (!submission) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading submission...</p>
+            </div>
+        );
 
     }
 
@@ -104,7 +117,7 @@ function SubmissionDetails() {
 
                         <p>
 
-                            Submitted on {submission.createdAt}
+                            Submitted on {formatDateTime(submission.createdAt)}
 
                         </p>
 
@@ -124,7 +137,7 @@ function SubmissionDetails() {
 
                         {" "}
 
-                        {submission.status}
+                        {formatStatus(submission.status)}
 
                     </div>
 
@@ -196,7 +209,7 @@ function SubmissionDetails() {
 
                         <h2>
 
-                            🤖 AI Feedback
+                            Submission Feedback
 
                         </h2>
 

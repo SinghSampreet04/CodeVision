@@ -6,6 +6,7 @@ import com.codevision.backend.dto.RegisterRequest;
 import com.codevision.backend.dto.UserResponse;
 import com.codevision.backend.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(
             @Valid
             @RequestBody

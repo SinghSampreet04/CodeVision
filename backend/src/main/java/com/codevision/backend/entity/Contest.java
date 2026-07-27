@@ -1,6 +1,9 @@
 package com.codevision.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,15 +19,20 @@ public class Contest {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank
+    @Size(max = 150)
     private String title;
 
     @Column(
             columnDefinition = "TEXT"
     )
+    @Size(max = 5000)
     private String description;
 
+    @NotNull
     private LocalDateTime startTime;
 
+    @NotNull
     private LocalDateTime endTime;
 
     @ManyToMany

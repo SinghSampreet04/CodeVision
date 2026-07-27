@@ -1,6 +1,9 @@
 package com.codevision.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "problems")
@@ -13,21 +16,29 @@ public class Problem {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank
+    @Size(max = 150)
     private String title;
 
     @Column(
             columnDefinition = "TEXT",
             nullable = false
     )
+    @NotBlank
+    @Size(max = 20000)
     private String description;
 
     @Column(nullable = false)
+    @NotBlank
+    @Pattern(regexp = "(?i)Easy|Medium|Hard")
     private String difficulty;
 
     @Column(columnDefinition = "TEXT")
+    @Size(max = 10000)
     private String sampleInput;
 
     @Column(columnDefinition = "TEXT")
+    @Size(max = 10000)
     private String sampleOutput;
 
     public Problem() {

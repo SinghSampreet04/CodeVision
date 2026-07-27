@@ -16,14 +16,19 @@ function Register() {
     const [message, setMessage] =
         useState("");
 
+    const [submitting, setSubmitting] =
+        useState(false);
+
     async function handleSubmit(
         event
     ) {
 
         event.preventDefault();
 
-        try {
+        setSubmitting(true);
+        setMessage("");
 
+        try {
             const result =
                 await registerUser({
 
@@ -47,14 +52,13 @@ function Register() {
 
             setPassword("");
 
-        } catch {
+        } catch (error) {
 
             setMessage(
-
-                "Registration failed."
-
+                error.message
             );
-
+        } finally {
+            setSubmitting(false);
         }
 
     }
@@ -81,15 +85,19 @@ function Register() {
                     onSubmit={handleSubmit}
                 >
 
-                    <label>
+                    <label htmlFor="register-username">
 
                         Username
 
                     </label>
 
                     <input
+                        id="register-username"
                         className="auth-input"
                         type="text"
+                        autoComplete="username"
+                        minLength={2}
+                        maxLength={50}
                         placeholder="Choose a username"
                         value={username}
                         onChange={(e) =>
@@ -100,15 +108,17 @@ function Register() {
                         required
                     />
 
-                    <label>
+                    <label htmlFor="register-email">
 
                         Email
 
                     </label>
 
                     <input
+                        id="register-email"
                         className="auth-input"
                         type="email"
+                        autoComplete="email"
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) =>
@@ -119,15 +129,19 @@ function Register() {
                         required
                     />
 
-                    <label>
+                    <label htmlFor="register-password">
 
                         Password
 
                     </label>
 
                     <input
+                        id="register-password"
                         className="auth-input"
                         type="password"
+                        autoComplete="new-password"
+                        minLength={8}
+                        maxLength={100}
                         placeholder="Create a password"
                         value={password}
                         onChange={(e) =>
@@ -141,9 +155,9 @@ function Register() {
                     <button
                         className="submit-btn"
                         type="submit"
+                        disabled={submitting}
                     >
-
-                        Create Account
+                        {submitting ? "Creating account..." : "Create Account"}
 
                     </button>
 
@@ -153,7 +167,7 @@ function Register() {
 
                     message && (
 
-                        <p className="auth-message">
+                        <p className="auth-message" role="status">
 
                             {message}
 

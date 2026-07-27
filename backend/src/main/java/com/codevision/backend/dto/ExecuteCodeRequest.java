@@ -1,11 +1,20 @@
 package com.codevision.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class ExecuteCodeRequest {
 
+    @NotBlank
+    @Size(max = 50000)
     private String code;
 
+    @Size(max = 10000)
     private String input;
 
+    @NotBlank
+    @Pattern(regexp = "(?i)java|python|javascript|cpp")
     private String language;
 
     public ExecuteCodeRequest() {

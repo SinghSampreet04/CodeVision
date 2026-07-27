@@ -2,6 +2,7 @@ package com.codevision.backend.service;
 
 import com.codevision.backend.dto.ContestLeaderboardEntry;
 import com.codevision.backend.entity.Submission;
+import com.codevision.backend.repository.ContestRepository;
 import com.codevision.backend.repository.SubmissionRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +14,27 @@ public class ContestLeaderboardService {
     private final SubmissionRepository
             submissionRepository;
 
+    private final ContestRepository contestRepository;
+
     public ContestLeaderboardService(
-            SubmissionRepository submissionRepository
+            SubmissionRepository submissionRepository,
+            ContestRepository contestRepository
     ) {
 
         this.submissionRepository =
                 submissionRepository;
+
+        this.contestRepository =
+                contestRepository;
     }
 
     public List<ContestLeaderboardEntry>
     getLeaderboard(
             Long contestId
     ) {
+        if (!contestRepository.existsById(contestId)) {
+            throw new NoSuchElementException("Contest not found");
+        }
 
         List<Submission> submissions =
                 submissionRepository
@@ -32,13 +42,8 @@ public class ContestLeaderboardService {
                                 contestId
                         );
 
-        Map<String, Set<Long>>
-                solvedProblems =
-                new HashMap<>();
-
-        Map<String, Long>
-                runtimes =
-                new HashMap<>();
+        Map<Long, String> usernames = new HashMap<>();
+        Map<Long, Map<Long, Long>> bestRuntimeByProblem = new HashMap<>();
 
         for (
                 Submission submission :
@@ -54,37 +59,14 @@ public class ContestLeaderboardService {
                 continue;
             }
 
-            String username =
-                    submission
-                            .getUser()
-                            .getUsername();
+            Long userId = submission.getUser().getId();
+            Long problemId = submission.getProblem().getId();
+            long runtime = submission.getRuntime() == null ? 0L : submission.getRuntime();
 
-            solvedProblems
-                    .computeIfAbsent(
-                            username,
-                            k ->
-                                    new HashSet<>()
-                    )
-                    .add(
-                            submission
-                                    .getProblem()
-                                    .getId()
-                    );
-
-            runtimes.put(
-                    username,
-                    runtimes.getOrDefault(
-                            username,
-                            0L
-                    )
-                    +
-                    (
-                            submission.getRuntime()
-                                    == null
-                                    ? 0L
-                                    : submission.getRuntime()
-                    )
-            );
+            usernames.put(userId, submission.getUser().getUsername());
+            bestRuntimeByProblem
+                    .computeIfAbsent(userId, ignored -> new HashMap<>())
+                    .merge(problemId, runtime, Math::min);
         }
 
         List<ContestLeaderboardEntry>
@@ -92,28 +74,27 @@ public class ContestLeaderboardService {
                 new ArrayList<>();
 
         for (
-                String username :
-                solvedProblems.keySet()
+                Long userId :
+                bestRuntimeByProblem.keySet()
         ) {
 
             ContestLeaderboardEntry entry =
                     new ContestLeaderboardEntry();
 
             entry.setUsername(
-                    username
+                    usernames.get(userId)
             );
 
             entry.setSolvedProblems(
-                    (long)
-                    solvedProblems
-                            .get(username)
-                            .size()
+                    (long) bestRuntimeByProblem.get(userId).size()
             );
 
             entry.setTotalRuntime(
-                    runtimes.get(
-                            username
-                    )
+                    bestRuntimeByProblem.get(userId)
+                            .values()
+                            .stream()
+                            .mapToLong(Long::longValue)
+                            .sum()
             );
 
             leaderboard.add(

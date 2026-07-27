@@ -3,6 +3,8 @@ package com.codevision.backend.controller;
 import com.codevision.backend.dto.CreateDiscussionRequest;
 import com.codevision.backend.dto.DiscussionResponse;
 import com.codevision.backend.service.DiscussionService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +26,11 @@ public class DiscussionController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DiscussionResponse
     createDiscussion(
             @RequestBody
+            @Valid
             CreateDiscussionRequest request,
             Authentication authentication
     ) {

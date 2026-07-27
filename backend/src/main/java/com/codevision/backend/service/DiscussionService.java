@@ -11,6 +11,7 @@ import com.codevision.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class DiscussionService {
@@ -44,15 +45,19 @@ public class DiscussionService {
 
         User user =
                 userRepository
-                        .findByEmail(email)
-                        .orElseThrow();
+                        .findByEmailIgnoreCase(email)
+                        .orElseThrow(
+                                () -> new NoSuchElementException("User not found")
+                        );
 
         Problem problem =
                 problemRepository
                         .findById(
                                 request.getProblemId()
                         )
-                        .orElseThrow();
+                        .orElseThrow(
+                                () -> new NoSuchElementException("Problem not found")
+                        );
 
         Discussion discussion =
                 new Discussion();
@@ -66,7 +71,7 @@ public class DiscussionService {
         );
 
         discussion.setContent(
-                request.getContent()
+                request.getContent().trim()
         );
 
         Discussion saved =
@@ -83,6 +88,9 @@ public class DiscussionService {
     getProblemDiscussions(
             Long problemId
     ) {
+        if (!problemRepository.existsById(problemId)) {
+            throw new NoSuchElementException("Problem not found");
+        }
 
         return discussionRepository
                 .findByProblemIdOrderByCreatedAtDesc(

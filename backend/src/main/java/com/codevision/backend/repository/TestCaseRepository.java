@@ -11,9 +11,4 @@ public interface TestCaseRepository
     List<TestCase> findByProblemId(
             Long problemId
     );
-
-    List<TestCase>
-    findByProblemIdAndHiddenFalse(
-            Long problemId
-    );
 }

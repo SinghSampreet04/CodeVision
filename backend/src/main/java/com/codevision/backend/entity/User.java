@@ -2,6 +2,10 @@ package com.codevision.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -13,20 +17,27 @@ public class User {
     )
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
+    @NotBlank
+    @Size(max = 50)
     private String username;
 
     @Column(
             nullable = false,
-            unique = true
+            unique = true,
+            length = 254
     )
+    @Email
+    @NotBlank
+    @Size(max = 254)
     private String email;
 
     @JsonIgnore
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
+    @Pattern(regexp = "USER|ADMIN")
     private String role;
 
     public User() {

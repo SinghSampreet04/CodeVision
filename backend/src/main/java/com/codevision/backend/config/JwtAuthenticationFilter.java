@@ -41,89 +41,32 @@ public class JwtAuthenticationFilter
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
-       System.out.println("--------------------------------");
-System.out.println(request.getMethod());
-System.out.println(request.getRequestURI());
-
-String header =
-        request.getHeader(
-                "Authorization"
-        );
-
-System.out.println("Authorization Header:");
-System.out.println(header);
+        String header = request.getHeader("Authorization");
 
         if (
                 header != null &&
-                header.startsWith(
-                        "Bearer "
-                )
+                header.startsWith("Bearer ") &&
+                SecurityContextHolder.getContext().getAuthentication() == null
         ) {
-                System.out.println("Bearer token found");
+            String token = header.substring(7);
 
-            String token =
-                    header.substring(
-                            7
-                    );
+            if (jwtService.isValid(token)) {
+                String email = jwtService.extractEmail(token);
+                User user = userRepository.findByEmailIgnoreCase(email).orElse(null);
 
-         System.out.println("Checking token...");
+                if (user != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    user.getEmail(),
+                                    null,
+                                    AuthorityUtils.createAuthorityList("ROLE_" + user.getRole())
+                            );
 
-boolean valid = jwtService.isValid(token);
-
-System.out.println("TOKEN VALID = " + valid);
-
-if (valid)  {
-
-    String email =
-            jwtService.extractEmail(
-                    token
-            );
-
-    System.out.println("EMAIL = " + email);
-
-    User user =
-            userRepository
-                    .findByEmail(
-                            email
-                    )
-                    .orElse(null);
-
-    System.out.println("USER = " + user);
-
-    if (
-            user != null
-    ) {
-
-        UsernamePasswordAuthenticationToken
-                authentication =
-                new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        AuthorityUtils.createAuthorityList(
-                                "ROLE_" + user.getRole()
-                        )
-                );
-
-        SecurityContextHolder
-                .getContext()
-                .setAuthentication(
-                        authentication
-                );
-
-        System.out.println(
-                "AUTH = "
-                        + SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-        );
-    }
-}
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
         }
 
-        filterChain.doFilter(
-                request,
-                response
-        );
+        filterChain.doFilter(request, response);
     }
 }

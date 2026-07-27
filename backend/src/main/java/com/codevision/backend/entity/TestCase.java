@@ -1,6 +1,8 @@
 package com.codevision.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "test_cases")
@@ -13,15 +15,20 @@ public class TestCase {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "problem_id")
+    @JoinColumn(name = "problem_id", nullable = false)
+    @NotNull
     private Problem problem;
 
     @Column(columnDefinition = "TEXT")
+    @Size(max = 10000)
     private String input;
 
     @Column(columnDefinition = "TEXT")
+    @NotNull
+    @Size(max = 10000)
     private String expectedOutput;
 
+    @Column(nullable = false)
     private Boolean hidden = false;
 
     public TestCase() {

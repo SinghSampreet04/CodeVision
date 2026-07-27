@@ -19,6 +19,12 @@ function ContestLeaderboard() {
     const [entries, setEntries] =
         useState([]);
 
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
+        useState("");
+
     useEffect(() => {
 
         async function loadLeaderboard() {
@@ -35,16 +41,32 @@ function ContestLeaderboard() {
                 );
 
             } catch (error) {
-
-                console.error(
-                    error
-                );
+                setError(error.message);
+            } finally {
+                setLoading(false);
             }
         }
 
         loadLeaderboard();
 
     }, [id]);
+
+    if (loading) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading leaderboard...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="section-card page-state" role="alert">
+                <h1>Leaderboard unavailable</h1>
+                <p>{error}</p>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -62,10 +84,7 @@ function ContestLeaderboard() {
 
                 ) : (
 
-                    <table
-                        border="1"
-                        cellPadding="10"
-                    >
+                    <table className="leaderboard-table">
 
                         <thead>
 
@@ -101,9 +120,7 @@ function ContestLeaderboard() {
                                     ) => (
 
                                         <tr
-                                            key={
-                                                index
-                                            }
+                                            key={entry.username}
                                         >
 
                                             <td>

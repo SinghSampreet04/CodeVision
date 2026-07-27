@@ -11,6 +11,7 @@ import {
 import {
     getContestById
 } from "../services/api";
+import { formatDateTime, formatStatus } from "../utils/format";
 
 function ContestDetails() {
 
@@ -19,6 +20,9 @@ function ContestDetails() {
 
     const [contest, setContest] =
         useState(null);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
 
@@ -36,11 +40,7 @@ function ContestDetails() {
                 );
 
             } catch (error) {
-
-                console.error(
-                    error
-                );
-
+                setError(error.message);
             }
 
         }
@@ -49,16 +49,23 @@ function ContestDetails() {
 
     }, [id]);
 
-    if (!contest) {
-
+    if (error) {
         return (
+            <div className="section-card page-state" role="alert">
+                <h1>Contest unavailable</h1>
+                <p>{error}</p>
+                <Link className="secondary-btn" to="/contests">
+                    Back to contests
+                </Link>
+            </div>
+        );
+    }
 
-            <p>
-
-                Loading...
-
-            </p>
-
+    if (!contest) {
+        return (
+            <div className="section-card page-state" role="status">
+                <p>Loading contest...</p>
+            </div>
         );
 
     }
@@ -93,7 +100,7 @@ function ContestDetails() {
 
                         <span>
 
-                            {contest.status}
+                            {formatStatus(contest.status)}
 
                         </span>
 
@@ -109,7 +116,7 @@ function ContestDetails() {
 
                         <span>
 
-                            {contest.startTime}
+                            {formatDateTime(contest.startTime)}
 
                         </span>
 
@@ -125,7 +132,7 @@ function ContestDetails() {
 
                         <span>
 
-                            {contest.endTime}
+                            {formatDateTime(contest.endTime)}
 
                         </span>
 

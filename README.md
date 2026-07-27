@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="frontend/public/brand/codevision-logo-v2.png" alt="CodeVision logo" width="132" />
+  <img src="frontend/public/brand/codevision-logo-warm.png" alt="CodeVision logo" width="132" />
 </p>
 
 <h1 align="center">CodeVision</h1>

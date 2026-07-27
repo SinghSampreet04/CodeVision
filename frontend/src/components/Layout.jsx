@@ -17,7 +17,7 @@ function Layout() {
                     <Link className="logo" to="/" aria-label="CodeVision home">
                         <img
                             className="logo-mark"
-                            src="/brand/codevision-logo-v2.png"
+                            src="/brand/codevision-logo-warm.png"
                             alt=""
                         />
                         <span>CodeVision</span>
